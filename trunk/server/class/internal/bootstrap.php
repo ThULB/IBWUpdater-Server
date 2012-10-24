@@ -12,10 +12,11 @@ function __autoload( $className ) {
 	//relative to the script going to use this file.
 	//New entries can be added to this list
 	$directories = array(
-			'class/',
-			'class/datamodel',
-			'class/internal/',
-			'class/persistency/',
+			LIB_DIR.'doctrine/',
+			BASE_DIR.'class/',
+			BASE_DIR.'class/datamodel',
+			BASE_DIR.'class/internal/',
+			BASE_DIR.'class/persistency/',
 	);
 
 	//Add your file naming formats here
@@ -24,13 +25,13 @@ function __autoload( $className ) {
 			'class.%s.inc.php'
 	);
 
-	// this is to take care of the PEAR style of naming classes
-	$path = str_ireplace('_', '/', $className);
-	if ( @include_once $path.'.php' ){
-		return;
-	}
-
 	foreach ( $directories as $directory ) {
+		// this is to take care of the PEAR style of naming classes
+		$path = $directory.str_ireplace('_', '/', $className);
+		if ( @include_once $path.'.php' ){
+			return;
+		}
+
 		foreach ( $fileNameFormats as $fileNameFormat ) {
 			$path = $directory.sprintf( $fileNameFormat, $className );
 			if ( file_exists($path) ){
