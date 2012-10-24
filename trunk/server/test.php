@@ -13,7 +13,7 @@ try {
 	Doctrine_Core::createDatabases();
 	Doctrine_Core::createTablesFromModels(BASE_DIR."class/datamodel");*/
 
-	/*$usrMgr = UserManager::getInstance();
+	$usrMgr = UserManager::getInstance();
 
 	$user1 = $usrMgr->createUser("adlerre", "René Adler");
 	print_r($user1->toArray(true));
@@ -24,17 +24,17 @@ try {
 	$grpMgr = GroupManager::getInstance();
 	$group = $grpMgr->createGroup("EDV", "EDV Abteilung", array($user1, $user2));
 	
-	print_r($group->toArray());*/
+	print_r($group->toArray());
 
 	$pkgMgr = PackageManager::getInstance();
-	echo $pkgMgr->buildXML(true, $pkgMgr->getPackagesForUserName("adlerre"));
+	//echo $pkgMgr->buildXML(true, $pkgMgr->getPackagesForUserName("adlerre"));
 	
-	/*$pkg = $pkgMgr->createPackage("IBWUpdater", "IBWUpdater Modul.", Package::COMMON);
+	$pkg = $pkgMgr->createPackage("IBWUpdater", "IBWUpdater Modul.", Package::COMMON);
 	$pkg->setURL("packages/IBWUpdater.zip");
 	$pkg->setStartupScript("resource:/scripts/IBWUpdater.js");
-	$pkg->save();*/
+	$pkg->save();
 	
-	/*$pkg = $pkgMgr->createPackage("IBW3ESA", "Bearbeitungsmodul für die Semesterapparate in der DBT.", Package::COMMON);
+	$pkg = $pkgMgr->createPackage("IBW3ESA", "Bearbeitungsmodul für die Semesterapparate in der DBT.", Package::COMMON);
 	$pkg->setURL("packages/IBW3ESA.zip");
 	$pkg->setStartupScript("resource:/scripts/ibw3esa.js");
 	$pkg->addPermission($group);
@@ -46,8 +46,6 @@ try {
 	$pkg = $pkgMgr->createPackage("Inhaltsverzeichnis", "Macro für das setzen des Inhaltsverzeichnis Links.", Package::USER);
 	$pkg->addFunction("ivLink", "", "alert('Hello!');");
 	$pkg->addPermission($user1);
-	*/
-	
 } catch (Exception $e) {
 	echo $e->getMessage()."\n";
 	echo $e->getTraceAsString();
