@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Default values for internal use.
  */
