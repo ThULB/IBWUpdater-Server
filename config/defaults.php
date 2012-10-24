@@ -6,14 +6,6 @@
 @define('CFG_ROOT', dirname(__FILE__) . '/');
 @define('LIB_DIR', dirname(__FILE__) . '/../lib/');
 
-@define('SAFEMODE', true);
-
-if (SAFEMODE) {
-	ini_set('include_path', ((LIB_DIR."doctrine/").PATH_SEPARATOR.ini_get('include_path')));
-}
-
-@include_once('Doctrine.php');
-
 /**
  * DataSource Settings
  */
