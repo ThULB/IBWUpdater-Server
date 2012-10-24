@@ -20,7 +20,6 @@ function __autoload( $className ) {
 
 	//Add your file naming formats here
 	$fileNameFormats = array(
-			'%s.php',
 			'%s.cls.php',
 			'class.%s.inc.php'
 	);
