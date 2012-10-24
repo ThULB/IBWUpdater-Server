@@ -13,8 +13,6 @@ try {
 	Doctrine_Core::createDatabases();
 	Doctrine_Core::createTablesFromModels(BASE_DIR."class/datamodel");*/
 
-	Doctrine_Core::loadModels(BASE_DIR."class/datamodel");
-
 	/*$usrMgr = UserManager::getInstance();
 
 	$user1 = $usrMgr->createUser("adlerre", "René Adler");
