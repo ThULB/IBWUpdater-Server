@@ -48,8 +48,13 @@ function __autoload( $className ) {
 }
 
 // init Doctrine
-Doctrine_Core::loadModels(BASE_DIR."class/datamodel");
+try {
+	Doctrine_Core::loadModels(BASE_DIR."class/datamodel");
 
-$manager = Doctrine_Manager::getInstance();
-$conn = Doctrine_Manager::connection(BASE_DSN);
+	$manager = Doctrine_Manager::getInstance();
+	$conn = Doctrine_Manager::connection(BASE_DSN);
+} catch (Exception $e) {
+	echo $e->getMessage()."\n";
+	echo $e->getTraceAsString();
+}
 ?>
