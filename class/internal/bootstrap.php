@@ -13,12 +13,14 @@ function __autoload( $className ) {
 	//New entries can be added to this list
 	$directories = array(
 			'class/',
+			'class/datamodel',
 			'class/internal/',
 			'class/persistency/',
 	);
 
 	//Add your file naming formats here
 	$fileNameFormats = array(
+			'%s.php',
 			'%s.cls.php',
 			'class.%s.inc.php'
 	);
