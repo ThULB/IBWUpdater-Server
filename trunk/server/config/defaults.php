@@ -9,7 +9,7 @@
 @define('SAFEMODE', true);
 
 if (SAFEMODE) {
-	ini_set('include_path', (LIB_DIR . PATH_SEPARATOR . ini_get('include_path') ));
+	ini_set('include_path', ((LIB_DIR."doctrine/").PATH_SEPARATOR.ini_get('include_path')));
 }
 
 @include_once('Doctrine.php');
