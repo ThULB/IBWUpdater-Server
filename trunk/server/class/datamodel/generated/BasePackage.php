@@ -25,6 +25,9 @@ abstract class BasePackage extends Doctrine_Record
 	public function setTableDefinition()
 	{
 		$this->setTableName('Package');
+		$this->option('collate', 'utf8_unicode_ci');
+		$this->option('charset', 'utf8');
+		
 		$this->hasColumn('id', 'string', 64, array(
 				'type' => 'string',
 				'length' => 64,

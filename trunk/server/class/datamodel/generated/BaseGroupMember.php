@@ -20,6 +20,9 @@ abstract class BaseGroupMember extends Doctrine_Record
     public function setTableDefinition()
     {
         $this->setTableName('GroupMember');
+        $this->option('collate', 'utf8_unicode_ci');
+        $this->option('charset', 'utf8');
+        
         $this->hasColumn('gid', 'integer', 4, array(
              'type' => 'integer',
              'length' => 4,

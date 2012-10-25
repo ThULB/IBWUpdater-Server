@@ -21,6 +21,9 @@ abstract class BasePermission extends Doctrine_Record
     public function setTableDefinition()
     {
         $this->setTableName('Permission');
+        $this->option('collate', 'utf8_unicode_ci');
+        $this->option('charset', 'utf8');
+        
         $this->hasColumn('sourceType', 'string', 1, array(
              'type' => 'string',
              'length' => 1,
