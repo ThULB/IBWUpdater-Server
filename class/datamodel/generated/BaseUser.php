@@ -20,6 +20,9 @@ abstract class BaseUser extends Doctrine_Record
     public function setTableDefinition()
     {
         $this->setTableName('User');
+        $this->option('collate', 'utf8_unicode_ci');
+        $this->option('charset', 'utf8');
+        
         $this->hasColumn('id', 'integer', 4, array(
              'type' => 'integer',
              'length' => 4,
