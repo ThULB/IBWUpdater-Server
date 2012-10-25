@@ -66,7 +66,7 @@ class JSFunction extends BaseJSFunction {
 		$root->setAttribute( "name", $this->name );
 		$root->setAttribute( "params", $this->params );
 
-		$code = $xml->createCDATASection($this->code);
+		$code = $xml->createCDATASection(utf8_encode($this->code));
 		$root->appendChild($code);
 
 		$xml->appendChild( $root );
