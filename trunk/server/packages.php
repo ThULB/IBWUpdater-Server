@@ -12,6 +12,8 @@
 
 try {
 	$pkgMgr = PackageManager::getInstance();
+	
+	header('Content-Type: text/xml; charset=UTF-8');
 	echo $pkgMgr->buildXML(true, $pkgMgr->getPackagesForUserName($_GET["uid"]));
 } catch (Exception $e) {
 	echo $e->getMessage()."\n";
