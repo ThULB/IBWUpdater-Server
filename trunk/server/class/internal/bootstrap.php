@@ -55,6 +55,7 @@ try {
 
 	$manager = Doctrine_Manager::getInstance();
 	$conn = Doctrine_Manager::connection(BASE_DSN);
+	$conn->setCharset('utf8');
 } catch (Exception $e) {
 	echo $e->getMessage()."\n";
 	echo $e->getTraceAsString();
