@@ -284,7 +284,7 @@ class CLI {
 	 * The help is auto generated using various variables.
 	 */
 	public function help($args = array()){
-		print $this->colorText($this->appname, "LIGHT_RED")." ".$this->colorText($this->buildVersion(), "LIGHT_RED")."\n";
+		print $this->colorText($this->appname." (".$this->buildVersion().")", "LIGHT_RED")."\n";
 		print $this->colorText($this->author.' - '.$this->copyright, "LIGHT_RED")."\n";
 
 
