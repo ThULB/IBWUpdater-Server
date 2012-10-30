@@ -9,8 +9,10 @@
  * @author     René Adler <rene.adler@tu-ilmenau.de>
  * @version    $Revision$
  */
-class CLI{
-
+class CLI {
+	protected $VER	= "1.0";
+	protected $REV	= '$Revision$';
+	
 	private $appname = 'CLI Framework';
 	private $author = 'R. Adler';
 	private $copyright = '(c) 2012 R. Adler - TU Ilmenau';
@@ -272,12 +274,17 @@ class CLI{
 
 	}
 
+	protected function buildVersion() {
+		preg_match('/(?P<rev>\d+)/', $this->REV, $match);
+		return $this->VER.($match["rev"] != null ? ".".$match["rev"] : "");
+	}
+	
 	/**
 	 * Print out help for this program.
 	 * The help is auto generated using various variables.
 	 */
 	public function help($args = array()){
-		print $this->colorText($this->appname, "LIGHT_RED")."\n";
+		print $this->colorText($this->appname, "LIGHT_RED")." ".$this->colorText($this->buildVersion(), "LIGHT_RED")."\n";
 		print $this->colorText($this->author.' - '.$this->copyright, "LIGHT_RED")."\n";
 
 

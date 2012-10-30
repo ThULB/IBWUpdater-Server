@@ -8,13 +8,16 @@
  * @version    $Revision$
  */
 class UpdaterCLI extends CLI{
+	protected $VER	= "1.0";
+	protected $REV	= '$Revision$';
+	
 	private $modifier;
 	private $object;
 	
 	function __construct($appname = null, $author = null, $copyright = null) {
-		parent::__construct('IBWUpdater CLI', 'René Adler', '(c) 2012- R. Adler - TU Ilmenau');
+		parent::__construct('IBWUpdater CLI', $this->buildVersion(), 'René Adler', '(c) 2012 R. Adler - TU Ilmenau');
 	}
-
+	
 	/**
 	 * The main() function gets called if at least one argument is present.
 	 * If no arguments are present, the automatically generated help is displayed.
