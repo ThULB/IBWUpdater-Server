@@ -34,6 +34,6 @@ class User extends BaseUser {
 	}
 
 	public function __toString() {
-		return sprintf("User [id:%d, name:\"%s\", description::\"%s\"]", $this->id, $this->name, $this->description);
+		return sprintf("User [id:%d, name:\"%s\", description:\"%s\"]", $this->id, $this->name, $this->description);
 	}
 }
