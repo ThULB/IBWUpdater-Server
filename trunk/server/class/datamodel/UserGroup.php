@@ -80,7 +80,10 @@ class UserGroup extends BaseUserGroup {
 	}
 
 	public function isMember($aObject) {
-		return $this->getMember($aObject) != null;
+		if ($aObject instanceof User)
+			return $this->getMember($aObject->getName()) != null;
+		else
+			return $this->getMember($aObject) != null;
 	}
 
 	public function removeMember($aObject) {
