@@ -83,12 +83,14 @@ class UserGroup extends BaseUserGroup {
 		return $this->getMember($aObject) != null;
 	}
 
-	public function removeMember($aName) {
+	public function removeMember($aObject) {
+		$aName = $aObject instanceof User ? $aObject->getName() : $aObject;
+		
 		if ($this->GroupMember->count() != 0) {
 			foreach ($this->GroupMember as $key => $member) {
 				if ($member->User->name == $aName) {
-					unset($this->GroupMember[$key]);
 					$this->GroupMember[$key]->delete();
+					unset($this->GroupMember[$key]);
 					return;
 				}
 			}
