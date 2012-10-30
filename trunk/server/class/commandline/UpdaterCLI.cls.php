@@ -15,7 +15,7 @@ class UpdaterCLI extends CLI{
 	private $object;
 	
 	function __construct($appname = null, $author = null, $copyright = null) {
-		parent::__construct('IBWUpdater CLI', $this->buildVersion(), 'René Adler', '(c) 2012 R. Adler - TU Ilmenau');
+		parent::__construct('IBWUpdater CLI', 'René Adler', '(c) 2012 R. Adler - TU Ilmenau');
 	}
 	
 	/**
