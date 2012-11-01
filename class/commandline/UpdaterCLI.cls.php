@@ -222,7 +222,7 @@ class UpdaterCLI extends CLI{
 						$group->addMember($member);
 						print " - add member \"".$this->colorText($member->getName(), "red")."\"\n";
 					} else
-						$this->colorText(" - user \"".$member->getName()."\" is already a member\n", "yellow");
+						$this->colorText(" - user \"".$member->getName()."\" is already a member\n", "yellow", false);
 				}
 
 				exit();
