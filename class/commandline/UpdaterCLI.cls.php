@@ -86,7 +86,7 @@ class UpdaterCLI extends CLI{
 			return 'The group to modify.';
 		}
 
-		if ($this->object["type"] == null) {
+		if ($this->object == null || $this->object["type"] == null) {
 			$this->object["type"] = "group";
 			$this->object["name"] = $opt;
 		} else if ($this->object["type"] == "package") {
@@ -99,7 +99,7 @@ class UpdaterCLI extends CLI{
 		if($opt == 'help'){
 			return 'The package to modify.';
 		}
-		if ($this->object["type"] == null) {
+		if ($this->object == null || $this->object["type"] == null) {
 			$this->object["type"] = "package";
 			$this->object["name"] = $opt;
 		} else
