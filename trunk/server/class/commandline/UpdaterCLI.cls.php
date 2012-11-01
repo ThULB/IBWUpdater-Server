@@ -134,8 +134,8 @@ class UpdaterCLI extends CLI{
 		$userName = $this->object["name"];
 
 		if ($userName != null) {
-			self::$usrMgr->createUser($userName, isset($this->object["description"]) ? $this->object["description"] : null);
 			print "Create user \"".$this->colorText($userName, "red")."\".\n";
+			self::$usrMgr->createUser($userName, isset($this->object["description"]) ? $this->object["description"] : null);
 			exit();
 		} else
 			throw new Exception("Missing user name!");
@@ -165,8 +165,8 @@ class UpdaterCLI extends CLI{
 		if ($userName != null) {
 			$user = self::$usrMgr->getUser($userName);
 			if ($user != null) {
-				$user->delete();
 				print "Delete user \"".$this->colorText($userName, "red")."\".\n";
+				$user->delete();
 				exit();
 			} else
 				throw new Exception("User \"".$userName."\" not found!");
@@ -195,8 +195,8 @@ class UpdaterCLI extends CLI{
 		$members = $this->parseMembers();
 
 		if ($groupName != null) {
-			self::$grpMgr->createGroup($groupName, isset($this->object["description"]) ? $this->object["description"] : null, $members);
 			print "Create group \"".$this->colorText($groupName, "red")."\".\n";
+			self::$grpMgr->createGroup($groupName, isset($this->object["description"]) ? $this->object["description"] : null, $members);
 			exit();
 		} else
 			throw new Exception("Missing group name!");
@@ -209,10 +209,12 @@ class UpdaterCLI extends CLI{
 		if ($groupName != null) {
 			$group = self::$grpMgr->getGroup($groupName);
 			if ($group != null) {
+				print "Edit group \"".$this->colorText($groupName, "red")."\".\n";
+				
 				if (isset($this->object["description"])) {
+					print "Set description for Group \"".$this->colorText($groupName, "red")."\".\n";
 					$group->setDescription($this->object["description"]);
 					$group->save();
-					print "Set description for Group \"".$this->colorText($groupName, "red")."\".\n";
 				}
 
 				foreach ($members as $member) {
