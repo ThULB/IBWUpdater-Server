@@ -7,6 +7,11 @@
 @define('LIB_DIR', dirname(__FILE__) . '/../lib/');
 
 /**
+ * The Directory where packages are stored
+ */
+@define('PKG_DIR', '/packages/');
+
+/**
  * DataSource Settings
  */
 @define('BASE_DSN', 'mysql://ibwupd:ibwupd@127.0.0.1/IBWUpdater');

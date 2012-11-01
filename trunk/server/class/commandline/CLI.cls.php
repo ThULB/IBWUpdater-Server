@@ -16,6 +16,8 @@ class CLI {
 	private $appname = 'CLI Framework';
 	private $author = 'R. Adler';
 	private $copyright = '(c) 2012 R. Adler - TU Ilmenau';
+	
+	private $unkArgs;
 
 	function __construct($appname = null, $author = null, $copyright = null) {
 		if($appname){
