@@ -486,7 +486,7 @@ class UpdaterCLI extends CLI{
 			if ($pkg != null) {
 				print "Edit package \"".$this->colorText($pkgName, "red")."\"...\n";
 
-				if ($this->object["description"] != null) {
+				if (isset($this->object["description"])) {
 					print " - set description for package\n";
 					$pkg->setDescription($this->object["description"]);
 				}
