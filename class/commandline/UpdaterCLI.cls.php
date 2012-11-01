@@ -70,7 +70,7 @@ class UpdaterCLI extends CLI{
 			return 'The user to modify.';
 		}
 
-		if ($this->object == null || $this->object["type"] == null) {
+		if (!isset($this->object["type"])) {
 			$this->object["type"] = "user";
 			$this->object["name"] = $opt;
 		} else if ($this->object["type"] == "group") {
@@ -86,7 +86,7 @@ class UpdaterCLI extends CLI{
 			return 'The group to modify.';
 		}
 
-		if ($this->object == null || $this->object["type"] == null) {
+		if (!isset($this->object["type"])) {
 			$this->object["type"] = "group";
 			$this->object["name"] = $opt;
 		} else if ($this->object["type"] == "package") {
@@ -99,7 +99,7 @@ class UpdaterCLI extends CLI{
 		if($opt == 'help'){
 			return 'The package to modify.';
 		}
-		if ($this->object == null || $this->object["type"] == null) {
+		if (!isset($this->object["type"])) {
 			$this->object["type"] = "package";
 			$this->object["name"] = $opt;
 		} else
@@ -134,7 +134,7 @@ class UpdaterCLI extends CLI{
 		$userName = $this->object["name"];
 
 		if ($userName != null) {
-			self::$usrMgr->createUser($userName, $this->object["description"]);
+			self::$usrMgr->createUser($userName, isset($this->object["description"]) ? $this->object["description"] : null);
 			print "Create user \"".$this->colorText($userName, "red")."\".\n";
 			exit();
 		} else
@@ -147,7 +147,7 @@ class UpdaterCLI extends CLI{
 		if ($userName != null) {
 			$user = self::$usrMgr->getUser($userName);
 			if ($user != null) {
-				if ($this->object["description"] != null) {
+				if (isset($this->object["description"])) {
 					print "Set description for User \"".$this->colorText($userName, "red")."\".\n";
 					$user->setDescription($this->object["description"]);
 					$user->save();
@@ -209,7 +209,7 @@ class UpdaterCLI extends CLI{
 		if ($groupName != null) {
 			$group = self::$grpMgr->getGroup($groupName);
 			if ($group != null) {
-				if ($this->object["description"] != null) {
+				if (isset($this->object["description"])) {
 					$group->setDescription($this->object["description"]);
 					$group->save();
 					print "Set description for Group \"".$this->colorText($groupName, "red")."\".\n";
@@ -460,7 +460,7 @@ class UpdaterCLI extends CLI{
 					}
 				}
 
-				if ($this->object["permissions"] != null) {
+				if (isset($this->object["permissions"])) {
 					foreach ($this->parsePermissions() as $permObj) {
 						print " - add permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\"\n";
 						$pkg->addPermission($permObj);
@@ -491,7 +491,7 @@ class UpdaterCLI extends CLI{
 					$pkg->setDescription($this->object["description"]);
 				}
 
-				if ($this->object["permissions"] != null) {
+				if (isset($this->object["permissions"])) {
 					foreach ($this->parsePermissions() as $permObj) {
 						if ($pkg->getPermission($permObj) == null) {
 							print " - add permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\"\n";
@@ -566,7 +566,7 @@ class UpdaterCLI extends CLI{
 					}
 				}
 
-				if ($this->object["permissions"] != null) {
+				if (isset($this->object["permissions"])) {
 					print "Edit package \"".$this->colorText($pkgName, "red")."\"...\n";
 					foreach ($this->parsePermissions() as $permObj) {
 						if ($pkg->getPermission($permObj) != null) {
