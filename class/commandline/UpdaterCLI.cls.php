@@ -11,10 +11,18 @@ class UpdaterCLI extends CLI{
 	protected $VER		= "1.0";
 	protected $REV		= '$Revision$';
 
+	private static $pkgMgr;
+	private static $grpMgr;
+	private static $usrMgr;
+
 	private $modifier	= "show";
 	private $object		= array();
 
 	function __construct($appname = null, $author = null, $copyright = null) {
+		self::$grpMgr = GroupManager::getInstance();
+		self::$usrMgr = UserManager::getInstance();
+		self::$pkgMgr = PackageManager::getInstance();
+
 		parent::__construct('IBWUpdater CLI', 'René Adler', '(c) 2012 R. Adler - TU Ilmenau');
 	}
 
@@ -113,22 +121,20 @@ class UpdaterCLI extends CLI{
 
 		$this->object["startupScript"] = $opt;
 	}
-	
+
 	public function option_function($opt = null) {
 		if($opt == 'help'){
 			return 'The function(s) to be set for user package.';
 		}
-	
+
 		$this->object["functions"] = $opt;
 	}
 
 	private function addUser() {
-		$usrMgr = UserManager::getInstance();
-
 		$userName = $this->object["name"];
 
 		if ($userName != null) {
-			$usrMgr->createUser($userName, $this->object["description"]);
+			self::$usrMgr->createUser($userName, $this->object["description"]);
 			print "Create user \"".$this->colorText($userName, "red")."\".\n";
 			exit();
 		} else
@@ -136,12 +142,10 @@ class UpdaterCLI extends CLI{
 	}
 
 	private function editUser() {
-		$usrMgr = UserManager::getInstance();
-
 		$userName = $this->object["name"];
 
 		if ($userName != null) {
-			$user = $usrMgr->getUser($userName);
+			$user = self::$usrMgr->getUser($userName);
 			if ($user != null) {
 				$user->setDescription($this->object["description"]);
 				$user->save();
@@ -154,12 +158,10 @@ class UpdaterCLI extends CLI{
 	}
 
 	private function deleteUser() {
-		$usrMgr = UserManager::getInstance();
-
 		$userName = $this->object["name"];
 
 		if ($userName != null) {
-			$user = $usrMgr->getUser($userName);
+			$user = self::$usrMgr->getUser($userName);
 			if ($user != null) {
 				$user->delete();
 				print "Delete user \"".$this->colorText($userName, "red")."\".\n";
@@ -171,16 +173,15 @@ class UpdaterCLI extends CLI{
 	}
 
 	private function parseMembers() {
-		$usrMgr = UserManager::getInstance();
-		
 		$members = array();
 		if ($this->object["members"] != null) {
 			foreach (explode(",", $this->object["members"]) as $userName) {
-				$user = $usrMgr->getUser(trim($userName));
+				$userName = trim($userName);
+				$user = self::$usrMgr->getUser($userName);
 				if ($user != null)
 					$members[] = $user;
 				else
-					throw new Exception("User \"".trim($userName)."\" doesn't exists!");
+					throw new Exception("User \"".$userName."\" doesn't exists!");
 			}
 		}
 
@@ -188,14 +189,11 @@ class UpdaterCLI extends CLI{
 	}
 
 	private function addGroup() {
-		$grpMgr = GroupManager::getInstance();
-		$usrMgr = UserManager::getInstance();
-
 		$groupName = $this->object["name"];
 		$members = $this->parseMembers();
 
 		if ($groupName != null) {
-			$grpMgr->createGroup($groupName, $this->object["description"], $members);
+			self::$grpMgr->createGroup($groupName, $this->object["description"], $members);
 			print "Create group \"".$this->colorText($groupName, "red")."\".\n";
 			exit();
 		} else
@@ -203,14 +201,11 @@ class UpdaterCLI extends CLI{
 	}
 
 	private function editGroup() {
-		$grpMgr = GroupManager::getInstance();
-		$usrMgr = UserManager::getInstance();
-
 		$groupName = $this->object["name"];
 		$members = $this->parseMembers();
 
 		if ($groupName != null) {
-			$group = $grpMgr->getGroup($groupName);
+			$group = self::$grpMgr->getGroup($groupName);
 			if ($group != null) {
 				if ($this->object["description"] != null) {
 					$group->setDescription($this->object["description"]);
@@ -234,14 +229,11 @@ class UpdaterCLI extends CLI{
 	}
 
 	private function deleteGroup() {
-		$grpMgr = GroupManager::getInstance();
-		$usrMgr = UserManager::getInstance();
-
 		$groupName = $this->object["name"];
 		$members = $this->parseMembers();
 
 		if ($groupName != null) {
-			$group = $grpMgr->getGroup($groupName);
+			$group = self::$grpMgr->getGroup($groupName);
 			if ($group != null) {
 				if (count($members) == 0) {
 					$group->delete();
@@ -281,18 +273,16 @@ class UpdaterCLI extends CLI{
 	}
 
 	private function parsePermissions() {
-		$grpMgr = GroupManager::getInstance();
-		$usrMgr = UserManager::getInstance();
-
 		$permissions = array();
 		if ($this->object["permissions"] != null) {
 			foreach ($this->object["permissions"] as $type => $perms) {
 				foreach (explode(",", $perms) as $name) {
-					$permObj = $type == "u" ? $usrMgr->getUser(trim($name)) : $grpMgr->getGroup(trim($name));
+					$name = trim($name);
+					$permObj = $type == "u" ? self::$usrMgr->getUser($name) : self::$grpMgr->getGroup($name);
 					if ($permObj != null)
 						$permissions[] = $permObj;
 					else
-						throw new Exception(($type == "u" ? "User" : "Group")." \"".trim($name)."\" doesn't exists!");
+						throw new Exception(($type == "u" ? "User" : "Group")." \"".$name."\" doesn't exists!");
 				}
 			}
 		}
@@ -300,11 +290,142 @@ class UpdaterCLI extends CLI{
 		return $permissions;
 	}
 
-	private function addPackage() {
-		$pkgMgr = PackageManager::getInstance();
-		$grpMgr = GroupManager::getInstance();
-		$usrMgr = UserManager::getInstance();
+	private function trimCode($aCode) {
+		$code = null;
 
+		if (strpos($aCode, "{") !== false) {
+			$code = substr($aCode, strpos($aCode, "{") + 1);
+			$code = substr($code, 0, strrpos($code, "}"));
+		}
+
+		return $code;
+	}
+
+	private function startsWith($haystack, $needle, $withTrim = true) {
+		if ($withTrim)
+			return substr(trim($haystack), 0, strlen($needle)) == $needle;
+		else
+			return substr($haystack, 0, strlen($needle)) == $needle;
+	}
+
+	const lineSeparator = "\n";
+
+	private function parseJSFile($jsFile) {
+		$functions = array();
+
+		$jsLines = file($jsFile);
+		$jsUnknown = null;
+
+		$c = 0;
+		while ($c < count($jsLines)) {
+			$comment = null;
+
+			// read comment(s)
+			$line = trim($jsLines[$c]).self::lineSeparator;
+
+			if ($this->startsWith($line, "/*")) {
+				$comment = $line;
+				$c++;
+
+				$line = trim($jsLines[$c]).self::lineSeparator;
+				while ($this->startsWith($line, "*/") != true) {
+					$comment .= $line;
+					$c++;
+					$line = trim($jsLines[$c]).self::lineSeparator;
+				}
+				$comment .= $line;
+				$c++;
+				$line = trim($jsLines[$c]).self::lineSeparator;
+			}
+
+			if ($this->startsWith($line, "//")) {
+				if ($comment == null)
+					$comment = $line;
+				else
+					$comment .= $line;
+			}
+
+			// read function(s)
+			if ($this->startsWith($line, "function")) {
+				$found = preg_match("/function\s([^\(].*)\((.*)\)/", $line, $match);
+				if ($found) {
+					$brackets = 0;
+					$code = null;
+
+					while (strpos($line, "{") === false) {
+						$c++;
+						$line = trim($jsLines[$c]).self::lineSeparator;
+					}
+
+					do {
+						if (strpos($line, "{") !== false)
+							$brackets++;
+						if (strpos($line, "}") !== false)
+							$brackets--;
+
+						if ($code == null)
+							$code = $line;
+						else
+							$code .= $line;
+
+						if (($brackets != 0)) {
+							$c++;
+							$line = trim($jsLines[$c]).self::lineSeparator;
+						}
+					} while ($brackets != 0);
+
+					$functions[$match[1]] = array("params" => $match[2], "comment" => utf8_encode($comment), "code" => utf8_encode($this->trimCode($code)));
+				}
+			} else {
+				$line = trim($line);
+				if (strlen($line) != 0) {
+					if ($jsUnknown == null)
+						$jsUnknown = $line.self::lineSeparator;
+					else
+						$jsUnknown .= $line.self::lineSeparator;
+				}
+			}
+
+			// next line
+			$c++;
+		}
+
+		return $functions != null ? $functions : $jsUnknown;
+	}
+
+	private function parseFunctions($args) {
+		$functions = array();
+
+		if ($this->object["functions"] != null) {
+			$fCount = 0;
+			$pfunc = null;
+
+			foreach (explode(",", $this->object["functions"]) as $funcName) {
+				$funcName = trim($funcName);
+
+				if ($args[$fCount] != null) {
+					$pfunc = $this->parseJSFile($args[$fCount]);
+					if (is_array($pfunc)) {
+						if ($pfunc[$funcName] != null) {
+							$functions[$funcName] = $pfunc[$funcName];
+						}
+					} else {
+						$functions[$funcName] = array("params" => "", "code" => $pfunc);
+						$pfunc = null;
+					}
+				} else if ($pfunc[$funcName] != null) {
+					$functions[$funcName] = $pfunc[$funcName];
+				} else
+					throw new Exception("Function \"".$funcName."\" wasn't found!");
+
+				$fCount++;
+			}
+		}
+
+		return $functions;
+	}
+
+	private function addPackage() {
 		$pkgName = $this->object["name"];
 		$args = parent::parseArgs();
 
@@ -313,13 +434,13 @@ class UpdaterCLI extends CLI{
 				print "Create package \"".$this->colorText($pkgName, "red")."\"...\n";
 				$inputFile = $args["arguments"][0];
 				$pkgType = $this->isZip($inputFile) ? Package::COMMON : Package::USER;
-				
+
 				if ($pkgType == Package::COMMON && $this->object["startupScript"] == null)
 					throw new Exception("The startup script wasn't set!");
 				if ($pkgType == Package::COMMON && !$this->isStartupScriptIncluded($inputFile, $this->object["startupScript"]))
 					throw new Exception("The startup script \"".$this->object["startupScript"]."\" wasn't found within package archive!");
 
-				$pkg = $pkgMgr->createPackage($pkgName, $this->object["description"], $pkgType);
+				$pkg = self::$pkgMgr->createPackage($pkgName, $this->object["description"], $pkgType);
 				if ($pkgType == Package::COMMON) {
 					print " - copy archive...";
 					$pkgFile = PKG_DIR.$pkg->getId().".zip";
@@ -327,25 +448,100 @@ class UpdaterCLI extends CLI{
 						throw new Exception("Couldn't copy \"".$inputFile."\" to package store directory!");
 					}
 					print "done.\n";
-					
+
 					$pkg->setUrl($pkgFile);
 					$pkg->setStartupScript($this->object["startupScript"]);
-						
-					if ($this->object["permissions"] != null) {
-						print " - set permissions...";
-						foreach ($this->parsePermissions() as $permObj) {
-							$pkg->addPermission($permObj);
-						}
-						print "done.\n";
+				} else {
+					print " - set functions...";
+					$functions = $this->parseFunctions($args["arguments"]);
+					foreach ($functions as $funcName => $funcData) {
+						$pkg->addFunction($funcName, $funcData["params"], $funcData["code"]);
 					}
-						
-					$pkg->save();
+					print "done.\n";
 				}
+
+				if ($this->object["permissions"] != null) {
+					print " - set permissions...";
+					foreach ($this->parsePermissions() as $permObj) {
+						$pkg->addPermission($permObj);
+					}
+					print "done.\n";
+				}
+
+				$pkg->save();
 
 				print "...done.\n";
 				exit();
 			} else
 				throw new Exception("Missing file argument!");
+		} else
+			throw new Exception("Missing package name!");
+	}
+
+	private function editPackage() {
+		$pkgName = $this->object["name"];
+		$args = parent::parseArgs();
+
+		if ($pkgName != null) {
+			$pkg = self::$pkgMgr->getPackage($pkgName);
+				
+			if ($pkg != null) {
+				print "Edit package \"".$this->colorText($pkgName, "red")."\"...\n";
+				
+				if ($this->object["description"] != null) {
+					print " - set description for package...";
+					$pkg->setDescription($this->object["description"]);
+					print "done.\n";
+				}
+				
+				if ($this->object["permissions"] != null) {
+					print " - set permissions...";
+					foreach ($this->parsePermissions() as $permObj) {
+						if ($pkg->getPermission($permObj) == null)
+							$pkg->addPermission($permObj);
+						else
+							print $this->colorText("\n   Permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\" was already set.\n", "yellow");
+					}
+					print "done.\n";
+				}
+				
+				if ($args["arguments"] != null) {
+					$inputFile = $args["arguments"][0];
+					$pkgType = $pkg->getType();
+
+					if ($pkgType == Package::COMMON && $this->object["startupScript"] == null)
+						throw new Exception("The startup script wasn't set!");
+					if ($pkgType == Package::COMMON && !$this->isStartupScriptIncluded($inputFile, $this->object["startupScript"]))
+						throw new Exception("The startup script \"".$this->object["startupScript"]."\" wasn't found within package archive!");
+
+					if ($pkgType == Package::COMMON) {
+						print " - copy archive...";
+						$pkgFile = PKG_DIR.$pkg->getId().".zip";
+						if (!@copy($inputFile, BASE_DIR.$pkgFile)) {
+							throw new Exception("Couldn't copy \"".$inputFile."\" to package store directory!");
+						}
+						print "done.\n";
+
+						$pkg->setUrl($pkgFile);
+						$pkg->setStartupScript($this->object["startupScript"]);
+					} else {
+						print " - set functions...";
+						$functions = $this->parseFunctions($args["arguments"]);
+						foreach ($functions as $funcName => $funcData) {
+							$pkg->addFunction($funcName, $funcData["params"], $funcData["code"]);
+						}
+						print "done.\n";
+					}
+					
+					$pkg->setVersion($pkg->getVersion() + 1);
+				}
+					
+				$pkg->save();
+					
+				print "...done.\n";
+				exit();
+			} else
+				throw new Exception("Package \"".$pkgName."\" not found.");
 		} else
 			throw new Exception("Missing package name!");
 	}

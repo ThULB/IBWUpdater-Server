@@ -173,7 +173,7 @@ class Package extends BasePackage {
 	public function getPermission($aSourceObject, $aAction = Permission::READ, $aSourceType = null) {
 		if ($this->Permission->count() != 0) {
 			$aName = null;
-
+			
 			if ($aSourceObject instanceof UserGroup || $aSourceObject instanceof User) {
 				$aName = $aSourceObject->getName();
 				if ($aSourceObject instanceof UserGroup)
@@ -182,25 +182,25 @@ class Package extends BasePackage {
 					$aSourceType = Permission::USER;
 			} else
 				$aName = $aSourceObject;
-
+			
 			foreach($this->Permission as $key => $permission) {
 				if ($permission->getSourceObject() == null) {
-					if ($permission->getSourceType() == Permission::USER)
-						$source = GroupManager::getInstance()->getUser($permission->getSourceId());
+					if ($permission->getSourceType() == Permission::GROUP)
+						$source = GroupManager::getInstance()->getGroup($permission->getSourceId());
 					else if ($permission->getSourceType() == Permission::USER)
 						$source = UserManager::getInstance()->getUser($permission->getSourceId());
 					$this->Permission[$key]->setSourceObject($source);
 				}
 				if ($this->Permission[$key]->getSourceObject()->getName() == $aName && $this->Permission[$key]->getSourceType() == $aSourceType && $this->Permission[$key]->getAction() == $aAction)
-					return $this->permissions[$key];
+					return $this->Permission[$key];
 			}
 		}
-
+		
 		return null;
 	}
 
 	public function removePermission($aSourceObject, $aAction = Permission::READ, $aSourceType = null) {
-		if (count($this->permissions) != 0) {
+		if ($this->Permission->count() != 0) {
 			$aName = null;
 
 			if ($aSourceObject instanceof Group || $aSourceObject instanceof User) {
@@ -212,9 +212,10 @@ class Package extends BasePackage {
 			} else
 				$aName = $aSourceObject;
 
-			foreach($this->permissions as $key => $permission); {
+			foreach($this->Permission as $key => $permission); {
 				if ($permission->getSourceObject()->getName() == $aName && $permission->getSourceType() == $aSourceType && $permission->getAction() == $aAction) {
-					unset($this->permissions[$key]);
+					$permission->delte();
+					unset($this->Permission[$key]);
 					return;
 				}
 			}
