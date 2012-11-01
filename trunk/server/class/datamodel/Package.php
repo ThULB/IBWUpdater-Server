@@ -136,6 +136,10 @@ class Package extends BasePackage {
 
 		return null;
 	}
+	
+	public function countFunctions() {
+		return $this->JSFunction->count();
+	}
 
 	private function createPermission($aSourceObject, $aAction = Permission::READ) {
 		$permission = new Permission();
@@ -214,7 +218,7 @@ class Package extends BasePackage {
 
 			foreach($this->Permission as $key => $permission); {
 				if ($permission->getSourceObject()->getName() == $aName && $permission->getSourceType() == $aSourceType && $permission->getAction() == $aAction) {
-					$permission->delte();
+					$permission->delete();
 					unset($this->Permission[$key]);
 					return;
 				}
