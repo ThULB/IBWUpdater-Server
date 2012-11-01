@@ -437,7 +437,7 @@ class UpdaterCLI extends CLI{
 				$inputFile = $args["arguments"][0];
 				$pkgType = $this->isZip($inputFile) ? Package::COMMON : Package::USER;
 
-				if ($pkgType == Package::COMMON && $this->object["startupScript"] == null)
+				if ($pkgType == Package::COMMON && !isset($this->object["startupScript"]))
 					throw new Exception("The startup script wasn't set!");
 				if ($pkgType == Package::COMMON && !$this->isStartupScriptIncluded($inputFile, $this->object["startupScript"]))
 					throw new Exception("The startup script \"".$this->object["startupScript"]."\" wasn't found within package archive!");
@@ -505,7 +505,7 @@ class UpdaterCLI extends CLI{
 					$inputFile = $args["arguments"][0];
 					$pkgType = $pkg->getType();
 
-					if ($pkgType == Package::COMMON && $this->object["startupScript"] == null)
+					if ($pkgType == Package::COMMON && !isset($this->object["startupScript"]))
 						$this->object["startupScript"] = $pkg->getStartupScript();
 					if ($pkgType == Package::COMMON && !$this->isStartupScriptIncluded($inputFile, $this->object["startupScript"]))
 						throw new Exception("The startup script \"".$this->object["startupScript"]."\" wasn't found within package archive!");
