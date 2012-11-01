@@ -176,7 +176,7 @@ class UpdaterCLI extends CLI{
 
 	private function parseMembers() {
 		$members = array();
-		if ($this->object["members"] != null) {
+		if (isset($this->object["members"])) {
 			foreach (explode(",", $this->object["members"]) as $userName) {
 				$userName = trim($userName);
 				$user = self::$usrMgr->getUser($userName);
