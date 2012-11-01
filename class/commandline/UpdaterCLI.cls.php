@@ -70,7 +70,7 @@ class UpdaterCLI extends CLI{
 			return 'The user to modify.';
 		}
 
-		if ($this->object["type"] == null) {
+		if ($this->object == null || $this->object["type"] == null) {
 			$this->object["type"] = "user";
 			$this->object["name"] = $opt;
 		} else if ($this->object["type"] == "group") {
