@@ -147,9 +147,11 @@ class UpdaterCLI extends CLI{
 		if ($userName != null) {
 			$user = self::$usrMgr->getUser($userName);
 			if ($user != null) {
-				$user->setDescription($this->object["description"]);
-				$user->save();
-				print "Set description for User \"".$this->colorText($userName, "red")."\".\n";
+				if ($this->object["description"] != null) {
+					print "Set description for User \"".$this->colorText($userName, "red")."\".\n";
+					$user->setDescription($this->object["description"]);
+					$user->save();
+				}
 				exit();
 			} else
 				throw new Exception("User \"".$userName."\" not found!");
@@ -193,7 +195,7 @@ class UpdaterCLI extends CLI{
 		$members = $this->parseMembers();
 
 		if ($groupName != null) {
-			self::$grpMgr->createGroup($groupName, $this->object["description"], $members);
+			self::$grpMgr->createGroup($groupName, isset($this->object["description"]) ? $this->object["description"] : null, $members);
 			print "Create group \"".$this->colorText($groupName, "red")."\".\n";
 			exit();
 		} else
@@ -544,7 +546,7 @@ class UpdaterCLI extends CLI{
 
 			if ($pkg != null) {
 				$pkgType = $pkg->getType();
-				
+
 				if ($pkgType == Package::COMMON && $this->object["permissions"] == null) {
 					print "Delete package \"".$this->colorText($pkgName, "red")."\".\n";
 					$pkg->delete();
@@ -574,7 +576,7 @@ class UpdaterCLI extends CLI{
 							$this->colorText(" - Permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\" wasn't set.\n", "yellow", false);
 					}
 				}
-				
+
 				$pkg->save();
 				exit();
 			}
