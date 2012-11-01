@@ -212,7 +212,7 @@ class UpdaterCLI extends CLI{
 				print "Edit group \"".$this->colorText($groupName, "red")."\".\n";
 				
 				if (isset($this->object["description"])) {
-					print "Set description for Group \"".$this->colorText($groupName, "red")."\".\n";
+					print " - set description for Group \"".$this->colorText($groupName, "red")."\".\n";
 					$group->setDescription($this->object["description"]);
 					$group->save();
 				}
@@ -220,9 +220,9 @@ class UpdaterCLI extends CLI{
 				foreach ($members as $member) {
 					if ($group->isMember($member) == false) {
 						$group->addMember($member);
-						print "Add member \"".$this->colorText($member->getName(), "red")."\" to group \"".$this->colorText($groupName, "red")."\".\n";
+						print " - add member \"".$this->colorText($member->getName(), "red")."\" to group \"".$this->colorText($groupName, "red")."\".\n";
 					} else
-						print "User \"".$this->colorText($member->getName(), "red")."\" is already a member of group \"".$this->colorText($groupName, "red")."\".\n";
+						print " - user \"".$this->colorText($member->getName(), "red")."\" is already a member of group \"".$this->colorText($groupName, "red")."\".\n";
 				}
 
 				exit();
