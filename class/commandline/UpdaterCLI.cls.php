@@ -442,35 +442,31 @@ class UpdaterCLI extends CLI{
 
 				$pkg = self::$pkgMgr->createPackage($pkgName, $this->object["description"], $pkgType);
 				if ($pkgType == Package::COMMON) {
-					print " - copy archive...";
+					print " - copy archive\n";
 					$pkgFile = PKG_DIR.$pkg->getId().".zip";
 					if (!@copy($inputFile, BASE_DIR.$pkgFile)) {
 						throw new Exception("Couldn't copy \"".$inputFile."\" to package store directory!");
 					}
-					print "done.\n";
 
 					$pkg->setUrl($pkgFile);
 					$pkg->setStartupScript($this->object["startupScript"]);
 				} else {
-					print " - set functions...";
 					$functions = $this->parseFunctions($args["arguments"]);
 					foreach ($functions as $funcName => $funcData) {
+						print " - add function \"".$funcName."\"\n";
 						$pkg->addFunction($funcName, $funcData["params"], $funcData["code"]);
 					}
-					print "done.\n";
 				}
 
 				if ($this->object["permissions"] != null) {
-					print " - set permissions...";
 					foreach ($this->parsePermissions() as $permObj) {
+						print " - add permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\"\n";
 						$pkg->addPermission($permObj);
 					}
-					print "done.\n";
 				}
 
 				$pkg->save();
 
-				print "...done.\n";
 				exit();
 			} else
 				throw new Exception("Missing file argument!");
@@ -484,66 +480,105 @@ class UpdaterCLI extends CLI{
 
 		if ($pkgName != null) {
 			$pkg = self::$pkgMgr->getPackage($pkgName);
-				
+
 			if ($pkg != null) {
 				print "Edit package \"".$this->colorText($pkgName, "red")."\"...\n";
-				
+
 				if ($this->object["description"] != null) {
-					print " - set description for package...";
+					print " - set description for package\n";
 					$pkg->setDescription($this->object["description"]);
-					print "done.\n";
 				}
-				
+
 				if ($this->object["permissions"] != null) {
-					print " - set permissions...";
 					foreach ($this->parsePermissions() as $permObj) {
-						if ($pkg->getPermission($permObj) == null)
+						if ($pkg->getPermission($permObj) == null) {
+							print " - add permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\"\n";
 							$pkg->addPermission($permObj);
-						else
-							print $this->colorText("\n   Permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\" was already set.\n", "yellow");
+						} else
+							$this->colorText(" - Permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\" was already set.\n", "yellow", false);
 					}
-					print "done.\n";
 				}
-				
+
 				if ($args["arguments"] != null) {
 					$inputFile = $args["arguments"][0];
 					$pkgType = $pkg->getType();
 
 					if ($pkgType == Package::COMMON && $this->object["startupScript"] == null)
-						throw new Exception("The startup script wasn't set!");
+						$this->object["startupScript"] = $pkg->getStartupScript();
 					if ($pkgType == Package::COMMON && !$this->isStartupScriptIncluded($inputFile, $this->object["startupScript"]))
 						throw new Exception("The startup script \"".$this->object["startupScript"]."\" wasn't found within package archive!");
 
 					if ($pkgType == Package::COMMON) {
-						print " - copy archive...";
+						print " - copy archive\n";
 						$pkgFile = PKG_DIR.$pkg->getId().".zip";
 						if (!@copy($inputFile, BASE_DIR.$pkgFile)) {
 							throw new Exception("Couldn't copy \"".$inputFile."\" to package store directory!");
 						}
-						print "done.\n";
 
 						$pkg->setUrl($pkgFile);
 						$pkg->setStartupScript($this->object["startupScript"]);
 					} else {
-						print " - set functions...";
 						$functions = $this->parseFunctions($args["arguments"]);
 						foreach ($functions as $funcName => $funcData) {
+							print " - set function \"".$funcName."\"\n";
 							$pkg->addFunction($funcName, $funcData["params"], $funcData["code"]);
 						}
-						print "done.\n";
 					}
-					
+
 					$pkg->setVersion($pkg->getVersion() + 1);
 				}
 					
 				$pkg->save();
-					
-				print "...done.\n";
 				exit();
 			} else
 				throw new Exception("Package \"".$pkgName."\" not found.");
 		} else
 			throw new Exception("Missing package name!");
+	}
+
+	private function deletePackage() {
+		$pkgName = $this->object["name"];
+
+		if ($pkgName != null) {
+			$pkg = self::$pkgMgr->getPackage($pkgName);
+
+			if ($pkg != null) {
+				$pkgType = $pkg->getType();
+				
+				if ($pkgType == Package::COMMON && $this->object["permissions"] == null) {
+					print "Delete package \"".$this->colorText($pkgName, "red")."\".\n";
+					$pkg->delete();
+					exit();
+				} else if ($pkgType == Package::USER) {
+					$functions = explode(",", $this->object["functions"]);
+					if (count($functions) == $pkg->countFunctions()) {
+						print "Delete package \"".$this->colorText($pkgName, "red")."\".\n";
+						$pkg->delete();
+						exit();
+					} else {
+						print "Edit package \"".$this->colorText($pkgName, "red")."\"...\n";
+						foreach ($functions as $funcName) {
+							print " - remove function \"".$funcName."\"\n";
+							$pkg->removeFunction($funcName);
+						}
+					}
+				}
+
+				if ($this->object["permissions"] != null) {
+					print "Edit package \"".$this->colorText($pkgName, "red")."\"...\n";
+					foreach ($this->parsePermissions() as $permObj) {
+						if ($pkg->getPermission($permObj) != null) {
+							print " - remove permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\"\n";
+							$pkg->removePermission($permObj);
+						} else
+							$this->colorText(" - Permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\" wasn't set.\n", "yellow", false);
+					}
+				}
+				
+				$pkg->save();
+				exit();
+			}
+		}
 	}
 }
 ?>
