@@ -358,7 +358,6 @@ class CLI {
 
 	);
 
-
 	/**
 	 * Output coloized text to the terminal
 	 */

@@ -91,22 +91,26 @@ class Table {
 		$border = $this->_renderer->border();
 
 		if (isset($border)) {
-			print($border."\n");
+			self::line($border);
 		}
-		print($this->_renderer->row($this->_headers)."\n");
+		self::line($this->_renderer->row($this->_headers));
 		if (isset($border)) {
-			print($border."\n");
+			self::line($border);
 		}
 
 		foreach ($this->_rows as $row) {
-			print($this->_renderer->row($row)."\n");
+			self::line($this->_renderer->row($row));
 		}
 
 		if (isset($border)) {
-			print($border."\n");
+			self::line($border);
 		}
 	}
 
+	private function line($string) {
+		print Colors::colorize($string, true)."\n";	
+	}
+	
 	/**
 	 * Set the headers of the table.
 	 *
