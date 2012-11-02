@@ -40,8 +40,7 @@ class UpdaterCLI extends CLI{
 				call_user_func(array($this, $method_name));
 			} else
 				throw new Exception("Command not understood!");
-		} else
-			$this->help();
+		}
 	}
 
 	public function flag_a($opt = null){
@@ -106,7 +105,7 @@ class UpdaterCLI extends CLI{
 			throw new Exception("Group can't be set on previously used Type.");
 	}
 
-	public function option_desc($opt = null) {
+	public function option_description($opt = null) {
 		if($opt == 'help'){
 			return 'The description for an user, group or package.';
 		}
@@ -114,7 +113,7 @@ class UpdaterCLI extends CLI{
 		$this->object["description"] = $opt;
 	}
 
-	public function option_startup($opt = null) {
+	public function option_startscript($opt = null) {
 		if($opt == 'help'){
 			return 'The startup script file for common package.';
 		}
@@ -130,6 +129,21 @@ class UpdaterCLI extends CLI{
 		$this->object["functions"] = $opt;
 	}
 
+	private function showUser() {
+		$userName = $this->object["name"];
+		
+		if ($userName != null) {
+			
+		} else {
+			$table = new Table();
+			$table->setHeaders(array("UID", "Name", "Description"));
+			foreach (self::$usrMgr->getUsers() as $user) {
+				$table->addRow(array($user->getId(), $user->getName(), $user->getDescription()));
+			}
+			$table->display();
+		}
+	}
+	
 	private function addUser() {
 		$userName = $this->object["name"];
 

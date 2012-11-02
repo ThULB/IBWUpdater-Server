@@ -37,6 +37,10 @@ class UserManager {
 		} else
 			throw new Exception("Source must either user ID or Name.");
 	}
+	
+	public function getUsers() {
+		return $this->users->findAll();
+	}
 
 	/**
 	 * Create a new User object if not exists.
