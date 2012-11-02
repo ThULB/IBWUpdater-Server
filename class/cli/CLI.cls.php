@@ -69,17 +69,6 @@ class CLI {
 			}
 		}
 	}
-
-	/**
-	 * Set the name of the app
-	 */
-	public function setAppName($appname){
-		$this->appname = $appname;
-	}
-
-	static public function columns() {
-		return exec('/usr/bin/env tput cols');
-	}
 	
 	/**
 	 * Checks whether the output of the current script is a TTY or a pipe / redirect
