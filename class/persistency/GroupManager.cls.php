@@ -32,6 +32,10 @@ class GroupManager {
 			throw new Exception("Source must either group ID or Name.");
 	}
 
+	public function getGroups() {
+		return $this->groups->findAll();
+	}
+	
 	public function createGroup($aName, $aDescription, $users = array()) {
 		if ($this->getGroup($aName) != null)
 			throw new Exception("Group with name \"$aName\" already exists!");
