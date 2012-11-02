@@ -204,6 +204,25 @@ class UpdaterCLI extends CLI{
 		return $members;
 	}
 
+	private function showGroup() {
+		$groupName = $this->object["name"];
+	
+		if ($groupName != null) {
+				
+		} else {
+			$table = new Table();
+			$table->setHeaders(array("GID", "Name", "Description", "Member(s)"));
+			foreach (self::$grpMgr->getGroups() as $group) {
+				$members = "";
+				foreach ($group->getMembers() as $member) {
+					$members .= strlen($members) != 0 ? ", ".$member->getName() : $member->getName(); 
+				}
+				$table->addRow(array($group->getId(), $group->getName(), $group->getDescription(), $members));
+			}
+			$table->display();
+		}
+	}
+	
 	private function addGroup() {
 		$groupName = $this->object["name"];
 		$members = $this->parseMembers();

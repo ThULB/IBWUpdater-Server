@@ -78,6 +78,19 @@ class UserGroup extends BaseUserGroup {
 
 		return null;
 	}
+	
+	public function getMembers() {
+		if ($this->GroupMember->count() != 0) {
+			$members = array();
+			foreach ($this->GroupMember as $key => $member) {
+				$members[] = $member->User;
+			}
+			
+			return $members;
+		}
+		
+		return null;
+	}
 
 	public function isMember($aObject) {
 		if ($aObject instanceof User)
