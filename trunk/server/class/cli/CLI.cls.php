@@ -17,8 +17,6 @@ class CLI {
 	private $author = 'R. Adler';
 	private $copyright = '(c) 2012 R. Adler - TU Ilmenau';
 	
-	private $unkArgs;
-
 	function __construct($appname = null, $author = null, $copyright = null) {
 		if($appname){
 			$this->appname = $appname;
@@ -79,7 +77,22 @@ class CLI {
 		$this->appname = $appname;
 	}
 
-
+	static public function columns() {
+		return exec('/usr/bin/env tput cols');
+	}
+	
+	/**
+	 * Checks whether the output of the current script is a TTY or a pipe / redirect
+	 *
+	 * Returns true if STDOUT output is being redirected to a pipe or a file; false is
+	 * output is being sent directly to the terminal.
+	 *
+	 * @return bool
+	 */
+	static public function isPiped() {
+		return (function_exists('posix_isatty') && !posix_isatty(STDOUT));
+	}
+	
 	/**
 	 * Simply test whether or not we are running in CLI mode.
 	 */
@@ -295,34 +308,38 @@ class CLI {
 		}
 		print "\n";
 
+		$longest = 0;
 		$methods = get_class_methods(get_class($this));
 		foreach($methods as $method){
 			if(substr($method,0, 4) == 'flag'){
 				$flag = str_replace('flag_', '', $method);
+				$longest = strlen($flag) > $longest ? strlen($flag) : $longest;
 				$flags_help[$flag] = $this->$method('help');
 			}elseif(substr($method,0, 8) == 'argument'){
 				$argument = str_replace('argument_', '', $method);
+				$longest = strlen($argument) > $longest ? strlen($argument) : $longest;
 				$arguments_help[$argument] = $this->$method('help');
 			}elseif(substr($method,0, 6) == 'option'){
 				$option = str_replace('option_', '', $method);
+				$longest = strlen($option) > $longest ? strlen($option) : $longest;
 				$options_help[$option] = $this->$method('help');
 			}
 		}
 
 		print $this->colorText(' Flags:', "BLUE")."\n";
 		foreach($flags_help as $flag => $desc){
-			$spaces = 20 - strlen($flag);
+			$spaces = ($longest*2+5) - strlen($flag);
 			printf("  -%s%".$spaces."s%s\n", $flag,'', $desc);
 		}
 		print "\n".$this->colorText(' Arguments:', "BLUE")."\n";
 		foreach($arguments_help as $arg => $desc){
-			$spaces = 20 - strlen($arg) + 1;
+			$spaces = ($longest*2+5) - strlen($arg) + 1;
 
 			printf("  %s%".$spaces."s%s\n", $arg,'', $desc);
 		}
 		print "\n".$this->colorText(' Options:', "BLUE")."\n";
 		foreach($options_help as $opt => $desc){
-			$spaces = 20 - strlen($opt) - strlen($opt) - 4;
+			$spaces = ($longest*2+5) - strlen($opt) - strlen($opt) - 4;
 			printf("  --%s;%s=?%".$spaces."s%s\n",$opt, $opt,'', $desc);
 		}
 		print "\n";
@@ -367,6 +384,5 @@ class CLI {
 			echo chr(27)."$out$text".chr(27).chr(27)."[0m";#.chr(27);
 		}
 	}
-
 }
 ?>

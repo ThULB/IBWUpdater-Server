@@ -14,6 +14,8 @@ function __autoload( $className ) {
 	$directories = array(
 			LIB_DIR.'doctrine/',
 			BASE_DIR.'class/',
+			BASE_DIR.'class/cli/',
+			BASE_DIR.'class/cli/table/',
 			BASE_DIR.'class/commandline/',
 			BASE_DIR.'class/datamodel/',
 			BASE_DIR.'class/datamodel/generated/',
