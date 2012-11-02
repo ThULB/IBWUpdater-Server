@@ -1,16 +1,5 @@
 <?php
 /**
- * PHP Command Line Tools
- *
- * This source file is subject to the MIT license that is bundled
- * with this package in the file LICENSE.
- *
- * @author    James Logsdon <dwarf@girsbrain.org>
- * @copyright 2010 James Logsdom (http://girsbrain.org)
- * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
- */
-
-/**
  * The `Table` class is used to display data in a tabular format.
  */
 class Table {
@@ -52,7 +41,7 @@ class Table {
 			$this->setRows($rows);
 		}
 
-		if (CLI::isPiped()) {
+		if (Shell::isPiped()) {
 			$this->setRenderer(new Tabular());
 		} else {
 			$this->setRenderer(new Ascii());
@@ -62,12 +51,12 @@ class Table {
 	/**
 	 * Sets the renderer used by this table.
 	 *
-	 * @param cli\table\Renderer  $renderer  The renderer to use for output.
-	 * @see   cli\table\Renderer
-	 * @see   cli\table\Standard
-	 * @see   cli\table\Tabular
+	 * @param table\Renderer  $renderer  The renderer to use for output.
+	 * @see   table\Renderer
+	 * @see   table\Standard
+	 * @see   table\Tabular
 	 */
-	public function setRenderer(Renderer $renderer) {
+	public function setRenderer($renderer) {
 		$this->_renderer = $renderer;
 	}
 
@@ -88,14 +77,14 @@ class Table {
 	}
 
 	/**
-	 * Output the table to `STDOUT` using `cli\line()`.
+	 * Output the table to `STDOUT` using `line()`.
 	 *
 	 * If STDOUT is a pipe or redirected to a file, should output simple
 	 * tab-separated text. Otherwise, renders table with ASCII table borders
 	 *
-	 * @uses cli\Shell::isPiped() Determine what format to output
+	 * @uses Shell::isPiped() Determine what format to output
 	 *
-	 * @see cli\Table::renderRow()
+	 * @see Table::renderRow()
 	 */
 	public function display() {
 		$this->_renderer->setWidths($this->_width);
@@ -119,24 +108,6 @@ class Table {
 	}
 
 	/**
-	 * Sort the table by a column. Must be called before `cli\Table::display()`.
-	 *
-	 * @param int  $column  The index of the column to sort by.
-	 */
-	public function sort($column) {
-		function colSort($a, $b) {
-			return strcmp($a[$column], $b[$column]);
-		}
-		
-		if (!isset($this->_headers[$column])) {
-			trigger_error('No column with index ' . $column, E_USER_NOTICE);
-			return;
-		}
-
-		usort($this->_rows, "colSort");
-	}
-
-	/**
 	 * Set the headers of the table.
 	 *
 	 * @param array  $headers  An array of strings containing column header names.
@@ -149,7 +120,7 @@ class Table {
 	 * Add a row to the table.
 	 *
 	 * @param array  $row  The row data.
-	 * @see cli\Table::checkRow()
+	 * @see Table::checkRow()
 	 */
 	public function addRow(array $row) {
 		$this->_rows[] = $this->checkRow($row);
@@ -159,7 +130,7 @@ class Table {
 	 * Clears all previous rows and adds the given rows.
 	 *
 	 * @param array  $rows  A 2-dimensional array of row data.
-	 * @see cli\Table::addRow()
+	 * @see Table::addRow()
 	 */
 	public function setRows(array $rows) {
 		$this->_rows = array();
