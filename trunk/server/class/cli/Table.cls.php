@@ -124,14 +124,16 @@ class Table {
 	 * @param int  $column  The index of the column to sort by.
 	 */
 	public function sort($column) {
+		function colSort($a, $b) {
+			return strcmp($a[$column], $b[$column]);
+		}
+		
 		if (!isset($this->_headers[$column])) {
 			trigger_error('No column with index ' . $column, E_USER_NOTICE);
 			return;
 		}
 
-		usort($this->_rows, function($a, $b) use ($column) {
-			return strcmp($a[$column], $b[$column]);
-		});
+		usort($this->_rows, "colSort");
 	}
 
 	/**
