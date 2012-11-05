@@ -5,7 +5,7 @@
 abstract class Renderer {
 	protected $_widths = array();
 
-	public function __construct(array $widths = array()) {
+	public function __construct($widths = array()) {
 		$this->setWidths($widths);
 	}
 
@@ -14,7 +14,7 @@ abstract class Renderer {
 	 *
 	 * @param array  $widths  The widths of the columns.
 	 */
-	public function setWidths(array $widths) {
+	public function setWidths($widths) {
 		$this->_widths = $widths;
 	}
 
@@ -34,5 +34,5 @@ abstract class Renderer {
 	 * @param array  $row  The table row.
 	 * @return string  The formatted table row.
 	 */
-	abstract public function row(array $row);
+	abstract public function row($row);
 }
