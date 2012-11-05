@@ -23,7 +23,7 @@ class PackageManager {
 		$this->packages = PackageTable::getInstance();
 	}
 
-	protected function getPackages() {
+	public function getPackages() {
 		$packages = array();
 		foreach ($this->packages->findAll() as $package) {
 			array_push($packages, $package);

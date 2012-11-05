@@ -461,6 +461,21 @@ class UpdaterCLI extends CLI{
 
 		return $functions;
 	}
+	
+	private function showPackage() {
+		$pkgName = $this->object["name"];
+	
+		if ($pkgName != null) {
+	
+		} else {
+			$table = new Table();
+			$table->setHeaders(array("ID", "Name", "Description", "Type", "Version"));
+			foreach (self::$pkgMgr->getPackages() as $pkg) {
+				$table->addRow(array($pkg->getId(), $pkg->getName(), $pkg->getDescription(), $pkg->getType(), $pkg->getVersion()));
+			}
+			$table->display();
+		}
+	}
 
 	private function addPackage() {
 		$pkgName = $this->object["name"];
