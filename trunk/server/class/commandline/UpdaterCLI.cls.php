@@ -621,14 +621,14 @@ class UpdaterCLI extends CLI{
 					$pkg->delete();
 					exit();
 				} else if ($pkgType == Package::USER) {
-					$functions = explode(",", $this->object["functions"]);
+					$functions = isset($this->object["functions"]) ? explode(",", $this->object["functions"]) : array();
 					if (count($functions) == $pkg->countFunctions()) {
 						CLI::line("Delete package \"%r".$pkgName."%n\".");
 						CLI::line(" - remove old archive");
 						@unlink(BASE_DIR.$pkg->getUrl());
 						$pkg->delete();
 						exit();
-					} else {
+					} else if (!empty($functions)) {
 						CLI::line("Edit package \"%r".$pkgName."%n\"...");
 						foreach ($functions as $funcName) {
 							CLI::line(" - remove function \"".$funcName."\"");
