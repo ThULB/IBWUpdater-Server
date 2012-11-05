@@ -469,7 +469,7 @@ class UpdaterCLI extends CLI{
 	
 		} else {
 			$table = new Table();
-			$table->setHeaders(array("ID", "Name", "Description", "Type", "Version"));
+			$table->setHeaders(array("ID", "Name", "Description", "Type", "Ver."));
 			foreach (self::$pkgMgr->getPackages() as $pkg) {
 				$table->addRow(array($pkg->getId(), $pkg->getName(), $pkg->getDescription(), $pkg->getType(), $pkg->getVersion()));
 			}
