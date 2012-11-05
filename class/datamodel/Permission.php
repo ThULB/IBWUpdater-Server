@@ -44,6 +44,13 @@ class Permission extends BasePermission {
 	}
 	
 	public function getSourceObject() {
+		if ($this->sourceObject == null) {
+			if ($this->sourceType == self::USER)
+				$this->sourceObject = UserManager::getInstance()->getUser($this->sourceId);
+			else if ($this->sourceType == self::GROUP)
+				$this->sourceObject = GroupManager::getInstance()->getGroup($this->sourceId);
+		}
+		
 		return $this->sourceObject;
 	}
 	
