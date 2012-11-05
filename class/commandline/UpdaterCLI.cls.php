@@ -148,7 +148,7 @@ class UpdaterCLI extends CLI{
 		$userName = $this->object["name"];
 
 		if ($userName != null) {
-			print "Create user \"".$this->colorText($userName, "red")."\".\n";
+			CLI::line("Create user \"%r".$userName."%n\".");
 			self::$usrMgr->createUser($userName, isset($this->object["description"]) ? $this->object["description"] : null);
 			exit();
 		} else
@@ -162,7 +162,7 @@ class UpdaterCLI extends CLI{
 			$user = self::$usrMgr->getUser($userName);
 			if ($user != null) {
 				if (isset($this->object["description"])) {
-					print "Set description for User \"".$this->colorText($userName, "red")."\".\n";
+					CLI::line("Set description for User \"%r".$userName."%n\".");
 					$user->setDescription($this->object["description"]);
 					$user->save();
 				}
@@ -179,7 +179,7 @@ class UpdaterCLI extends CLI{
 		if ($userName != null) {
 			$user = self::$usrMgr->getUser($userName);
 			if ($user != null) {
-				print "Delete user \"".$this->colorText($userName, "red")."\".\n";
+				CLI::line("Delete user \"%r".$userName."%n\".");
 				$user->delete();
 				exit();
 			} else
@@ -228,7 +228,7 @@ class UpdaterCLI extends CLI{
 		$members = $this->parseMembers();
 
 		if ($groupName != null) {
-			print "Create group \"".$this->colorText($groupName, "red")."\".\n";
+			CLI::line("Create group \"%r".$groupName."%n\"");
 			self::$grpMgr->createGroup($groupName, isset($this->object["description"]) ? $this->object["description"] : null, $members);
 			exit();
 		} else
@@ -242,10 +242,10 @@ class UpdaterCLI extends CLI{
 		if ($groupName != null) {
 			$group = self::$grpMgr->getGroup($groupName);
 			if ($group != null) {
-				print "Edit group \"".$this->colorText($groupName, "red")."\".\n";
+				CLI::line("Edit group \"%r".$groupName."%n\"");
 				
 				if (isset($this->object["description"])) {
-					print " - set description\n";
+					CLI::line(" - set description");
 					$group->setDescription($this->object["description"]);
 					$group->save();
 				}
@@ -253,9 +253,9 @@ class UpdaterCLI extends CLI{
 				foreach ($members as $member) {
 					if ($group->isMember($member) == false) {
 						$group->addMember($member);
-						print " - add member \"".$this->colorText($member->getName(), "red")."\"\n";
+						CLI::line(" - add member \"%r".$member->getName()."%n\"");
 					} else
-						$this->colorText(" - user \"".$member->getName()."\" is already a member\n", "yellow", false);
+						CLI::line(" - $yuser \"".$member->getName()."\" is already a member%n");
 				}
 
 				exit();
@@ -274,12 +274,12 @@ class UpdaterCLI extends CLI{
 			if ($group != null) {
 				if (count($members) == 0) {
 					$group->delete();
-					print "Delete group \"".$this->colorText($groupName, "red")."\".\n";
+					CLI::line("Delete group \"%r".$groupName."%n\".");
 				} else {
 					foreach ($members as $member) {
 						if ($group->isMember($member)) {
 							$group->removeMember($member);
-							print "Remove member \"".$this->colorText($member->getName(), "red")."\" from group \"".$this->colorText($groupName, "red")."\".\n";
+							CLI::line("Remove member \"%r".$member->getName()."%n\" from group \"%r".$groupName."%n\".");
 						} else
 							throw new Exception("User \"".$member->getName()."\" isn't a member of group \"".$groupName."\".");
 					}
@@ -468,7 +468,7 @@ class UpdaterCLI extends CLI{
 
 		if ($pkgName != null) {
 			if ($args["arguments"] != null) {
-				print "Create package \"".$this->colorText($pkgName, "red")."\"...\n";
+				CLI::line("Create package \"%r".$pkgName."%n\"...");
 				$inputFile = $args["arguments"][0];
 				$pkgType = $this->isZip($inputFile) ? Package::COMMON : Package::USER;
 
@@ -479,7 +479,7 @@ class UpdaterCLI extends CLI{
 
 				$pkg = self::$pkgMgr->createPackage($pkgName, $this->object["description"], $pkgType);
 				if ($pkgType == Package::COMMON) {
-					print " - copy archive\n";
+					CLI::line(" - copy archive");
 					$pkgFile = PKG_DIR.$pkg->getId().".zip";
 					if (!@copy($inputFile, BASE_DIR.$pkgFile)) {
 						throw new Exception("Couldn't copy \"".$inputFile."\" to package store directory!");
@@ -490,14 +490,14 @@ class UpdaterCLI extends CLI{
 				} else {
 					$functions = $this->parseFunctions($args["arguments"]);
 					foreach ($functions as $funcName => $funcData) {
-						print " - add function \"".$funcName."\"\n";
+						CLI::line(" - add function \"".$funcName."\"");
 						$pkg->addFunction($funcName, $funcData["params"], $funcData["code"]);
 					}
 				}
 
 				if (isset($this->object["permissions"])) {
 					foreach ($this->parsePermissions() as $permObj) {
-						print " - add permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\"\n";
+						CLI::line(" - add permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\"");
 						$pkg->addPermission($permObj);
 					}
 				}
@@ -519,20 +519,20 @@ class UpdaterCLI extends CLI{
 			$pkg = self::$pkgMgr->getPackage($pkgName);
 
 			if ($pkg != null) {
-				print "Edit package \"".$this->colorText($pkgName, "red")."\"...\n";
+				CLI::line("Edit package \"%r".pkgName."%n\"...");
 
 				if (isset($this->object["description"])) {
-					print " - set description for package\n";
+					CLI::line(" - set description for package");
 					$pkg->setDescription($this->object["description"]);
 				}
 
 				if (isset($this->object["permissions"])) {
 					foreach ($this->parsePermissions() as $permObj) {
 						if ($pkg->getPermission($permObj) == null) {
-							print " - add permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\"\n";
+							CLI::line(" - add permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\"");
 							$pkg->addPermission($permObj);
 						} else
-							$this->colorText(" - Permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\" was already set.\n", "yellow", false);
+							CLI::line(" - %yPermission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\" was already set.%n");
 					}
 				}
 
@@ -546,7 +546,7 @@ class UpdaterCLI extends CLI{
 						throw new Exception("The startup script \"".$this->object["startupScript"]."\" wasn't found within package archive!");
 
 					if ($pkgType == Package::COMMON) {
-						print " - copy archive\n";
+						CLI::line(" - copy archive");
 						$pkgFile = PKG_DIR.$pkg->getId().".zip";
 						if (!@copy($inputFile, BASE_DIR.$pkgFile)) {
 							throw new Exception("Couldn't copy \"".$inputFile."\" to package store directory!");
@@ -557,7 +557,7 @@ class UpdaterCLI extends CLI{
 					} else {
 						$functions = $this->parseFunctions($args["arguments"]);
 						foreach ($functions as $funcName => $funcData) {
-							print " - set function \"".$funcName."\"\n";
+							CLI::line(" - set function \"".$funcName."\"");
 							$pkg->addFunction($funcName, $funcData["params"], $funcData["code"]);
 						}
 					}
@@ -583,32 +583,32 @@ class UpdaterCLI extends CLI{
 				$pkgType = $pkg->getType();
 
 				if ($pkgType == Package::COMMON && $this->object["permissions"] == null) {
-					print "Delete package \"".$this->colorText($pkgName, "red")."\".\n";
+					CLI::line("Delete package \"%r".$pkgName."%n\".");
 					$pkg->delete();
 					exit();
 				} else if ($pkgType == Package::USER) {
 					$functions = explode(",", $this->object["functions"]);
 					if (count($functions) == $pkg->countFunctions()) {
-						print "Delete package \"".$this->colorText($pkgName, "red")."\".\n";
+						CLI::line("Delete package \"%r".$pkgName."%n\".");
 						$pkg->delete();
 						exit();
 					} else {
-						print "Edit package \"".$this->colorText($pkgName, "red")."\"...\n";
+						CLI::line("Edit package \"%r".$pkgName."%n\"...");
 						foreach ($functions as $funcName) {
-							print " - remove function \"".$funcName."\"\n";
+							CLI::line(" - remove function \"".$funcName."\"");
 							$pkg->removeFunction($funcName);
 						}
 					}
 				}
 
 				if (isset($this->object["permissions"])) {
-					print "Edit package \"".$this->colorText($pkgName, "red")."\"...\n";
+					CLI::line("Edit package \"%r".$pkgName."%n\"...");
 					foreach ($this->parsePermissions() as $permObj) {
 						if ($pkg->getPermission($permObj) != null) {
-							print " - remove permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\"\n";
+							CLI::line(" - remove permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\"");
 							$pkg->removePermission($permObj);
 						} else
-							$this->colorText(" - Permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\" wasn't set.\n", "yellow", false);
+							CLI::line(" - %yPermission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\" wasn't set.%n");
 					}
 				}
 

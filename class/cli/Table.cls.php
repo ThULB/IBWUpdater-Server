@@ -91,24 +91,20 @@ class Table {
 		$border = $this->_renderer->border();
 
 		if (isset($border)) {
-			self::line($border);
+			CLI::line($border);
 		}
-		self::line($this->_renderer->row($this->_headers));
+		CLI::line($this->_renderer->row($this->_headers));
 		if (isset($border)) {
-			self::line($border);
+			CLI::line($border);
 		}
 
 		foreach ($this->_rows as $row) {
-			self::line($this->_renderer->row($row));
+			CLI::line($this->_renderer->row($row));
 		}
 
 		if (isset($border)) {
-			self::line($border);
+			CLI::line($border);
 		}
-	}
-
-	private function line($string) {
-		print Colors::colorize($string, true)."\n";	
 	}
 	
 	/**
