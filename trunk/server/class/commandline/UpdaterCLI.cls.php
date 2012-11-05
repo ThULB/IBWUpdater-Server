@@ -467,7 +467,19 @@ class UpdaterCLI extends CLI{
 
 		$table = new Table();
 		$table->setHeaders($this->verbose ? array("ID", "Name", "Description", "Type", "Ver.") : array("Name", "Description", "Type", "Ver."));
-		foreach (self::$pkgMgr->getPackages($pkgName) as $pkg) {
+
+		$packages = array();
+		if (isset($this->object["permissions"])) {
+			foreach ($this->parsePermissions() as $permObj) {
+				if ($permObj instanceof User) {
+					$packages += self::$pkgMgr->getPackagesForUserName($permObj->getName());
+				}
+			}
+		} else {
+			$packages = self::$pkgMgr->getPackages($pkgName);
+		}
+
+		foreach ($packages as $pkg) {
 			$table->addRow($this->verbose ? array($pkg->getId(), $pkg->getName(), $pkg->getDescription(), $pkg->getType(), $pkg->getVersion()) : array($pkg->getName(), $pkg->getDescription(), $pkg->getType(), $pkg->getVersion()));
 		}
 		$table->display();
