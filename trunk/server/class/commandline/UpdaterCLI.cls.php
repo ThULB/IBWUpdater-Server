@@ -548,7 +548,7 @@ class UpdaterCLI extends CLI{
 			$pkg = self::$pkgMgr->getPackage($pkgName);
 
 			if ($pkg != null) {
-				CLI::line("Edit package \"%r".pkgName."%n\"...");
+				CLI::line("Edit package \"%r".$pkgName."%n\"...");
 
 				if (isset($this->object["description"])) {
 					CLI::line(" - set description for package");
