@@ -16,6 +16,7 @@ class UpdaterCLI extends CLI{
 	private static $usrMgr;
 
 	private $modifier	= "show";
+	private $verbose	= false;
 	private $object		= array();
 
 	function __construct($appname = null, $author = null, $copyright = null) {
@@ -62,6 +63,13 @@ class UpdaterCLI extends CLI{
 			return 'Modifier to delete an user, group or package.';
 		}
 		$this->modifier = "delete";
+	}
+
+	public function flag_v($opt = null){
+		if($opt == 'help'){
+			return 'More verbose output';
+		}
+		$this->verbose = true;
 	}
 
 	public function option_user($opt = null) {
@@ -131,19 +139,15 @@ class UpdaterCLI extends CLI{
 
 	private function showUser() {
 		$userName = $this->object["name"];
-		
-		if ($userName != null) {
-			
-		} else {
-			$table = new Table();
-			$table->setHeaders(array("UID", "Name", "Description"));
-			foreach (self::$usrMgr->getUsers() as $user) {
-				$table->addRow(array($user->getId(), $user->getName(), $user->getDescription()));
-			}
-			$table->display();
+
+		$table = new Table();
+		$table->setHeaders($this->verbose ? array("UID", "Name", "Description") : array("Name", "Description"));
+		foreach (self::$usrMgr->getUsers($userName) as $user) {
+			$table->addRow($this->verbose ? array($user->getId(), $user->getName(), $user->getDescription()) : array($user->getName(), $user->getDescription()));
 		}
+		$table->display();
 	}
-	
+
 	private function addUser() {
 		$userName = $this->object["name"];
 
@@ -206,23 +210,19 @@ class UpdaterCLI extends CLI{
 
 	private function showGroup() {
 		$groupName = $this->object["name"];
-	
-		if ($groupName != null) {
-				
-		} else {
-			$table = new Table();
-			$table->setHeaders(array("GID", "Name", "Description", "Member(s)"));
-			foreach (self::$grpMgr->getGroups() as $group) {
-				$members = "";
-				foreach ($group->getMembers() as $member) {
-					$members .= strlen($members) != 0 ? ", ".$member->getName() : $member->getName(); 
-				}
-				$table->addRow(array($group->getId(), $group->getName(), $group->getDescription(), $members));
+
+		$table = new Table();
+		$table->setHeaders($this->verbose ? array("GID", "Name", "Description", "Member(s)") : array("Name", "Description", "Member(s)"));
+		foreach (self::$grpMgr->getGroups($groupName) as $group) {
+			$members = "";
+			foreach ($group->getMembers() as $member) {
+				$members .= strlen($members) != 0 ? ", ".$member->getName() : $member->getName();
 			}
-			$table->display();
+			$table->addRow($this->verbose ? array($group->getId(), $group->getName(), $group->getDescription(), $members) : array($group->getName(), $group->getDescription(), $members));
 		}
+		$table->display();
 	}
-	
+
 	private function addGroup() {
 		$groupName = $this->object["name"];
 		$members = $this->parseMembers();
@@ -243,7 +243,7 @@ class UpdaterCLI extends CLI{
 			$group = self::$grpMgr->getGroup($groupName);
 			if ($group != null) {
 				CLI::line("Edit group \"%r".$groupName."%n\"");
-				
+
 				if (isset($this->object["description"])) {
 					CLI::line(" - set description");
 					$group->setDescription($this->object["description"]);
@@ -461,20 +461,16 @@ class UpdaterCLI extends CLI{
 
 		return $functions;
 	}
-	
+
 	private function showPackage() {
 		$pkgName = $this->object["name"];
-	
-		if ($pkgName != null) {
-	
-		} else {
-			$table = new Table();
-			$table->setHeaders(array("ID", "Name", "Description", "Type", "Ver."));
-			foreach (self::$pkgMgr->getPackages() as $pkg) {
-				$table->addRow(array($pkg->getId(), $pkg->getName(), $pkg->getDescription(), $pkg->getType(), $pkg->getVersion()));
-			}
-			$table->display();
+
+		$table = new Table();
+		$table->setHeaders($this->verbose ? array("ID", "Name", "Description", "Type", "Ver.") : array("Name", "Description", "Type", "Ver."));
+		foreach (self::$pkgMgr->getPackages($pkgName) as $pkg) {
+			$table->addRow($this->verbose ? array($pkg->getId(), $pkg->getName(), $pkg->getDescription(), $pkg->getType(), $pkg->getVersion()) : array($pkg->getName(), $pkg->getDescription(), $pkg->getType(), $pkg->getVersion()));
 		}
+		$table->display();
 	}
 
 	private function addPackage() {
