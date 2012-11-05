@@ -472,7 +472,8 @@ class UpdaterCLI extends CLI{
 		if (isset($this->object["permissions"])) {
 			foreach ($this->parsePermissions() as $permObj) {
 				if ($permObj instanceof User) {
-					$packages += self::$pkgMgr->getPackagesForUserName($permObj->getName());
+					$packages = self::$pkgMgr->getPackagesForUserName($permObj->getName());
+					break;
 				}
 			}
 		} else {
