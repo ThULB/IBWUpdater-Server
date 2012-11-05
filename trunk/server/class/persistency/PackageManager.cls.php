@@ -23,13 +23,8 @@ class PackageManager {
 		$this->packages = PackageTable::getInstance();
 	}
 
-	public function getPackages() {
-		$packages = array();
-		foreach ($this->packages->findAll() as $package) {
-			array_push($packages, $package);
-		}
-	
-		return $packages;
+	public function getPackages($filter = null) {
+		return $filter != null ? $this->packages->findByName($filter) : $this->packages->findAll();
 	}
 	
 	public function getPackagesForUserName($aName) {

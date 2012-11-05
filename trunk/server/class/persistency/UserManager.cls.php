@@ -38,8 +38,8 @@ class UserManager {
 			throw new Exception("Source must either user ID or Name.");
 	}
 	
-	public function getUsers() {
-		return $this->users->findAll();
+	public function getUsers($filter = null) {
+		return $filter != null ? $this->users->findByName($filter) : $this->users->findAll();
 	}
 
 	/**
