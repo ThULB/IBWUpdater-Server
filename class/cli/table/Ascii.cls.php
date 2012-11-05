@@ -17,7 +17,7 @@ class Ascii extends Renderer {
 	 *
 	 * @param $characters  array  Characters used in rendering.
 	 */
-	public function setCharacters(array $characters) {
+	public function setCharacters($characters) {
 		$this->_characters = array_merge($this->_characters, $characters);
 	}
 
@@ -45,7 +45,7 @@ class Ascii extends Renderer {
 	 * @param array  $row  The table row.
 	 * @return string  The formatted table row.
 	 */
-	public function row(array $row) {
+	public function row($row) {
 		$row = array_map(array($this, 'padColumn'), $row, array_keys($row));
 		array_unshift($row, ''); // First border
 		array_push($row, ''); // Last border
