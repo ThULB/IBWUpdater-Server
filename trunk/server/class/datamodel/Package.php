@@ -202,6 +202,28 @@ class Package extends BasePackage {
 		
 		return null;
 	}
+	
+	public function getPermissions($aAction = Permission::READ, $aSourceType = null) {
+		if ($this->Permission->count() != 0) {
+			$permissions = array();
+			
+			foreach($this->Permission as $key => $permission) {
+				if ($permission->getSourceObject() == null) {
+					if ($permission->getSourceType() == Permission::GROUP)
+						$source = GroupManager::getInstance()->getGroup($permission->getSourceId());
+					else if ($permission->getSourceType() == Permission::USER)
+						$source = UserManager::getInstance()->getUser($permission->getSourceId());
+					$this->Permission[$key]->setSourceObject($source);
+				}
+				if (($aSourceType == null || $this->Permission[$key]->getSourceType() == $aSourceType) && $this->Permission[$key]->getAction() == $aAction)
+					array_push($permissions, $this->Permission[$key]->getSourceObject());
+			}
+			
+			return $permissions;
+		}
+	
+		return null;
+	}
 
 	public function removePermission($aSourceObject, $aAction = Permission::READ, $aSourceType = null) {
 		if ($this->Permission->count() != 0) {
