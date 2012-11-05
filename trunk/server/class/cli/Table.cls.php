@@ -65,7 +65,7 @@ class Table {
 	 *
 	 * @param array  $row  The table row.
 	 */
-	protected function checkRow(array $row) {
+	protected function checkRow($row) {
 		foreach ($row as $column => $str) {
 			$width = Colors::length($str);
 			if (!isset($this->_width[$column]) || $width > $this->_width[$column]) {
@@ -112,7 +112,7 @@ class Table {
 	 *
 	 * @param array  $headers  An array of strings containing column header names.
 	 */
-	public function setHeaders(array $headers) {
+	public function setHeaders($headers) {
 		$this->_headers = $this->checkRow($headers);
 	}
 
@@ -122,7 +122,7 @@ class Table {
 	 * @param array  $row  The row data.
 	 * @see Table::checkRow()
 	 */
-	public function addRow(array $row) {
+	public function addRow($row) {
 		$this->_rows[] = $this->checkRow($row);
 	}
 
@@ -132,7 +132,7 @@ class Table {
 	 * @param array  $rows  A 2-dimensional array of row data.
 	 * @see Table::addRow()
 	 */
-	public function setRows(array $rows) {
+	public function setRows($rows) {
 		$this->_rows = array();
 		foreach ($rows as $row) {
 			$this->addRow($row);
