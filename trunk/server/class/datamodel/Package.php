@@ -222,7 +222,7 @@ class Package extends BasePackage {
 			return $permissions;
 		}
 	
-		return null;
+		return array();
 	}
 
 	public function removePermission($aSourceObject, $aAction = Permission::READ, $aSourceType = null) {
