@@ -229,9 +229,9 @@ class Package extends BasePackage {
 		if ($this->Permission->count() != 0) {
 			$aName = null;
 
-			if ($aSourceObject instanceof Group || $aSourceObject instanceof User) {
+			if ($aSourceObject instanceof UserGroup || $aSourceObject instanceof User) {
 				$aName = $aSourceObject->getName();
-				if ($aSourceObject instanceof Group)
+				if ($aSourceObject instanceof UserGroup)
 					$aSourceType = Permission::GROUP;
 				else if ($aSourceObject instanceof User)
 					$aSourceType = Permission::USER;
