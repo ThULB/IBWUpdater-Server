@@ -509,7 +509,7 @@ class UpdaterCLI extends CLI{
 				$pkg = self::$pkgMgr->createPackage($pkgName, $this->object["description"], $pkgType);
 				if ($pkgType == Package::COMMON) {
 					CLI::line(" - copy archive");
-					$pkgFile = PKG_DIR.$pkg->getId().".zip";
+					$pkgFile = PKG_DIR.$pkg->getId()."-".$pkg->getVersion().".zip";
 					if (!@copy($inputFile, BASE_DIR.$pkgFile)) {
 						throw new Exception("Couldn't copy \"".$inputFile."\" to package store directory!");
 					}
@@ -575,8 +575,11 @@ class UpdaterCLI extends CLI{
 						throw new Exception("The startup script \"".$this->object["startupScript"]."\" wasn't found within package archive!");
 
 					if ($pkgType == Package::COMMON) {
+						CLI::line(" - remove old archive");
+						@unlink(BASE_DIR.$pkg->getUrl());
+						
 						CLI::line(" - copy archive");
-						$pkgFile = PKG_DIR.$pkg->getId().".zip";
+						$pkgFile = PKG_DIR.$pkg->getId()."-".$pkg->getVersion().".zip";
 						if (!@copy($inputFile, BASE_DIR.$pkgFile)) {
 							throw new Exception("Couldn't copy \"".$inputFile."\" to package store directory!");
 						}
@@ -613,12 +616,16 @@ class UpdaterCLI extends CLI{
 
 				if ($pkgType == Package::COMMON && $this->object["permissions"] == null) {
 					CLI::line("Delete package \"%r".$pkgName."%n\".");
+					CLI::line(" - remove old archive");
+					@unlink(BASE_DIR.$pkg->getUrl());
 					$pkg->delete();
 					exit();
 				} else if ($pkgType == Package::USER) {
 					$functions = explode(",", $this->object["functions"]);
 					if (count($functions) == $pkg->countFunctions()) {
 						CLI::line("Delete package \"%r".$pkgName."%n\".");
+						CLI::line(" - remove old archive");
+						@unlink(BASE_DIR.$pkg->getUrl());
 						$pkg->delete();
 						exit();
 					} else {
