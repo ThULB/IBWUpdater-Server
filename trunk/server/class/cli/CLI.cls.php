@@ -65,7 +65,7 @@ class CLI {
 				}
 				exit();
 			} catch (Exception $e) {
-				$this->colorText($e->getMessage()."\n", "RED", false);
+				self::line("%r".$e->getMessage()."%n");
 			}
 		}
 	}
@@ -288,8 +288,8 @@ class CLI {
 	 * The help is auto generated using various variables.
 	 */
 	public function help($args = array()){
-		print $this->colorText($this->appname." (".$this->buildVersion().")", "LIGHT_RED")."\n";
-		print $this->colorText($this->author.' - '.$this->copyright, "LIGHT_RED")."\n";
+		self::line("%r".$this->appname." (".$this->buildVersion().")%n");
+		self::line("%r".$this->author.' - '.$this->copyright."%n");
 
 
 		for($i=0; $i < strlen($this->appname.$this->author.$this->copyright); $i++){
@@ -315,18 +315,18 @@ class CLI {
 			}
 		}
 
-		print $this->colorText(' Flags:', "BLUE")."\n";
+		self::line(" %bFlags:%n");
 		foreach($flags_help as $flag => $desc){
 			$spaces = ($longest*2+5) - strlen($flag);
 			printf("  -%s%".$spaces."s%s\n", $flag,'', $desc);
 		}
-		print "\n".$this->colorText(' Arguments:', "BLUE")."\n";
+		self::line("\n %bArguments:%n");
 		foreach($arguments_help as $arg => $desc){
 			$spaces = ($longest*2+5) - strlen($arg) + 1;
 
 			printf("  %s%".$spaces."s%s\n", $arg,'', $desc);
 		}
-		print "\n".$this->colorText(' Options:', "BLUE")."\n";
+		self::line("\n %bOptions:%n");
 		foreach($options_help as $opt => $desc){
 			$spaces = ($longest*2+5) - strlen($opt) - strlen($opt) - 4;
 			printf("  --%s;%s=?%".$spaces."s%s\n",$opt, $opt,'', $desc);
@@ -335,42 +335,8 @@ class CLI {
 		exit();
 	}
 
-
-	# first define colors to use
-	private $_colors = array(
-			"LIGHT_RED"     => "[1;31m",
-			"LIGHT_GREEN"   => "[1;32m",
-			"YELLOW"        => "[1;33m",
-			"LIGHT_BLUE"    => "[1;34m",
-			"MAGENTA"       => "[1;35m",
-			"LIGHT_CYAN"    => "[1;36m",
-			"WHITE"         => "[1;37m",
-			"NORMAL"        => "[0m",
-			"BLACK"         => "[0;30m",
-			"RED"           => "[0;31m",
-			"GREEN"         => "[0;32m",
-			"BROWN"         => "[0;33m",
-			"BLUE"          => "[0;34m",
-			"CYAN"          => "[0;36m",
-			"BOLD"          => "[1m",
-			"UNDERSCORE"    => "[4m",
-			"REVERSE"       => "[7m",
-
-	);
-
-	/**
-	 * Output coloized text to the terminal
-	 */
-	function colorText($text, $color="NORMAL", $back=1){
-		$out = $this->_colors[strtoupper($color)];
-		if($out == ""){
-			$out = "[0m";
-		}
-		if($back){
-			return chr(27)."$out$text".chr(27)."[0m";#.chr(27);
-		}else{
-			echo chr(27)."$out$text".chr(27).chr(27)."[0m";#.chr(27);
-		}
+	public static function line($string) {
+		print Colors::colorize($string, !Shell::isPiped())."\n";
 	}
 }
 ?>

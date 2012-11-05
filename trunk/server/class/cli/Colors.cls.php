@@ -123,7 +123,7 @@ class Colors {
 	 * @param string  $string  the string to measure
 	 */
 	static public function length($string) {
-		return strlen(self::colorize($string, false));
+		return mb_strlen(self::colorize(utf8_decode($string), false));
 	}
 
 	/**
@@ -133,7 +133,7 @@ class Colors {
 	 * @param integer  $length  the display length
 	 */
 	static public function pad($string, $length) {
-		$real_length = strlen($string);
+		$real_length = mb_strlen($string);
 		$show_length = self::length($string);
 		$length  += $real_length - $show_length;
 
