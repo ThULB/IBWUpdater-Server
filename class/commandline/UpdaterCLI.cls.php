@@ -466,7 +466,7 @@ class UpdaterCLI extends CLI{
 		$pkgName = $this->object["name"];
 
 		$table = new Table();
-		$table->setHeaders($this->verbose ? array("ID", "Name", "Description", "Type", "Ver.") : array("Name", "Description", "Type", "Ver."));
+		$table->setHeaders($this->verbose ? array("ID", "Name", "Description", "Type", "Ver.", "Permissions") : array("Name", "Description", "Type", "Ver.", "Permissions"));
 
 		$packages = array();
 		if (isset($this->object["permissions"])) {
@@ -481,7 +481,12 @@ class UpdaterCLI extends CLI{
 		}
 
 		foreach ($packages as $pkg) {
-			$table->addRow($this->verbose ? array($pkg->getId(), $pkg->getName(), $pkg->getDescription(), $pkg->getType(), $pkg->getVersion()) : array($pkg->getName(), $pkg->getDescription(), $pkg->getType(), $pkg->getVersion()));
+			$perms = array();
+			foreach ($pkg->getPermissions() as $permObj) {
+				array_push($perms, ($permObj instanceof User ? "[u] " : "[g] ").$permObj->getName());
+			}
+			$permissions = !empty($perms) ? implode(", ", $perms) : "all";
+			$table->addRow($this->verbose ? array($pkg->getId(), $pkg->getName(), $pkg->getDescription(), $pkg->getType(), $pkg->getVersion(), $permissions) : array($pkg->getName(), $pkg->getDescription(), $pkg->getType(), $pkg->getVersion(), $permissions));
 		}
 		$table->display();
 	}
