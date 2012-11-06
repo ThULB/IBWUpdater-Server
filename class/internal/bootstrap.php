@@ -20,6 +20,7 @@ function __autoload( $className ) {
 			BASE_DIR.'class/datamodel/',
 			BASE_DIR.'class/datamodel/generated/',
 			BASE_DIR.'class/internal/',
+			BASE_DIR.'class/parser/',
 			BASE_DIR.'class/persistency/',
 	);
 

@@ -19,6 +19,13 @@ class UpdaterCLI extends CLI{
 	private $verbose	= false;
 	private $object		= array();
 
+	/**
+	 * The Constructor of IBWUpdater CLI.
+	 *
+	 * @param string $appname
+	 * @param string $author
+	 * @param string $copyright
+	 */
 	function __construct($appname = null, $author = null, $copyright = null) {
 		self::$grpMgr = GroupManager::getInstance();
 		self::$usrMgr = UserManager::getInstance();
@@ -44,27 +51,50 @@ class UpdaterCLI extends CLI{
 		}
 	}
 
+	/**
+	 * Modifier flag for adding a user, group or packages.
+	 *
+	 * @param string $opt
+	 * @return string
+	 */
 	public function flag_a($opt = null){
 		if($opt == 'help'){
-			return 'Modifier to add an new user, group or package.';
+			return 'Modifier to add a new user, group or package.';
 		}
 		$this->modifier = "add";
 	}
 
+	/**
+	 * Modifier flag for editing a user, group or packages.
+	 *
+	 * @param string $opt
+	 * @return string
+	 */
 	public function flag_e($opt = null){
 		if($opt == 'help'){
-			return 'Modifier to edit an user, group or package.';
+			return 'Modifier to edit a user, group or package.';
 		}
 		$this->modifier = "edit";
 	}
 
+	/**
+	 * Modifier flag for deleteting a user, group or packages.
+	 *
+	 * @param string $opt
+	 * @return string
+	 */
 	public function flag_d($opt = null){
 		if($opt == 'help'){
-			return 'Modifier to delete an user, group or package.';
+			return 'Modifier to delete a user, group or package.';
 		}
 		$this->modifier = "delete";
 	}
 
+	/**
+	 * Flag used to set output more verbose.
+	 *
+	 * @param string $opt
+	 */
 	public function flag_v($opt = null){
 		if($opt == 'help'){
 			return 'More verbose output';
@@ -72,6 +102,15 @@ class UpdaterCLI extends CLI{
 		$this->verbose = true;
 	}
 
+	/**
+	 * The user name or user list.<br />
+	 * In combination with <code>--group</code> input is used as groupmember.<br />
+	 * In combination with <code>--package</code> input is used as permission.
+	 *
+	 * @param string $opt
+	 * @return string
+	 * @throws Exception
+	 */
 	public function option_user($opt = null) {
 		if($opt == 'help'){
 			return 'The user to modify.';
@@ -88,6 +127,14 @@ class UpdaterCLI extends CLI{
 			throw new Exception("User can't be set on previously used Type.");
 	}
 
+	/**
+	 * The group name or group list.<br />
+	 * In combination with <code>--package</code> input is used as permission.
+	 *
+	 * @param string $opt
+	 * @throws Exception
+	 * @return string
+	 */
 	public function option_group($opt = null) {
 		if($opt == 'help'){
 			return 'The group to modify.';
@@ -102,6 +149,13 @@ class UpdaterCLI extends CLI{
 			throw new Exception("Group can't be set on previously used Type.");
 	}
 
+	/**
+	 * The package name.
+	 *
+	 * @param string $opt
+	 * @throws Exception
+	 * @return string
+	 */
 	public function option_package($opt = null) {
 		if($opt == 'help'){
 			return 'The package to modify.';
@@ -113,6 +167,12 @@ class UpdaterCLI extends CLI{
 			throw new Exception("Group can't be set on previously used Type.");
 	}
 
+	/**
+	 * The description for user, group or package.
+	 *
+	 * @param string $opt
+	 * @return string
+	 */
 	public function option_description($opt = null) {
 		if($opt == 'help'){
 			return 'The description for an user, group or package.';
@@ -121,6 +181,12 @@ class UpdaterCLI extends CLI{
 		$this->object["description"] = $opt;
 	}
 
+	/**
+	 * The startup script for package. Can only be used with package archive.
+	 *
+	 * @param string $opt
+	 * @return string
+	 */
 	public function option_startscript($opt = null) {
 		if($opt == 'help'){
 			return 'The startup script file for common package.';
@@ -129,6 +195,11 @@ class UpdaterCLI extends CLI{
 		$this->object["startupScript"] = $opt;
 	}
 
+	/**
+	 * The function name or list for package. Is used with JavaScript input file.
+	 *
+	 * @param string $opt
+	 */
 	public function option_function($opt = null) {
 		if($opt == 'help'){
 			return 'The function(s) to be set for user package.';
@@ -137,6 +208,9 @@ class UpdaterCLI extends CLI{
 		$this->object["functions"] = $opt;
 	}
 
+	/**
+	 * Displays informations about the user.
+	 */
 	private function showUser() {
 		$userName = $this->object["name"];
 
@@ -148,6 +222,11 @@ class UpdaterCLI extends CLI{
 		$table->display();
 	}
 
+	/**
+	 * Add a new user.
+	 *
+	 * @throws Exception
+	 */
 	private function addUser() {
 		$userName = $this->object["name"];
 
@@ -159,6 +238,11 @@ class UpdaterCLI extends CLI{
 			throw new Exception("Missing user name!");
 	}
 
+	/**
+	 * Edit a user.
+	 *
+	 * @throws Exception
+	 */
 	private function editUser() {
 		$userName = $this->object["name"];
 
@@ -177,6 +261,11 @@ class UpdaterCLI extends CLI{
 			throw new Exception("Missing user name!");
 	}
 
+	/**
+	 * Deletes a user.
+	 *
+	 * @throws Exception
+	 */
 	private function deleteUser() {
 		$userName = $this->object["name"];
 
@@ -192,6 +281,11 @@ class UpdaterCLI extends CLI{
 			throw new Exception("Missing user name!");
 	}
 
+	/**
+	 * Helper function to parse groupmembers from arguments.
+	 *
+	 * @throws Exception
+	 */
 	private function parseMembers() {
 		$members = array();
 		if (isset($this->object["members"])) {
@@ -208,6 +302,9 @@ class UpdaterCLI extends CLI{
 		return $members;
 	}
 
+	/**
+	 * Displays information about the group.
+	 */
 	private function showGroup() {
 		$groupName = $this->object["name"];
 
@@ -223,6 +320,11 @@ class UpdaterCLI extends CLI{
 		$table->display();
 	}
 
+	/**
+	 * Add a new group and groupmeber is set.
+	 *
+	 * @throws Exception
+	 */
 	private function addGroup() {
 		$groupName = $this->object["name"];
 		$members = $this->parseMembers();
@@ -235,6 +337,11 @@ class UpdaterCLI extends CLI{
 			throw new Exception("Missing group name!");
 	}
 
+	/**
+	 * Edit group and add new groupmember.
+	 *
+	 * @throws Exception
+	 */
 	private function editGroup() {
 		$groupName = $this->object["name"];
 		$members = $this->parseMembers();
@@ -265,6 +372,11 @@ class UpdaterCLI extends CLI{
 			throw new Exception("Missing group name!");
 	}
 
+	/**
+	 * Deletes group or a groupmeber.
+	 *
+	 * @throws Exception
+	 */
 	private function deleteGroup() {
 		$groupName = $this->object["name"];
 		$members = $this->parseMembers();
@@ -291,11 +403,22 @@ class UpdaterCLI extends CLI{
 			throw new Exception("Missing group name!");
 	}
 
+	/**
+	 * Helper to check file is an ZIP.
+	 *
+	 * @param string $filename
+	 */
 	private function isZip($filename) {
 		$zip = new ZipArchive();
 		return $zip->open($filename) === true;
 	}
 
+	/**
+	 * Helper to check if startup script in archive.
+	 *
+	 * @param string $filename
+	 * @param string $startupScript
+	 */
 	private function isStartupScriptIncluded($filename, $startupScript) {
 		$zip = new ZipArchive();
 		$zip->open($filename);
@@ -309,6 +432,11 @@ class UpdaterCLI extends CLI{
 		return false;
 	}
 
+	/**
+	 * Helper to parse permissions for user(s) and/or group(s) from arguments.
+	 *
+	 * @throws Exception
+	 */
 	private function parsePermissions() {
 		$permissions = array();
 		if ($this->object["permissions"] != null) {
@@ -327,109 +455,12 @@ class UpdaterCLI extends CLI{
 		return $permissions;
 	}
 
-	private function trimCode($aCode) {
-		$code = null;
-
-		if (strpos($aCode, "{") !== false) {
-			$code = substr($aCode, strpos($aCode, "{") + 1);
-			$code = substr($code, 0, strrpos($code, "}"));
-		}
-
-		return $code;
-	}
-
-	private function startsWith($haystack, $needle, $withTrim = true) {
-		if ($withTrim)
-			return substr(trim($haystack), 0, strlen($needle)) == $needle;
-		else
-			return substr($haystack, 0, strlen($needle)) == $needle;
-	}
-
-	const lineSeparator = "\n";
-
-	private function parseJSFile($jsFile) {
-		$functions = array();
-
-		$jsLines = file($jsFile);
-		$jsUnknown = null;
-
-		$c = 0;
-		while ($c < count($jsLines)) {
-			$comment = null;
-
-			// read comment(s)
-			$line = trim($jsLines[$c]).self::lineSeparator;
-
-			if ($this->startsWith($line, "/*")) {
-				$comment = $line;
-				$c++;
-
-				$line = trim($jsLines[$c]).self::lineSeparator;
-				while ($this->startsWith($line, "*/") != true) {
-					$comment .= $line;
-					$c++;
-					$line = trim($jsLines[$c]).self::lineSeparator;
-				}
-				$comment .= $line;
-				$c++;
-				$line = trim($jsLines[$c]).self::lineSeparator;
-			}
-
-			if ($this->startsWith($line, "//")) {
-				if ($comment == null)
-					$comment = $line;
-				else
-					$comment .= $line;
-			}
-
-			// read function(s)
-			if ($this->startsWith($line, "function")) {
-				$found = preg_match("/function\s([^\(].*)\((.*)\)/", $line, $match);
-				if ($found) {
-					$brackets = 0;
-					$code = null;
-
-					while (strpos($line, "{") === false) {
-						$c++;
-						$line = trim($jsLines[$c]).self::lineSeparator;
-					}
-
-					do {
-						if (strpos($line, "{") !== false)
-							$brackets++;
-						if (strpos($line, "}") !== false)
-							$brackets--;
-
-						if ($code == null)
-							$code = $line;
-						else
-							$code .= $line;
-
-						if (($brackets != 0)) {
-							$c++;
-							$line = trim($jsLines[$c]).self::lineSeparator;
-						}
-					} while ($brackets != 0);
-
-					$functions[$match[1]] = array("params" => $match[2], "comment" => utf8_encode($comment), "code" => utf8_encode($this->trimCode($code)));
-				}
-			} else {
-				$line = trim($line);
-				if (strlen($line) != 0) {
-					if ($jsUnknown == null)
-						$jsUnknown = $line.self::lineSeparator;
-					else
-						$jsUnknown .= $line.self::lineSeparator;
-				}
-			}
-
-			// next line
-			$c++;
-		}
-
-		return $functions != null ? $functions : $jsUnknown;
-	}
-
+	/**
+	 * Helper function to parse function(s) from arguments.
+	 * 
+	 * @param array $args
+	 * @throws Exception
+	 */
 	private function parseFunctions($args) {
 		$functions = array();
 
@@ -441,12 +472,14 @@ class UpdaterCLI extends CLI{
 				$funcName = trim($funcName);
 
 				if ($args[$fCount] != null) {
-					$pfunc = $this->parseJSFile($args[$fCount]);
-					if (is_array($pfunc)) {
+					$jsParser = new JSParser($args[$fCount]);
+					if ($jsParser->getFunctions() != null) {
+						$pfunc = $jsParser->getFunctions();
 						if ($pfunc[$funcName] != null) {
 							$functions[$funcName] = $pfunc[$funcName];
 						}
 					} else {
+						$pfunc = $jsParser->getCodeString();
 						$functions[$funcName] = array("params" => "", "code" => $pfunc);
 						$pfunc = null;
 					}
@@ -462,6 +495,9 @@ class UpdaterCLI extends CLI{
 		return $functions;
 	}
 
+	/**
+	 * Displays information about the package.
+	 */
 	private function showPackage() {
 		$pkgName = $this->object["name"];
 
@@ -491,6 +527,11 @@ class UpdaterCLI extends CLI{
 		$table->display();
 	}
 
+	/**
+	 * Add a new package.
+	 * 
+	 * @throws Exception
+	 */
 	private function addPackage() {
 		$pkgName = $this->object["name"];
 		$args = parent::parseArgs();
@@ -540,6 +581,11 @@ class UpdaterCLI extends CLI{
 			throw new Exception("Missing package name!");
 	}
 
+	/**
+	 * Edit a package or set new content btw. permissions.
+	 * 
+	 * @throws Exception
+	 */
 	private function editPackage() {
 		$pkgName = $this->object["name"];
 		$args = parent::parseArgs();
@@ -577,7 +623,7 @@ class UpdaterCLI extends CLI{
 					if ($pkgType == Package::COMMON) {
 						CLI::line(" - remove old archive");
 						@unlink(BASE_DIR.$pkg->getUrl());
-						
+
 						CLI::line(" - copy archive");
 						$pkgFile = PKG_DIR.$pkg->getId()."-".$pkg->getVersion().".zip";
 						if (!@copy($inputFile, BASE_DIR.$pkgFile)) {
@@ -605,6 +651,9 @@ class UpdaterCLI extends CLI{
 			throw new Exception("Missing package name!");
 	}
 
+	/**
+	 * Delete a package, a function or a permission. 
+	 */
 	private function deletePackage() {
 		$pkgName = $this->object["name"];
 
