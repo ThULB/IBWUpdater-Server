@@ -457,7 +457,7 @@ class UpdaterCLI extends CLI{
 
 	/**
 	 * Helper function to parse function(s) from arguments.
-	 * 
+	 *
 	 * @param array $args
 	 * @throws Exception
 	 */
@@ -502,10 +502,8 @@ class UpdaterCLI extends CLI{
 		$pkgName = $this->object["name"];
 
 		$table = new Table();
-		$table->setHeaders($this->verbose ? array("ID", "Name", "Description", "Type", "Ver.", "Permissions") : array("Name", "Description", "Type", "Ver.", "Permissions"));
-
 		$packages = array();
-		if (isset($this->object["permissions"])) {
+		if (array_key_exists("permissions", $this->object)) {
 			foreach ($this->parsePermissions() as $permObj) {
 				if ($permObj instanceof User) {
 					$packages = self::$pkgMgr->getPackagesForUserName($permObj->getName());
@@ -516,20 +514,36 @@ class UpdaterCLI extends CLI{
 			$packages = self::$pkgMgr->getPackages($pkgName);
 		}
 
-		foreach ($packages as $pkg) {
-			$perms = array();
-			foreach ($pkg->getPermissions() as $permObj) {
-				array_push($perms, ($permObj instanceof User ? "[u] " : "[g] ").$permObj->getName());
+		if (array_key_exists("functions", $this->object)) {
+			$table->setHeaders($this->verbose ? array("ID", "Name", "Function") : array("Name", "Function"));
+			foreach ($packages as $pkg) {
+				if ($pkg->getType() == Package::USER) {
+					$funcs = array();
+					foreach ($pkg->getFunctions() as $funcObj) {
+						array_push($funcs, $funcObj->getName());
+					}
+					$functions = implode(", ", $funcs);
+					$table->addRow($this->verbose ? array($pkg->getId(), $pkg->getName(), $functions) : array($pkg->getName(), $functions));
+				}
 			}
-			$permissions = !empty($perms) ? implode(", ", $perms) : "all";
-			$table->addRow($this->verbose ? array($pkg->getId(), $pkg->getName(), $pkg->getDescription(), $pkg->getType(), $pkg->getVersion(), $permissions) : array($pkg->getName(), $pkg->getDescription(), $pkg->getType(), $pkg->getVersion(), $permissions));
+		} else {
+			$table->setHeaders($this->verbose ? array("ID", "Name", "Description", "Type", "Ver.", "Permissions") : array("Name", "Description", "Type", "Ver.", "Permissions"));
+
+			foreach ($packages as $pkg) {
+				$perms = array();
+				foreach ($pkg->getPermissions() as $permObj) {
+					array_push($perms, ($permObj instanceof User ? "[u] " : "[g] ").$permObj->getName());
+				}
+				$permissions = !empty($perms) ? implode(", ", $perms) : "all";
+				$table->addRow($this->verbose ? array($pkg->getId(), $pkg->getName(), $pkg->getDescription(), $pkg->getType(), $pkg->getVersion(), $permissions) : array($pkg->getName(), $pkg->getDescription(), $pkg->getType(), $pkg->getVersion(), $permissions));
+			}
 		}
 		$table->display();
 	}
 
 	/**
 	 * Add a new package.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	private function addPackage() {
@@ -565,7 +579,7 @@ class UpdaterCLI extends CLI{
 					}
 				}
 
-				if (isset($this->object["permissions"])) {
+				if (array_key_exists("permissions", $this->object)) {
 					foreach ($this->parsePermissions() as $permObj) {
 						CLI::line(" - add permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\"");
 						$pkg->addPermission($permObj);
@@ -583,7 +597,7 @@ class UpdaterCLI extends CLI{
 
 	/**
 	 * Edit a package or set new content btw. permissions.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	private function editPackage() {
@@ -601,7 +615,7 @@ class UpdaterCLI extends CLI{
 					$pkg->setDescription($this->object["description"]);
 				}
 
-				if (isset($this->object["permissions"])) {
+				if (array_key_exists("permissions", $this->object)) {
 					foreach ($this->parsePermissions() as $permObj) {
 						if ($pkg->getPermission($permObj) == null) {
 							CLI::line(" - add permission for ".($permObj instanceof User ? "user" : "group"). " \"".$permObj->getName()."\"");
@@ -621,7 +635,7 @@ class UpdaterCLI extends CLI{
 						throw new Exception("The startup script \"".$this->object["startupScript"]."\" wasn't found within package archive!");
 
 					$pkg->setVersion($pkg->getVersion() + 1);
-					
+
 					if ($pkgType == Package::COMMON) {
 						CLI::line(" - remove old archive");
 						@unlink(BASE_DIR.$pkg->getUrl());
@@ -652,7 +666,7 @@ class UpdaterCLI extends CLI{
 	}
 
 	/**
-	 * Delete a package, a function or a permission. 
+	 * Delete a package, a function or a permission.
 	 */
 	private function deletePackage() {
 		$pkgName = $this->object["name"];
@@ -686,7 +700,7 @@ class UpdaterCLI extends CLI{
 					}
 				}
 
-				if (isset($this->object["permissions"])) {
+				if (array_key_exists("permissions", $this->object)) {
 					CLI::line("Edit package \"%r".$pkgName."%n\"...");
 					foreach ($this->parsePermissions() as $permObj) {
 						if ($pkg->getPermission($permObj) != null) {
