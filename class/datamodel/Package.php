@@ -122,6 +122,10 @@ class Package extends BasePackage {
 
 		return null;
 	}
+	
+	public function getFunctions() {
+		return $this->JSFunction;
+	}
 
 	public function removeFunction($aObject) {
 		if ($this->JSFunction->count() != 0) {
