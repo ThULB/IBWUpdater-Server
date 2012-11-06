@@ -620,6 +620,8 @@ class UpdaterCLI extends CLI{
 					if ($pkgType == Package::COMMON && !$this->isStartupScriptIncluded($inputFile, $this->object["startupScript"]))
 						throw new Exception("The startup script \"".$this->object["startupScript"]."\" wasn't found within package archive!");
 
+					$pkg->setVersion($pkg->getVersion() + 1);
+					
 					if ($pkgType == Package::COMMON) {
 						CLI::line(" - remove old archive");
 						@unlink(BASE_DIR.$pkg->getUrl());
@@ -639,8 +641,6 @@ class UpdaterCLI extends CLI{
 							$pkg->addFunction($funcName, $funcData["params"], $funcData["code"]);
 						}
 					}
-
-					$pkg->setVersion($pkg->getVersion() + 1);
 				}
 					
 				$pkg->save();
