@@ -19,14 +19,18 @@ package ibw.updater.datamodel;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
  *
  */
+@XmlRootElement(name = "package")
 public class Package {
 	/**
 	 * The Package Type
@@ -107,6 +111,7 @@ public class Package {
 	/**
 	 * @return the id
 	 */
+	@XmlAttribute(name = "id")
 	public String getId() {
 		return Optional.ofNullable(id).orElse(UUID.randomUUID().toString());
 	}
@@ -122,6 +127,7 @@ public class Package {
 	/**
 	 * @return the type
 	 */
+	@XmlAttribute(name = "type", required = true)
 	public Type getType() {
 		return type;
 	}
@@ -137,6 +143,7 @@ public class Package {
 	/**
 	 * @return the version
 	 */
+	@XmlAttribute(name = "version")
 	public Integer getVersion() {
 		return version;
 	}
@@ -152,6 +159,7 @@ public class Package {
 	/**
 	 * @return the name
 	 */
+	@XmlAttribute(name = "name", required = true)
 	public String getName() {
 		return name;
 	}
@@ -167,6 +175,7 @@ public class Package {
 	/**
 	 * @return the description
 	 */
+	@XmlElement(name = "description")
 	public String getDescription() {
 		return description;
 	}
@@ -182,6 +191,7 @@ public class Package {
 	/**
 	 * @return the url
 	 */
+	@XmlElement(name = "url")
 	public String getUrl() {
 		return url;
 	}
@@ -197,6 +207,7 @@ public class Package {
 	/**
 	 * @return the startupScript
 	 */
+	@XmlElement(name = "startupScript")
 	public String getStartupScript() {
 		return startupScript;
 	}

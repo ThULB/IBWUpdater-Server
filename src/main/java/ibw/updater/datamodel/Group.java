@@ -16,10 +16,15 @@
  */
 package ibw.updater.datamodel;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author Ren\u00E9 Adler (eagle)
  *
  */
+@XmlRootElement(name = "group")
 public class Group {
 
 	private int id;
@@ -46,6 +51,7 @@ public class Group {
 	/**
 	 * @return the id
 	 */
+	@XmlAttribute(name = "id")
 	public int getId() {
 		return id;
 	}
@@ -61,6 +67,7 @@ public class Group {
 	/**
 	 * @return the name
 	 */
+	@XmlAttribute(name = "name", required = true)
 	public String getName() {
 		return name;
 	}
@@ -76,6 +83,7 @@ public class Group {
 	/**
 	 * @return the description
 	 */
+	@XmlElement(name = "description")
 	public String getDescription() {
 		return description;
 	}

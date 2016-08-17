@@ -16,10 +16,15 @@
  */
 package ibw.updater.datamodel;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlValue;
+
 /**
  * @author Ren\u00E9 Adler (eagle)
  *
  */
+@XmlRootElement(name = "function")
 public class Function {
 
 	private int id;
@@ -55,6 +60,7 @@ public class Function {
 	/**
 	 * @return the id
 	 */
+	@XmlAttribute(name = "id")
 	public int getId() {
 		return id;
 	}
@@ -70,6 +76,7 @@ public class Function {
 	/**
 	 * @return the packageId
 	 */
+	@XmlAttribute(name = "packageId")
 	public String getPackageId() {
 		return packageId;
 	}
@@ -85,6 +92,7 @@ public class Function {
 	/**
 	 * @return the name
 	 */
+	@XmlAttribute(name = "name", required = true)
 	public String getName() {
 		return name;
 	}
@@ -100,6 +108,7 @@ public class Function {
 	/**
 	 * @return the params
 	 */
+	@XmlAttribute(name = "params")
 	public String getParams() {
 		return params;
 	}
@@ -115,6 +124,7 @@ public class Function {
 	/**
 	 * @return the code
 	 */
+	@XmlValue
 	public String getCode() {
 		return code;
 	}

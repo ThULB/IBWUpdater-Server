@@ -16,14 +16,17 @@
  */
 package ibw.updater.datamodel;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
  *
  */
+@XmlRootElement(name = "permission")
 public class Permission {
 	/**
 	 * The Source Type
@@ -146,6 +149,7 @@ public class Permission {
 	/**
 	 * @return the type
 	 */
+	@XmlAttribute(name = "sourceType", required = true)
 	public Type getType() {
 		return type;
 	}
@@ -161,6 +165,7 @@ public class Permission {
 	/**
 	 * @return the sourceId
 	 */
+	@XmlAttribute(name = "sourceId")
 	public int getSourceId() {
 		return sourceId;
 	}
@@ -176,6 +181,7 @@ public class Permission {
 	/**
 	 * @return the action
 	 */
+	@XmlAttribute(name = "action", required = true)
 	public Action getAction() {
 		return action;
 	}
@@ -191,6 +197,7 @@ public class Permission {
 	/**
 	 * @return the packageId
 	 */
+	@XmlAttribute(name = "packageId")
 	public String getPackageId() {
 		return packageId;
 	}
