@@ -16,6 +16,11 @@
  */
 package ibw.updater.datamodel;
 
+import javax.persistence.Cacheable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
@@ -26,6 +31,8 @@ import javax.xml.bind.annotation.XmlType;
  * @author Ren\u00E9 Adler (eagle)
  *
  */
+@Entity
+@Cacheable
 @XmlRootElement(name = "permission")
 public class Permission {
 	/**
@@ -149,6 +156,8 @@ public class Permission {
 	/**
 	 * @return the type
 	 */
+	@Column(name = "sourceType", nullable = false)
+	@Enumerated(EnumType.STRING)
 	@XmlAttribute(name = "sourceType", required = true)
 	public Type getType() {
 		return type;
@@ -165,6 +174,7 @@ public class Permission {
 	/**
 	 * @return the sourceId
 	 */
+	@Column(name = "sourceId", nullable = false)
 	@XmlAttribute(name = "sourceId")
 	public int getSourceId() {
 		return sourceId;
@@ -181,6 +191,8 @@ public class Permission {
 	/**
 	 * @return the action
 	 */
+	@Column(name = "action", nullable = false)
+	@Enumerated(EnumType.STRING)
 	@XmlAttribute(name = "action", required = true)
 	public Action getAction() {
 		return action;
@@ -197,6 +209,7 @@ public class Permission {
 	/**
 	 * @return the packageId
 	 */
+	@Column(name = "packageId", length = 36, nullable = false)
 	@XmlAttribute(name = "packageId")
 	public String getPackageId() {
 		return packageId;

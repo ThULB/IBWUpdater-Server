@@ -16,6 +16,12 @@
  */
 package ibw.updater.datamodel;
 
+import javax.persistence.Cacheable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -24,6 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Ren\u00E9 Adler (eagle)
  *
  */
+
+@Entity
+@Cacheable
 @XmlRootElement(name = "user")
 public class User {
 
@@ -51,6 +60,9 @@ public class User {
 	/**
 	 * @return the id
 	 */
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	@XmlAttribute(name = "id")
 	public int getId() {
 		return id;
@@ -67,6 +79,7 @@ public class User {
 	/**
 	 * @return the name
 	 */
+	@Column(name = "name", length = 64, nullable = false)
 	@XmlAttribute(name = "name", required = true)
 	public String getName() {
 		return name;
@@ -83,6 +96,7 @@ public class User {
 	/**
 	 * @return the description
 	 */
+	@Column(name = "description", length = 4096)
 	@XmlElement(name = "description")
 	public String getDescription() {
 		return description;

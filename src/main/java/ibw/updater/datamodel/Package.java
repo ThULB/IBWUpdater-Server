@@ -19,6 +19,11 @@ package ibw.updater.datamodel;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.persistence.Cacheable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlEnum;
@@ -30,6 +35,8 @@ import javax.xml.bind.annotation.XmlType;
  * @author Ren\u00E9 Adler (eagle)
  *
  */
+@Entity
+@Cacheable
 @XmlRootElement(name = "package")
 public class Package {
 	/**
@@ -111,6 +118,7 @@ public class Package {
 	/**
 	 * @return the id
 	 */
+	@Column(name = "id", length = 36, nullable = false)
 	@XmlAttribute(name = "id")
 	public String getId() {
 		return Optional.ofNullable(id).orElse(UUID.randomUUID().toString());
@@ -127,6 +135,8 @@ public class Package {
 	/**
 	 * @return the type
 	 */
+	@Column(name = "type", nullable = false)
+	@Enumerated(EnumType.STRING)
 	@XmlAttribute(name = "type", required = true)
 	public Type getType() {
 		return type;
@@ -143,6 +153,7 @@ public class Package {
 	/**
 	 * @return the version
 	 */
+	@Column(name = "version", nullable = false)
 	@XmlAttribute(name = "version")
 	public Integer getVersion() {
 		return version;
@@ -159,6 +170,7 @@ public class Package {
 	/**
 	 * @return the name
 	 */
+	@Column(name = "name", length = 64, nullable = false)
 	@XmlAttribute(name = "name", required = true)
 	public String getName() {
 		return name;
@@ -175,6 +187,7 @@ public class Package {
 	/**
 	 * @return the description
 	 */
+	@Column(name = "description", length = 4096)
 	@XmlElement(name = "description")
 	public String getDescription() {
 		return description;
@@ -191,6 +204,7 @@ public class Package {
 	/**
 	 * @return the url
 	 */
+	@Column(name = "url", length = 4096)
 	@XmlElement(name = "url")
 	public String getUrl() {
 		return url;
@@ -207,6 +221,7 @@ public class Package {
 	/**
 	 * @return the startupScript
 	 */
+	@Column(name = "startupScript", length = 2048)
 	@XmlElement(name = "startupScript")
 	public String getStartupScript() {
 		return startupScript;

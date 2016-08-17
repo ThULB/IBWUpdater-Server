@@ -16,6 +16,12 @@
  */
 package ibw.updater.datamodel;
 
+import javax.persistence.Cacheable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
@@ -24,6 +30,8 @@ import javax.xml.bind.annotation.XmlValue;
  * @author Ren\u00E9 Adler (eagle)
  *
  */
+@Entity
+@Cacheable
 @XmlRootElement(name = "function")
 public class Function {
 
@@ -60,6 +68,9 @@ public class Function {
 	/**
 	 * @return the id
 	 */
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	@XmlAttribute(name = "id")
 	public int getId() {
 		return id;
@@ -76,6 +87,7 @@ public class Function {
 	/**
 	 * @return the packageId
 	 */
+	@Column(name = "packageId", length = 36, nullable = false)
 	@XmlAttribute(name = "packageId")
 	public String getPackageId() {
 		return packageId;
@@ -92,6 +104,7 @@ public class Function {
 	/**
 	 * @return the name
 	 */
+	@Column(name = "name", length = 64, nullable = false)
 	@XmlAttribute(name = "name", required = true)
 	public String getName() {
 		return name;
@@ -108,6 +121,7 @@ public class Function {
 	/**
 	 * @return the params
 	 */
+	@Column(name = "params", length = 4096)
 	@XmlAttribute(name = "params")
 	public String getParams() {
 		return params;
@@ -124,6 +138,7 @@ public class Function {
 	/**
 	 * @return the code
 	 */
+	@Column(name = "code", length = Integer.MAX_VALUE, nullable = false)
 	@XmlValue
 	public String getCode() {
 		return code;
