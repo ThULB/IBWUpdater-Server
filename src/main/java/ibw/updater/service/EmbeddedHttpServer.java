@@ -69,7 +69,7 @@ public class EmbeddedHttpServer {
 
 	private HttpServer createHttpServer()
 			throws IOException, IllegalArgumentException, UriBuilderException, URISyntaxException {
-		ResourceConfig resourceConfig = new ResourceConfig().packages("org.mycore.vidconv.resource")
+		ResourceConfig resourceConfig = new ResourceConfig().packages("ibw.updater.resource")
 				.register(MoxyJsonFeature.class);
 		return JdkHttpServerFactory.createHttpServer(getURI(), resourceConfig, false);
 	}

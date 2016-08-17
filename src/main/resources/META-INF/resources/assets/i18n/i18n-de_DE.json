@@ -1,0 +1,9 @@
+{
+    "app.headline" : "IBWUpdater",
+    
+    "btn.save" : "Speichern", 
+    "btn.close" : "Schliessen",
+    
+    "nav.dashboard" : "Übersicht",
+	"nav.settings" : "Einstellungen"
+}
