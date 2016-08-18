@@ -16,15 +16,24 @@
  */
 package ibw.updater.datamodel;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -42,6 +51,8 @@ public class Group {
 	private String name;
 
 	private String description;
+
+	private List<User> users;
 
 	/**
 	 * 
@@ -109,6 +120,36 @@ public class Group {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * @return the users
+	 */
+	@OneToMany
+	@JoinTable(name = "IBWGroupMember", joinColumns = {
+			@JoinColumn(name = "gid", referencedColumnName = "id") }, inverseJoinColumns = {
+					@JoinColumn(name = "uid", referencedColumnName = "id") })
+	@XmlElementWrapper(name = "users")
+	@XmlElement(name = "user")
+	public List<User> getUsers() {
+		return users;
+	}
+
+	/**
+	 * @param users
+	 *            the users to set
+	 */
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
+
+	/**
+	 * @param user
+	 *            the user to add
+	 */
+	@Transient
+	public void addUser(User user) {
+		Optional.ofNullable(this.users).orElse(new ArrayList<>()).add(user);
 	}
 
 	/*
