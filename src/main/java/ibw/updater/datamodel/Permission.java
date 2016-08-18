@@ -16,16 +16,23 @@
  */
 package ibw.updater.datamodel;
 
+import java.io.Serializable;
+
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import ibw.updater.datamodel.Permission.PermissionId;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -33,6 +40,8 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Entity
 @Cacheable
+@IdClass(value = PermissionId.class)
+@Table(name = "IBWPermission")
 @XmlRootElement(name = "permission")
 public class Permission {
 	/**
@@ -156,6 +165,7 @@ public class Permission {
 	/**
 	 * @return the type
 	 */
+	@Id
 	@Column(name = "sourceType", nullable = false)
 	@Enumerated(EnumType.STRING)
 	@XmlAttribute(name = "sourceType", required = true)
@@ -174,6 +184,7 @@ public class Permission {
 	/**
 	 * @return the sourceId
 	 */
+	@Id
 	@Column(name = "sourceId", nullable = false)
 	@XmlAttribute(name = "sourceId")
 	public int getSourceId() {
@@ -191,6 +202,7 @@ public class Permission {
 	/**
 	 * @return the action
 	 */
+	@Id
 	@Column(name = "action", nullable = false)
 	@Enumerated(EnumType.STRING)
 	@XmlAttribute(name = "action", required = true)
@@ -209,6 +221,7 @@ public class Permission {
 	/**
 	 * @return the packageId
 	 */
+	@Id
 	@Column(name = "packageId", length = 36, nullable = false)
 	@XmlAttribute(name = "packageId")
 	public String getPackageId() {
@@ -278,4 +291,126 @@ public class Permission {
 				+ "]";
 	}
 
+	public static class PermissionId implements Serializable {
+
+		private static final long serialVersionUID = -3030317167265840962L;
+
+		private Type type;
+
+		private int sourceId;
+
+		private Action action;
+
+		private String packageId;
+
+		/**
+		 * 
+		 */
+		public PermissionId() {
+		}
+
+		/**
+		 * @return the type
+		 */
+		public Type getType() {
+			return type;
+		}
+
+		/**
+		 * @param type
+		 *            the type to set
+		 */
+		public void setType(Type type) {
+			this.type = type;
+		}
+
+		/**
+		 * @return the sourceId
+		 */
+		public int getSourceId() {
+			return sourceId;
+		}
+
+		/**
+		 * @param sourceId
+		 *            the sourceId to set
+		 */
+		public void setSourceId(int sourceId) {
+			this.sourceId = sourceId;
+		}
+
+		/**
+		 * @return the action
+		 */
+		public Action getAction() {
+			return action;
+		}
+
+		/**
+		 * @param action
+		 *            the action to set
+		 */
+		public void setAction(Action action) {
+			this.action = action;
+		}
+
+		/**
+		 * @return the packageId
+		 */
+		public String getPackageId() {
+			return packageId;
+		}
+
+		/**
+		 * @param packageId
+		 *            the packageId to set
+		 */
+		public void setPackageId(String packageId) {
+			this.packageId = packageId;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Object#hashCode()
+		 */
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((action == null) ? 0 : action.hashCode());
+			result = prime * result + ((packageId == null) ? 0 : packageId.hashCode());
+			result = prime * result + sourceId;
+			result = prime * result + ((type == null) ? 0 : type.hashCode());
+			return result;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Object#equals(java.lang.Object)
+		 */
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			PermissionId other = (PermissionId) obj;
+			if (action != other.action)
+				return false;
+			if (packageId == null) {
+				if (other.packageId != null)
+					return false;
+			} else if (!packageId.equals(other.packageId))
+				return false;
+			if (sourceId != other.sourceId)
+				return false;
+			if (type != other.type)
+				return false;
+			return true;
+		}
+	}
 }

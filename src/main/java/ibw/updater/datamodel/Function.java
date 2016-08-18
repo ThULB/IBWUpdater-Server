@@ -22,6 +22,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
@@ -32,6 +33,7 @@ import javax.xml.bind.annotation.XmlValue;
  */
 @Entity
 @Cacheable
+@Table(name = "IBWFunction")
 @XmlRootElement(name = "function")
 public class Function {
 

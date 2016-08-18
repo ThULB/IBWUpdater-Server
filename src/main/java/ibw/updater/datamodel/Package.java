@@ -24,6 +24,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlEnum;
@@ -37,6 +39,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Entity
 @Cacheable
+@Table(name = "IBWPackage")
 @XmlRootElement(name = "package")
 public class Package {
 	/**
@@ -118,6 +121,7 @@ public class Package {
 	/**
 	 * @return the id
 	 */
+	@Id
 	@Column(name = "id", length = 36, nullable = false)
 	@XmlAttribute(name = "id")
 	public String getId() {
@@ -156,7 +160,7 @@ public class Package {
 	@Column(name = "version", nullable = false)
 	@XmlAttribute(name = "version")
 	public Integer getVersion() {
-		return version;
+		return Optional.ofNullable(version).orElse(1);
 	}
 
 	/**
