@@ -15,6 +15,8 @@
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  */
 /**
+ * Package provides IBWUpdate datamodel.
+ * 
  * @author Ren\u00E9 Adler (eagle)
  *
  */
