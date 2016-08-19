@@ -105,4 +105,31 @@ public class TestDatamodel extends JPATestCase {
 		entitymanager.persist(p);
 		entitymanager.getTransaction().commit();
 	}
+
+	@Test
+	public void testPermission() {
+		entitymanager.getTransaction().begin();
+
+		User u = new User("test", "Test User");
+
+		entitymanager.persist(u);
+		entitymanager.getTransaction().commit();
+
+		entitymanager.getTransaction().begin();
+
+		Package p = new Package(Package.Type.USER, "test", "Test Package");
+		p.setStartupScript("scripts/testStartup.js");
+
+		assertNotNull("package id should not null", p.getId());
+
+		entitymanager.persist(p);
+		entitymanager.getTransaction().commit();
+
+		entitymanager.getTransaction().begin();
+
+		Permission permission = new Permission(Permission.Type.USER, u.getId(), Permission.Action.READ, p);
+
+		entitymanager.persist(permission);
+		entitymanager.getTransaction().commit();
+	}
 }

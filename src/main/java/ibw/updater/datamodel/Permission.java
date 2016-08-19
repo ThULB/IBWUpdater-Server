@@ -25,6 +25,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlEnum;
@@ -141,7 +143,7 @@ public class Permission {
 
 	private Action action;
 
-	private String packageId;
+	private Package _package;
 
 	/**
 	 * 
@@ -155,11 +157,11 @@ public class Permission {
 	 * @param action
 	 * @param packageId
 	 */
-	public Permission(Type type, int sourceId, Action action, String packageId) {
+	public Permission(Type type, int sourceId, Action action, Package p) {
 		this.type = type;
 		this.sourceId = sourceId;
 		this.action = action;
-		this.packageId = packageId;
+		this._package = p;
 	}
 
 	/**
@@ -219,21 +221,22 @@ public class Permission {
 	}
 
 	/**
-	 * @return the packageId
+	 * @return the package
 	 */
 	@Id
-	@Column(name = "packageId", length = 36, nullable = false)
+	@OneToOne
+	@JoinColumn(name = "packageId", nullable = false)
 	@XmlAttribute(name = "packageId")
-	public String getPackageId() {
-		return packageId;
+	public Package getPackage() {
+		return _package;
 	}
 
 	/**
-	 * @param packageId
-	 *            the packageId to set
+	 * @param package
+	 *            the package to set
 	 */
-	public void setPackageId(String packageId) {
-		this.packageId = packageId;
+	public void setPackage(Package p) {
+		this._package = p;
 	}
 
 	/*
@@ -245,8 +248,8 @@ public class Permission {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((_package == null) ? 0 : _package.hashCode());
 		result = prime * result + ((action == null) ? 0 : action.hashCode());
-		result = prime * result + ((packageId == null) ? 0 : packageId.hashCode());
 		result = prime * result + sourceId;
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
@@ -266,12 +269,12 @@ public class Permission {
 		if (getClass() != obj.getClass())
 			return false;
 		Permission other = (Permission) obj;
-		if (action != other.action)
-			return false;
-		if (packageId == null) {
-			if (other.packageId != null)
+		if (_package == null) {
+			if (other._package != null)
 				return false;
-		} else if (!packageId.equals(other.packageId))
+		} else if (!_package.equals(other._package))
+			return false;
+		if (action != other.action)
 			return false;
 		if (sourceId != other.sourceId)
 			return false;
@@ -287,7 +290,7 @@ public class Permission {
 	 */
 	@Override
 	public String toString() {
-		return "Permission [type=" + type + ", sourceId=" + sourceId + ", action=" + action + ", packageId=" + packageId
+		return "Permission [type=" + type + ", sourceId=" + sourceId + ", action=" + action + ", _package=" + _package
 				+ "]";
 	}
 
@@ -357,7 +360,7 @@ public class Permission {
 		/**
 		 * @return the packageId
 		 */
-		public String getPackageId() {
+		public String getPackage() {
 			return packageId;
 		}
 
@@ -365,7 +368,7 @@ public class Permission {
 		 * @param packageId
 		 *            the packageId to set
 		 */
-		public void setPackageId(String packageId) {
+		public void setPackage(String packageId) {
 			this.packageId = packageId;
 		}
 
@@ -378,8 +381,8 @@ public class Permission {
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + ((action == null) ? 0 : action.hashCode());
 			result = prime * result + ((packageId == null) ? 0 : packageId.hashCode());
+			result = prime * result + ((action == null) ? 0 : action.hashCode());
 			result = prime * result + sourceId;
 			result = prime * result + ((type == null) ? 0 : type.hashCode());
 			return result;
@@ -399,12 +402,12 @@ public class Permission {
 			if (getClass() != obj.getClass())
 				return false;
 			PermissionId other = (PermissionId) obj;
-			if (action != other.action)
-				return false;
 			if (packageId == null) {
 				if (other.packageId != null)
 					return false;
 			} else if (!packageId.equals(other.packageId))
+				return false;
+			if (action != other.action)
 				return false;
 			if (sourceId != other.sourceId)
 				return false;

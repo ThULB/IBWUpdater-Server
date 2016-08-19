@@ -125,7 +125,10 @@ public class Package {
 	@Column(name = "id", length = 36, nullable = false)
 	@XmlAttribute(name = "id")
 	public String getId() {
-		return Optional.ofNullable(id).orElse(UUID.randomUUID().toString());
+		if (id == null) {
+			id = UUID.randomUUID().toString();
+		}
+		return id;
 	}
 
 	/**
@@ -160,7 +163,10 @@ public class Package {
 	@Column(name = "version", nullable = false)
 	@XmlAttribute(name = "version")
 	public Integer getVersion() {
-		return Optional.ofNullable(version).orElse(1);
+		if (version == null) {
+			version = 1;
+		}
+		return version;
 	}
 
 	/**
