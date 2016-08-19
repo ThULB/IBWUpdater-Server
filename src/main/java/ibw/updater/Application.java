@@ -22,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 
+import ibw.updater.common.events.AutoExecutableHandler;
 import ibw.updater.service.EmbeddedHttpServer;
 
 /**
@@ -56,6 +57,15 @@ public class Application {
 	}
 
 	private void run() throws Exception {
+		AutoExecutableHandler.setHaltOnError(false);
+		AutoExecutableHandler.startup();
+
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				AutoExecutableHandler.shutdown();
+			}
+		});
+
 		EmbeddedHttpServer embeddedHttpServer = new EmbeddedHttpServer(host, port);
 		embeddedHttpServer.start();
 	}
