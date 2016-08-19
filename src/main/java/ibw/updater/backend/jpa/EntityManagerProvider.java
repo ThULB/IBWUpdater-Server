@@ -54,6 +54,8 @@ public class EntityManagerProvider {
 
 	@Shutdown
 	public void shutdown() {
-		EntityManagerProvider.getEntityManagerFactory().close();
+		if (EntityManagerProvider.getEntityManagerFactory().isOpen()) {
+			EntityManagerProvider.getEntityManagerFactory().close();
+		}
 	}
 }
