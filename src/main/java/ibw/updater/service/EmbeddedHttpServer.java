@@ -37,6 +37,7 @@ import com.sun.net.httpserver.HttpServer;
  * @author Ren\u00E9 Adler (eagle)
  *
  */
+@SuppressWarnings("restriction")
 public class EmbeddedHttpServer {
 	private static final Logger LOGGER = LogManager.getLogger(EmbeddedHttpServer.class);
 
@@ -69,7 +70,7 @@ public class EmbeddedHttpServer {
 
 	private HttpServer createHttpServer()
 			throws IOException, IllegalArgumentException, UriBuilderException, URISyntaxException {
-		ResourceConfig resourceConfig = new ResourceConfig().packages("ibw.updater.resource")
+		ResourceConfig resourceConfig = new ResourceConfig().packages("ibw.updater.frontend.resource")
 				.register(MoxyJsonFeature.class);
 		return JdkHttpServerFactory.createHttpServer(getURI(), resourceConfig, false);
 	}
