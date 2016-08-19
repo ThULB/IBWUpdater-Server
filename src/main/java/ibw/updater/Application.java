@@ -22,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 
+import ibw.updater.common.config.ConfigurationDir;
 import ibw.updater.common.events.AutoExecutableHandler;
 import ibw.updater.service.EmbeddedHttpServer;
 
@@ -41,6 +42,9 @@ public class Application {
 	@Parameter(names = "--host", description = "Set host listen on")
 	private String host;
 
+	@Parameter(names = { "--configDir", "-cd" }, description = "Set configuration dir")
+	private String configDir;
+
 	public static void main(String[] args) {
 		Application app = new Application();
 		JCommander jcmd = new JCommander(app, args);
@@ -57,6 +61,10 @@ public class Application {
 	}
 
 	private void run() throws Exception {
+		if (configDir != null) {
+			ConfigurationDir.setConfigurationDirectory(configDir);
+		}
+
 		AutoExecutableHandler.setHaltOnError(false);
 		AutoExecutableHandler.startup();
 
