@@ -14,7 +14,7 @@
  * If not, write to the Free Software Foundation Inc.,
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  */
-package ibw.updater.resource;
+package ibw.updater.frontend.resource;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +35,7 @@ import javax.ws.rs.core.StreamingOutput;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import ibw.updater.entity.ResourceWrapper;
+import ibw.updater.frontend.entity.ResourceWrapper;
 
 /**
  * @author Ren\u00E9 Adler (eagle)

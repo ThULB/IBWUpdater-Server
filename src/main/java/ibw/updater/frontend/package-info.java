@@ -18,4 +18,4 @@
  * @author Ren\u00E9 Adler (eagle)
  *
  */
-package ibw.updater.entity;
+package ibw.updater.frontend;
