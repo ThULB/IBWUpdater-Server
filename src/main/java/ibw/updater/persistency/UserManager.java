@@ -16,6 +16,8 @@
  */
 package ibw.updater.persistency;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
@@ -27,6 +29,20 @@ import ibw.updater.datamodel.User;
  *
  */
 public class UserManager {
+
+	/**
+	 * Returns all {@link User}s.
+	 * 
+	 * @return a {@link List} of {@link Users}
+	 */
+	public static List<User> get() {
+		EntityManager em = EntityManagerProvider.getEntityManager();
+		try {
+			return em.createNamedQuery("User.findAll", User.class).getResultList();
+		} finally {
+			em.close();
+		}
+	}
 
 	/**
 	 * Returns {@link User} for given id or <code>null</code> if nothing was

@@ -16,6 +16,8 @@
  */
 package ibw.updater.persistency;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
@@ -27,6 +29,20 @@ import ibw.updater.datamodel.Group;
  *
  */
 public class GroupManager {
+
+	/**
+	 * Returns all {@link Group}s.
+	 * 
+	 * @return a {@link List} of {@link Groups}
+	 */
+	public static List<Group> get() {
+		EntityManager em = EntityManagerProvider.getEntityManager();
+		try {
+			return em.createNamedQuery("Group.findAll", Group.class).getResultList();
+		} finally {
+			em.close();
+		}
+	}
 
 	/**
 	 * Returns {@link Group} for given id or <code>null</code> if nothing was
