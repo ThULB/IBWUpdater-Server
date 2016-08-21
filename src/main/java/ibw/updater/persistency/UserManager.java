@@ -28,27 +28,74 @@ import ibw.updater.datamodel.User;
  */
 public class UserManager {
 
-	public static boolean exists(int id) {
+	/**
+	 * Returns {@link User} for given id or <code>null</code> if nothing was
+	 * found.
+	 * 
+	 * @param id
+	 *            the {@link User#id}
+	 * @return the {@link User}
+	 */
+	public static User get(int id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			return em.find(User.class, id) != null;
+			return em.find(User.class, id);
 		} finally {
 			em.close();
 		}
 	}
 
-	public static boolean exists(String name) {
+	/**
+	 * Returns {@link User} for given name or <code>null</code> if nothing was
+	 * found.
+	 * 
+	 * @param name
+	 *            the {@link User#name}
+	 * @return the {@link User}
+	 */
+	public static User get(String name) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
 			TypedQuery<User> query = em.createNamedQuery("User.findByName", User.class);
 			query.setParameter("name", name);
 
-			return !query.getResultList().isEmpty();
+			return query.getSingleResult();
 		} finally {
 			em.close();
 		}
 	}
 
+	/**
+	 * Checks if {@link User} is exists.
+	 * 
+	 * @param id
+	 *            the {@link User#id}
+	 * @return <code>true</code> if {@link User} exists or <code>false</code>
+	 *         isn't.
+	 */
+	public static boolean exists(int id) {
+		return get(id) != null;
+	}
+
+	/**
+	 * Checks if {@link User} is exists.
+	 * 
+	 * @param name
+	 *            the {@link User#name}
+	 * @return <code>true</code> if {@link User} exists or <code>false</code>
+	 *         isn't.
+	 */
+	public static boolean exists(String name) {
+		return get(name) != null;
+	}
+
+	/**
+	 * Saves given {@link User}.
+	 * 
+	 * @param user
+	 *            the {@link User} to save
+	 * @return the saved {@link User} object
+	 */
 	public static User save(User user) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
@@ -62,6 +109,13 @@ public class UserManager {
 		}
 	}
 
+	/**
+	 * Updates given {@link User}.
+	 * 
+	 * @param user
+	 *            the {@link User} to update
+	 * @return the updated {@link User} object
+	 */
 	public static User update(User user) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
