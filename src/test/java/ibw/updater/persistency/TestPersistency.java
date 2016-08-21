@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import ibw.updater.backend.jpa.JPATestCase;
+import ibw.updater.datamodel.Group;
 import ibw.updater.datamodel.User;
 
 /**
@@ -54,6 +55,32 @@ public class TestPersistency extends JPATestCase {
 
 		assertTrue("user should exists (by Id)", UserManager.exists(1));
 		assertTrue("user should exists (by name)", UserManager.exists("test"));
+	}
+
+	@Test
+	public void saveGroup() {
+		Group g = new Group("test", "Test Group");
+		GroupManager.save(g);
+		assertTrue("group id should not 0", g.getId() != 0);
+	}
+
+	@Test
+	public void updateGroup() {
+		Group g = new Group("test", "Test Group");
+		GroupManager.save(g);
+		assertTrue("group id should not 0", g.getId() != 0);
+
+		g.setName("updatedtest");
+		GroupManager.update(g);
+		assertEquals("group should equal", "updatedtest", g.getName());
+	}
+
+	@Test
+	public void existsGroup() {
+		saveGroup();
+
+		assertTrue("group should exists (by Id)", GroupManager.exists(1));
+		assertTrue("group should exists (by name)", GroupManager.exists("test"));
 	}
 
 }

@@ -28,6 +28,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -43,6 +44,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Cacheable
 @Table(name = "IBWGroup")
+@NamedQuery(name = "Group.findByName", query = "Select g from Group g WHERE g.name = :name")
 @XmlRootElement(name = "group")
 public class Group {
 
