@@ -28,6 +28,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -44,6 +45,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Cacheable
 @Table(name = "IBWUser")
+@NamedQuery(name = "User.findByName", query = "Select u from User u WHERE u.name = :name")
 @XmlRootElement(name = "user")
 public class User {
 
