@@ -18,6 +18,8 @@ package ibw.updater.common.events;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -77,13 +79,13 @@ public class AutoExecutableHandler {
 	}
 
 	private static void runExecutables(Class<?> autoExecutable, Class<? extends Annotation> type) {
-		LOGGER.info("Run " + autoExecutable.getAnnotation(AutoExecutable.class).name() + " with priority of "
+		log("Run " + autoExecutable.getAnnotation(AutoExecutable.class).name() + " with priority of "
 				+ autoExecutable.getAnnotation(AutoExecutable.class).priority());
 		try {
 			sort(type, Arrays.stream(autoExecutable.getDeclaredMethods()).filter(m -> m.isAnnotationPresent(type)))
 					.forEachOrdered(m -> {
 						try {
-							LOGGER.info("...invoke " + m.getName() + "() for " + type.getSimpleName());
+							log("...invoke " + m.getName() + "() for " + type.getSimpleName());
 							m.invoke(autoExecutable.newInstance());
 						} catch (Exception e) {
 							throw new RuntimeException(e.getCause());
@@ -108,5 +110,14 @@ public class AutoExecutableHandler {
 		}
 
 		return methods;
+	}
+
+	private static void log(String msg) {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info(msg);
+		} else {
+			System.out.println(MessageFormat.format("{0} INFO\t{1}: {2}", Instant.now().toString(),
+					AutoExecutableHandler.class.getSimpleName(), msg));
+		}
 	}
 }

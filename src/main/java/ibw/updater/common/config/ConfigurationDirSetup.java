@@ -22,6 +22,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.text.MessageFormat;
+import java.time.Instant;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
@@ -31,6 +33,7 @@ import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.status.StatusLogger;
 
+import ibw.updater.common.events.AutoExecutableHandler;
 import ibw.updater.common.events.annotation.AutoExecutable;
 import ibw.updater.common.events.annotation.Startup;
 
@@ -56,7 +59,7 @@ public class ConfigurationDirSetup {
 		}
 		ClassLoader classLoader = ConfigurationDir.class.getClassLoader();
 		if (!(classLoader instanceof URLClassLoader)) {
-			System.err.println(classLoader.getClass() + " is unsupported for adding extending CLASSPATH at runtime.");
+			error(classLoader.getClass() + " is unsupported for adding extending CLASSPATH at runtime.");
 			return;
 		}
 		File libDir = ConfigurationDir.getConfigFile("lib");
@@ -73,7 +76,7 @@ public class ConfigurationDirSetup {
 					return null;
 				}
 			}).filter(Objects::nonNull).filter(u -> !currentCPElements.contains(u)).forEach(u -> {
-				System.out.println("Adding to CLASSPATH: " + u);
+				info("Adding to CLASSPATH: " + u);
 				try {
 					addUrlMethod.invoke(classLoader, u);
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -95,5 +98,23 @@ public class ConfigurationDirSetup {
 			}
 		}
 		return toClassPath;
+	}
+
+	private static void error(String msg) {
+		if (LOGGER.isErrorEnabled()) {
+			LOGGER.error(msg);
+		} else {
+			System.err.println(MessageFormat.format("{0} ERROR\t{1}: {2}", Instant.now().toString(),
+					AutoExecutableHandler.class.getSimpleName(), msg));
+		}
+	}
+
+	private static void info(String msg) {
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info(msg);
+		} else {
+			System.out.println(MessageFormat.format("{0} INFO\t{1}: {2}", Instant.now().toString(),
+					AutoExecutableHandler.class.getSimpleName(), msg));
+		}
 	}
 }
