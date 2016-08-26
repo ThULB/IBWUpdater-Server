@@ -54,7 +54,8 @@
   </developers>
 
   <properties>
-    <jersey.version>2.23.1</jersey.version>
+    <jersey.version>2.23.2</jersey.version>
+    <log4j.version>2.6.2</log4j.version>
     <grunt.projectBase>${project.build.directory}/grunt</grunt.projectBase>
     <template.assetsdir>${project.build.directory}/classes/META-INF/resources/assets</template.assetsdir>
     <encoding>UTF-8</encoding>
@@ -265,23 +266,23 @@
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <version>1.4.192</version>
-      <scope>test</scope>
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
-      <version>2.6.1</version>
+      <version>${log4j.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
-      <version>2.6.1</version>
+      <version>${log4j.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-slf4j-impl</artifactId>
-      <version>2.6.2</version>
+      <version>${log4j.version}</version>
     </dependency>
 
     <dependency>
@@ -321,7 +322,7 @@
     <dependency>
       <groupId>org.ehcache</groupId>
       <artifactId>ehcache</artifactId>
-      <version>3.1.0</version>
+      <version>3.1.1</version>
     </dependency>
   </dependencies>
 
