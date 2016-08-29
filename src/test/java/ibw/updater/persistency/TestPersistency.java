@@ -19,6 +19,8 @@ package ibw.updater.persistency;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import javax.persistence.EntityExistsException;
+
 import org.junit.Test;
 
 import ibw.updater.backend.jpa.JPATestCase;
@@ -36,6 +38,16 @@ public class TestPersistency extends JPATestCase {
 		User u = new User("test", "Test User");
 		UserManager.save(u);
 		assertTrue("user id should not 0", u.getId() != 0);
+	}
+
+	@Test(expected = EntityExistsException.class)
+	public void saveDuplicateUser() {
+		User u = new User("test", "Test User");
+		UserManager.save(u);
+		assertTrue("user id should not 0", u.getId() != 0);
+
+		User u2 = new User("test", "Test User");
+		UserManager.save(u2);
 	}
 
 	@Test
@@ -62,6 +74,16 @@ public class TestPersistency extends JPATestCase {
 		Group g = new Group("test", "Test Group");
 		GroupManager.save(g);
 		assertTrue("group id should not 0", g.getId() != 0);
+	}
+
+	@Test(expected = EntityExistsException.class)
+	public void saveDuplicateGroup() {
+		Group g = new Group("test", "Test Group");
+		GroupManager.save(g);
+		assertTrue("group id should not 0", g.getId() != 0);
+		
+		Group g2 = new Group("test", "Test Group");
+		GroupManager.save(g2);
 	}
 
 	@Test

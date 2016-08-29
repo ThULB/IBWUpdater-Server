@@ -18,11 +18,14 @@ package ibw.updater.persistency;
 
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import ibw.updater.backend.jpa.EntityManagerProvider;
 import ibw.updater.datamodel.User;
+import ibw.updater.datamodel.Users;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -35,10 +38,10 @@ public class UserManager {
 	 * 
 	 * @return a {@link List} of {@link Users}
 	 */
-	public static List<User> get() {
+	public static Users get() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			return em.createNamedQuery("User.findAll", User.class).getResultList();
+			return new Users(em.createNamedQuery("User.findAll", User.class).getResultList());
 		} finally {
 			em.close();
 		}
@@ -76,6 +79,8 @@ public class UserManager {
 			query.setParameter("name", name);
 
 			return query.getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
 		} finally {
 			em.close();
 		}
@@ -113,6 +118,10 @@ public class UserManager {
 	 * @return the saved {@link User} object
 	 */
 	public static User save(User user) {
+		if (user.getId() == 0 && exists(user.getName())) {
+			throw new EntityExistsException("A user with name \"" + user.getName() + "\" already exists.");
+		}
+
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
 			em.getTransaction().begin();

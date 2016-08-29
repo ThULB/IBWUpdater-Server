@@ -18,11 +18,14 @@ package ibw.updater.persistency;
 
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import ibw.updater.backend.jpa.EntityManagerProvider;
 import ibw.updater.datamodel.Group;
+import ibw.updater.datamodel.Groups;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -35,10 +38,10 @@ public class GroupManager {
 	 * 
 	 * @return a {@link List} of {@link Groups}
 	 */
-	public static List<Group> get() {
+	public static Groups get() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			return em.createNamedQuery("Group.findAll", Group.class).getResultList();
+			return new Groups(em.createNamedQuery("Group.findAll", Group.class).getResultList());
 		} finally {
 			em.close();
 		}
@@ -76,6 +79,8 @@ public class GroupManager {
 			query.setParameter("name", name);
 
 			return query.getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
 		} finally {
 			em.close();
 		}
@@ -113,6 +118,10 @@ public class GroupManager {
 	 * @return the saved {@link Group} object
 	 */
 	public static Group save(Group group) {
+		if (group.getId() == 0 && exists(group.getName())) {
+			throw new EntityExistsException("A group with name \"" + group.getName() + "\" already exists.");
+		}
+
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
 			em.getTransaction().begin();
