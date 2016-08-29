@@ -17,6 +17,7 @@
 package ibw.updater.persistency;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import javax.persistence.EntityExistsException;
@@ -70,6 +71,16 @@ public class TestPersistency extends JPATestCase {
 	}
 
 	@Test
+	public void deleteUser() {
+		User u = new User("test", "Test User");
+		UserManager.save(u);
+		UserManager.delete(u);
+
+		assertFalse("user should not exists (by Id)", UserManager.exists(1));
+		assertFalse("user should not exists (by name)", UserManager.exists("test"));
+	}
+
+	@Test
 	public void saveGroup() {
 		Group g = new Group("test", "Test Group");
 		GroupManager.save(g);
@@ -81,7 +92,7 @@ public class TestPersistency extends JPATestCase {
 		Group g = new Group("test", "Test Group");
 		GroupManager.save(g);
 		assertTrue("group id should not 0", g.getId() != 0);
-		
+
 		Group g2 = new Group("test", "Test Group");
 		GroupManager.save(g2);
 	}
@@ -103,6 +114,16 @@ public class TestPersistency extends JPATestCase {
 
 		assertTrue("group should exists (by Id)", GroupManager.exists(1));
 		assertTrue("group should exists (by name)", GroupManager.exists("test"));
+	}
+
+	@Test
+	public void deleteGroup() {
+		Group g = new Group("test", "Test Group");
+		GroupManager.save(g);
+		GroupManager.delete(g);
+
+		assertFalse("group should not exists (by Id)", GroupManager.exists(1));
+		assertFalse("group should not exists (by name)", GroupManager.exists("test"));
 	}
 
 }
