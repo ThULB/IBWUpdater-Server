@@ -142,8 +142,17 @@ public class GroupManager {
 	 * @return the updated {@link Group} object
 	 */
 	public static Group update(Group group) {
+		if (group.getId() == 0 && !exists(group.getName())) {
+			return save(group);
+		}
+
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			Group inDB = get(group.getName());
+			if (inDB != null) {
+				group.setId(inDB.getId());
+				em.detach(inDB);
+			}
 			em.getTransaction().begin();
 			em.merge(group);
 			em.getTransaction().commit();
@@ -152,5 +161,32 @@ public class GroupManager {
 		} finally {
 			em.close();
 		}
+	}
+
+	/**
+	 * Deletes given {@link Group#getId()}.
+	 * 
+	 * @param gid
+	 *            the {@link Group#getId()} to delete
+	 */
+	public static void delete(int gid) {
+		EntityManager em = EntityManagerProvider.getEntityManager();
+		try {
+			em.getTransaction().begin();
+			em.remove(em.find(Group.class, gid));
+			em.getTransaction().commit();
+		} finally {
+			em.close();
+		}
+	}
+
+	/**
+	 * Deletes given {@link Group}.
+	 * 
+	 * @param group
+	 *            the {@link Group} to delete
+	 */
+	public static void delete(Group group) {
+		delete(group.getId());
 	}
 }
