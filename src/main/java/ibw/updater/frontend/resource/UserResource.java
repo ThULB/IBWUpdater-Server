@@ -21,9 +21,11 @@ import java.io.PrintStream;
 
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -58,6 +60,50 @@ public class UserResource {
 		try {
 			LOGGER.info("Add new user: " + user);
 			UserManager.save(user);
+			return Response.ok().status(Response.Status.OK).build();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(so).build();
+		}
+	}
+
+	@POST
+	@Path("edit")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Response editUser(final User user) {
+		try {
+			LOGGER.info("Edit user: " + user);
+			UserManager.update(user);
+			return Response.ok().status(Response.Status.OK).build();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(so).build();
+		}
+	}
+
+	@POST
+	@Path("delete")
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Response deleteUser(final User user) {
+		try {
+			LOGGER.info("Remove user: " + user);
+			UserManager.delete(user);
+			return Response.ok().status(Response.Status.OK).build();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(so).build();
+		}
+	}
+
+	@DELETE
+	@Path("delete/{uid}")
+	public Response deleteUser(@PathParam("uid") final int uid) {
+		try {
+			LOGGER.info("Remove user: " + uid);
+			UserManager.delete(uid);
 			return Response.ok().status(Response.Status.OK).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
