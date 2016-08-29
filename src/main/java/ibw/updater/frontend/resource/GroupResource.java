@@ -69,11 +69,11 @@ public class GroupResource {
 	}
 
 	@POST
-	@Path("edit")
+	@Path("update")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Response edit(final Group group) {
+	public Response update(final Group group) {
 		try {
-			LOGGER.info("Edit " + group);
+			LOGGER.info("Update " + group);
 			GroupManager.update(group);
 			return Response.ok().status(Response.Status.OK).build();
 		} catch (Exception e) {
