@@ -142,8 +142,17 @@ public class UserManager {
 	 * @return the updated {@link User} object
 	 */
 	public static User update(User user) {
+		if (user.getId() == 0 && !exists(user.getName())) {
+			return save(user);
+		}
+
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			User inDB = get(user.getName());
+			if (inDB != null) {
+				user.setId(inDB.getId());
+				em.detach(inDB);
+			}
 			em.getTransaction().begin();
 			em.merge(user);
 			em.getTransaction().commit();
@@ -152,5 +161,32 @@ public class UserManager {
 		} finally {
 			em.close();
 		}
+	}
+
+	/**
+	 * Deletes given {@link User#getId()}.
+	 * 
+	 * @param uid
+	 *            the {@link User#getId()} to delete
+	 */
+	public static void delete(int uid) {
+		EntityManager em = EntityManagerProvider.getEntityManager();
+		try {
+			em.getTransaction().begin();
+			em.remove(em.find(User.class, uid));
+			em.getTransaction().commit();
+		} finally {
+			em.close();
+		}
+	}
+
+	/**
+	 * Deletes given {@link User}.
+	 * 
+	 * @param user
+	 *            the {@link User} to delete
+	 */
+	public static void delete(User user) {
+		delete(user.getId());
 	}
 }
