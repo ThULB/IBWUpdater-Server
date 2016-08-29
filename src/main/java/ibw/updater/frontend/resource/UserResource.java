@@ -58,7 +58,7 @@ public class UserResource {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response addUser(final User user) {
 		try {
-			LOGGER.info("Add new user: " + user);
+			LOGGER.info("Add " + user);
 			UserManager.save(user);
 			return Response.ok().status(Response.Status.OK).build();
 		} catch (Exception e) {
@@ -73,7 +73,7 @@ public class UserResource {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response editUser(final User user) {
 		try {
-			LOGGER.info("Edit user: " + user);
+			LOGGER.info("Edit " + user);
 			UserManager.update(user);
 			return Response.ok().status(Response.Status.OK).build();
 		} catch (Exception e) {
@@ -88,7 +88,7 @@ public class UserResource {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response deleteUser(final User user) {
 		try {
-			LOGGER.info("Remove user: " + user);
+			LOGGER.info("Remove " + user);
 			UserManager.delete(user);
 			return Response.ok().status(Response.Status.OK).build();
 		} catch (Exception e) {
@@ -102,7 +102,7 @@ public class UserResource {
 	@Path("delete/{uid}")
 	public Response deleteUser(@PathParam("uid") final int uid) {
 		try {
-			LOGGER.info("Remove user: " + uid);
+			LOGGER.info("Remove user with id " + uid);
 			UserManager.delete(uid);
 			return Response.ok().status(Response.Status.OK).build();
 		} catch (Exception e) {
