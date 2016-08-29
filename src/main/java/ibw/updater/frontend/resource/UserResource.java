@@ -49,14 +49,14 @@ public class UserResource {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Response listUsers() {
+	public Response list() {
 		return Response.ok().status(Response.Status.OK).entity(UserManager.get()).build();
 	}
 
 	@POST
 	@Path("add")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Response addUser(final User user) {
+	public Response add(final User user) {
 		try {
 			LOGGER.info("Add " + user);
 			UserManager.save(user);
@@ -71,7 +71,7 @@ public class UserResource {
 	@POST
 	@Path("edit")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Response editUser(final User user) {
+	public Response edit(final User user) {
 		try {
 			LOGGER.info("Edit " + user);
 			UserManager.update(user);
@@ -86,7 +86,7 @@ public class UserResource {
 	@POST
 	@Path("delete")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Response deleteUser(final User user) {
+	public Response delete(final User user) {
 		try {
 			LOGGER.info("Remove " + user);
 			UserManager.delete(user);
@@ -100,7 +100,7 @@ public class UserResource {
 
 	@DELETE
 	@Path("delete/{uid}")
-	public Response deleteUser(@PathParam("uid") final int uid) {
+	public Response delete(@PathParam("uid") final int uid) {
 		try {
 			LOGGER.info("Remove user with id " + uid);
 			UserManager.delete(uid);
