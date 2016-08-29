@@ -69,11 +69,11 @@ public class UserResource {
 	}
 
 	@POST
-	@Path("edit")
+	@Path("update")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Response edit(final User user) {
+	public Response update(final User user) {
 		try {
-			LOGGER.info("Edit " + user);
+			LOGGER.info("Update " + user);
 			UserManager.update(user);
 			return Response.ok().status(Response.Status.OK).build();
 		} catch (Exception e) {
