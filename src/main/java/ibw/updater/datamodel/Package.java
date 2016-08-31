@@ -16,7 +16,6 @@
  */
 package ibw.updater.datamodel;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import javax.persistence.Cacheable;
