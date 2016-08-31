@@ -18,7 +18,6 @@ package ibw.updater.datamodel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
@@ -33,10 +32,14 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import ibw.updater.persistency.GroupAdapter;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -48,6 +51,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "IBWUser")
 @NamedQueries({ @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
 		@NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name") })
+@XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "user")
 public class User {
 
@@ -134,8 +138,8 @@ public class User {
 	@JoinTable(name = "IBWGroupMember", joinColumns = {
 			@JoinColumn(name = "uid", referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(name = "gid", referencedColumnName = "id") })
-	@XmlElementWrapper(name = "groups")
 	@XmlElement(name = "group")
+	@XmlJavaTypeAdapter(GroupAdapter.class)
 	public List<Group> getGroups() {
 		return groups;
 	}
@@ -154,7 +158,10 @@ public class User {
 	 */
 	@Transient
 	public void addGroup(Group group) {
-		Optional.ofNullable(this.groups).orElse(new ArrayList<>()).add(group);
+		if (this.groups == null) {
+			this.groups = new ArrayList<>();
+		}
+		this.groups.add(group);
 	}
 
 	/*
@@ -196,7 +203,7 @@ public class User {
 		if (name == null) {
 			if (other.name != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!name.equalsIgnoreCase(other.name))
 			return false;
 		return true;
 	}
@@ -208,7 +215,6 @@ public class User {
 	 */
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", description=" + description + "]";
+		return "User [id=" + id + ", name=" + name + ", description=" + description + ", groups=" + groups + "]";
 	}
-
 }
