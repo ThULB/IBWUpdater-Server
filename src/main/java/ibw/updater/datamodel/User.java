@@ -18,6 +18,7 @@ package ibw.updater.datamodel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
@@ -158,10 +159,24 @@ public class User {
 	 */
 	@Transient
 	public void addGroup(Group group) {
-		if (this.groups == null) {
-			this.groups = new ArrayList<>();
+		if (groups == null) {
+			groups = new ArrayList<>();
 		}
-		this.groups.add(group);
+		groups.add(group);
+	}
+
+	/**
+	 * Removes group membership of user.
+	 * 
+	 * @param group
+	 *            the group membership to remove
+	 */
+	@Transient
+	public void removeGroup(Group group) {
+		if (groups != null) {
+			groups = groups.stream().filter(g -> group.getId() != 0 ? g.getId() != group.getId()
+					: !g.getName().equalsIgnoreCase(group.getName())).collect(Collectors.toList());
+		}
 	}
 
 	/*
