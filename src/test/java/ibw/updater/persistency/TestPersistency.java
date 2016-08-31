@@ -81,6 +81,36 @@ public class TestPersistency extends JPATestCase {
 	}
 
 	@Test
+	public void addGroupToUser() {
+		saveUser();
+		saveGroup();
+
+		User u = UserManager.get("test");
+		Group g = GroupManager.get("test");
+
+		u.addGroup(g);
+
+		u = UserManager.update(u);
+
+		assertEquals("user should have one group", 1, u.getGroups().size());
+		assertEquals("user group should be test", "test", u.getGroups().get(0).getName());
+	}
+
+	@Test
+	public void removeGroupFromUser() {
+		addGroupToUser();
+
+		User u = UserManager.get("test");
+		Group g = GroupManager.get("test");
+
+		u.removeGroup(g);
+
+		u = UserManager.update(u);
+
+		assertEquals("user should have no group", 0, u.getGroups().size());
+	}
+
+	@Test
 	public void saveGroup() {
 		Group g = new Group("test", "Test Group");
 		GroupManager.save(g);
@@ -124,6 +154,36 @@ public class TestPersistency extends JPATestCase {
 
 		assertFalse("group should not exists (by Id)", GroupManager.exists(1));
 		assertFalse("group should not exists (by name)", GroupManager.exists("test"));
+	}
+
+	@Test
+	public void addUserToGroup() {
+		saveUser();
+		saveGroup();
+
+		User u = UserManager.get("test");
+		Group g = GroupManager.get("test");
+
+		g.addUser(u);
+
+		g = GroupManager.update(g);
+
+		assertEquals("group should have one user", 1, g.getUsers().size());
+		assertEquals("group member should be test", "test", g.getUsers().get(0).getName());
+	}
+
+	@Test
+	public void removeUserFromGroup() {
+		addUserToGroup();
+
+		User u = UserManager.get("test");
+		Group g = GroupManager.get("test");
+
+		g.removeUser(u);
+
+		g = GroupManager.update(g);
+
+		assertEquals("group should have no user", 0, g.getUsers().size());
 	}
 
 }
