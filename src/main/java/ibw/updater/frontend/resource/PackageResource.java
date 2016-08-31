@@ -26,6 +26,8 @@ import javax.ws.rs.core.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ibw.updater.persistency.PackageManager;
+
 /**
  * @author Ren\u00E9 Adler (eagle)
  *
@@ -38,7 +40,7 @@ public class PackageResource {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Response listPackages() {
-		return null;
+	public Response list() {
+		return Response.ok().status(Response.Status.OK).entity(PackageManager.get()).build();
 	}
 }
