@@ -18,7 +18,6 @@ package ibw.updater.datamodel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
@@ -33,10 +32,14 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import ibw.updater.persistency.UserAdapter;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -47,6 +50,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "IBWGroup")
 @NamedQueries({ @NamedQuery(name = "Group.findAll", query = "SELECT g FROM Group g"),
 		@NamedQuery(name = "Group.findByName", query = "SELECT g FROM Group g WHERE g.name = :name") })
+@XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "group")
 public class Group {
 
@@ -133,8 +137,8 @@ public class Group {
 	@JoinTable(name = "IBWGroupMember", joinColumns = {
 			@JoinColumn(name = "gid", referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(name = "uid", referencedColumnName = "id") })
-	@XmlElementWrapper(name = "users")
 	@XmlElement(name = "user")
+	@XmlJavaTypeAdapter(UserAdapter.class)
 	public List<User> getUsers() {
 		return users;
 	}
@@ -153,7 +157,10 @@ public class Group {
 	 */
 	@Transient
 	public void addUser(User user) {
-		Optional.ofNullable(this.users).orElse(new ArrayList<>()).add(user);
+		if (this.users == null) {
+			this.users = new ArrayList<>();
+		}
+		this.users.add(user);
 	}
 
 	/*
@@ -195,7 +202,7 @@ public class Group {
 		if (name == null) {
 			if (other.name != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!name.equalsIgnoreCase(other.name))
 			return false;
 		return true;
 	}
