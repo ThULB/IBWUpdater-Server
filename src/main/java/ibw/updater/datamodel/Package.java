@@ -24,7 +24,11 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlEnum;
@@ -39,6 +43,9 @@ import javax.xml.bind.annotation.XmlType;
 @Entity
 @Cacheable
 @Table(name = "IBWPackage")
+@NamedQueries({ @NamedQuery(name = "Package.findAll", query = "SELECT p FROM Package p"),
+		@NamedQuery(name = "Package.findByName", query = "SELECT p FROM Package p WHERE p.name = :name") })
+@XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "package")
 public class Package {
 	/**
