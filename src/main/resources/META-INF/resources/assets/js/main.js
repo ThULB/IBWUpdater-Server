@@ -91,17 +91,15 @@ app.controller("users", function($scope, $http, ModalService, asyncQueue) {
 		});
 	};
 
-	$scope.editUser = function(user) {
-		$scope.showUserDialog(user);
-	}
-
 	$scope.updateUser = function(user) {
 		$http.post("/manage/users/update", user).then(function() {
 			for ( var i in $scope.users.user) {
 				if ($scope.users.user[i].id == user.id) {
 					$scope.users.user[i] = user;
+					return;
 				}
 			}
+			$scope.users.user.push(user);
 		}, function(e) {
 			console.error(e);
 		});
