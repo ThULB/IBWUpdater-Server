@@ -5,5 +5,13 @@
     "btn.close" : "Schliessen",
     
     "nav.dashboard" : "Übersicht",
-	"nav.settings" : "Einstellungen"
+	"nav.settings" : "Einstellungen",
+	
+	"users.headline" : "Benutzer",
+	
+	"user.headline.create" : "Benutzer erstellen",
+	"user.headline.edit" : "Benutzer bearbeiten",
+	"user.name" : "Name",
+	"user.description" : "Vollständiger Name",
+	"user.groups" : "Gruppen-Mitgliedschaft"
 }

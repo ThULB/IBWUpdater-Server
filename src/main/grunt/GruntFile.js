@@ -34,6 +34,7 @@ module.exports = function(grunt) {
 							'js' : [
 									'angular/*.min.*',
 									'angular-animate/*.min.*',
+									'angular-modal-service/dst/*.min.*',
 									'angular-sanitize/*.min.*',
 									'angular-translate/*.min.*',
 									'angular-translate-loader-static-files/*.min.*',

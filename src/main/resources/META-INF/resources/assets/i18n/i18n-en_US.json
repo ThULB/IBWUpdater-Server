@@ -5,5 +5,13 @@
     "btn.close": "Close",
     
     "nav.dashboard" : "Dashboard",
-	"nav.settings" : "Settings"
+	"nav.settings" : "Settings",
+	
+	"users.headline" : "Users",
+	
+	"user.headline.create" : "Create User",
+    "user.headline.edit" : "Edit User",
+    "user.name" : "Name",
+    "user.description" : "Real-Name",
+    "user.groups" : "Group-Membership"
 }
