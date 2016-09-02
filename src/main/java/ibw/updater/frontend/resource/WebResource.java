@@ -70,6 +70,7 @@ public class WebResource {
 
 				CacheControl cc = new CacheControl();
 				cc.setMaxAge(86400);
+				cc.setMustRevalidate(true);
 				cc.setPrivate(true);
 
 				return Response.ok().status(Response.Status.OK).tag(r.getETag()).type(r.getMimeType())
