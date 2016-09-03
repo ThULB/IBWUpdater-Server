@@ -123,3 +123,74 @@ app.controller('userDialog', function($scope, user, groups, close) {
 	};
 
 });
+
+app.controller("groups", function($scope, $http, $log, ModalService, asyncQueue) {
+	$scope.groups = {};
+	$scope.users = {};
+
+	$scope.loadData = function() {
+		asyncQueue.load([ "/manage/users", "/manage/groups" ]).then(function(results) {
+			results.forEach(function(result) {
+				if (result.status === 200) {
+					if (result.config.url.indexOf("/users") != -1) {
+						$scope.users = result.data;
+					} else if (result.config.url.indexOf("groups") != -1) {
+						$scope.groups = result.data;
+					}
+				}
+			});
+		}, function(error) {
+			$log.error(error);
+		});
+	};
+
+	$scope.showGroupDialog = function(group) {
+		ModalService.showModal({
+			templateUrl : "/web/assets/templates/group-dialog.html",
+			controller : "groupDialog",
+			inputs : {
+				group : group,
+				users : $scope.users
+			}
+		}).then(function(modal) {
+			modal.element.modal();
+			modal.close.then(function(group) {
+				if (group !== undefined) {
+					$scope.updateGroup(group);
+				}
+			});
+		});
+	};
+
+	$scope.updateGroup = function(group) {
+		$http.post("/manage/groups/update", group).then(function() {
+			for ( var i in $scope.groups.group) {
+				if ($scope.groups.group[i].id == group.id) {
+					$scope.groups.group[i] = group;
+					return;
+				}
+			}
+			$scope.groups.group.push(user);
+		}, function(e) {
+			$log.error(e);
+		});
+	}
+
+	$scope.loadData();
+});
+
+app.controller('groupDialog', function($scope, group, users, close) {
+
+	$scope.group = group;
+	$scope.users = users;
+	$scope.headline = 'group.headline.' + (group === undefined ? 'create' : 'edit');
+
+	$scope.close = function(result) {
+		close(result, 500);
+	};
+
+	$scope.save = function() {
+		close($scope.group, 500);
+	};
+
+});

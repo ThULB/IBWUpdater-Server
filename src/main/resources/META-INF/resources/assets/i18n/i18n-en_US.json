@@ -7,6 +7,14 @@
     "nav.dashboard" : "Dashboard",
 	"nav.settings" : "Settings",
 	
+	"groups.headline" : "Gruppen",
+    
+    "group.headline.create" : "Create Group",
+    "group.headline.edit" : "Edit Group",
+    "group.name" : "Name",
+    "group.description" : "Description",
+    "group.users" : "Group-Members",
+    
 	"users.headline" : "Users",
 	
 	"user.headline.create" : "Create User",

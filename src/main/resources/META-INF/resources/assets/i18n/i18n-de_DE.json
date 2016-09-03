@@ -7,6 +7,14 @@
     "nav.dashboard" : "Übersicht",
 	"nav.settings" : "Einstellungen",
 	
+	"groups.headline" : "Gruppen",
+	
+	"group.headline.create" : "Gruppe erstellen",
+    "group.headline.edit" : "Gruppe bearbeiten",
+    "group.name" : "Name",
+    "group.description" : "Beschreibung",
+    "group.users" : "Gruppen-Mitglieder",
+	
 	"users.headline" : "Benutzer",
 	
 	"user.headline.create" : "Benutzer erstellen",
