@@ -170,7 +170,7 @@ app.controller("groups", function($scope, $http, $log, ModalService, asyncQueue)
 					return;
 				}
 			}
-			$scope.groups.group.push(user);
+			$scope.groups.group.push(group);
 		}, function(e) {
 			$log.error(e);
 		});
