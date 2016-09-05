@@ -103,7 +103,7 @@ app.service("asyncQueue", function($http, $q) {
 app.controller("dashboard", function($scope) {
 });
 
-app.controller("users", function($scope, $http, ModalService, asyncQueue) {
+app.controller("users", function($scope, $log, $http, ModalService, asyncQueue) {
 	$scope.users = {};
 	$scope.groups = {};
 
@@ -119,7 +119,7 @@ app.controller("users", function($scope, $http, ModalService, asyncQueue) {
 				}
 			});
 		}, function(error) {
-			console.error(error);
+			$log.error(error);
 		});
 	};
 
@@ -151,7 +151,7 @@ app.controller("users", function($scope, $http, ModalService, asyncQueue) {
 			}
 			$scope.users.user.push(user);
 		}, function(e) {
-			console.error(e);
+			$log.error(e);
 		});
 	}
 
