@@ -17,20 +17,66 @@
 "use strict";
 
 var appName = "IBWUpdater";
-var app = angular.module(appName, [ "ngAnimate", "ngSanitize", "pascalprecht.translate", "angularModalService" ]);
+var app = angular.module(appName, [ "ngAnimate", "ngRoute", "ngSanitize", "pascalprecht.translate", "angularModalService" ]);
 
 app.run(function($animate) {
 	$animate.enabled(true);
 });
 
-app.config(function($translateProvider) {
+app.config(function($translateProvider, $routeProvider, $locationProvider) {
 	$translateProvider.useStaticFilesLoader({
 		prefix : "/web/assets/i18n/i18n-",
 		suffix : ".json"
 	});
 
 	$translateProvider.preferredLanguage("de_DE");
-	$translateProvider.fallbackLanguage('en_US');
+	$translateProvider.fallbackLanguage("en_US");
+
+	$routeProvider.when("/", {
+		templateUrl : "/web/assets/templates/dashboard.html",
+		controller : "dashboard",
+		name : "dashboard"
+	}).when("/users", {
+		templateUrl : "/web/assets/templates/users.html",
+		controller : "users",
+		name : "users"
+	}).when("/groups", {
+		templateUrl : "/web/assets/templates/groups.html",
+		controller : "groups",
+		name : "groups"
+	}).otherwise({
+		redirectTo : '/'
+	});
+});
+
+app.factory('routeNavigation', function($route, $location) {
+	var routes = [];
+	angular.forEach($route.routes, function(route, path) {
+		if (route.name) {
+			routes.push({
+				path : path,
+				name : route.name
+			});
+		}
+	});
+	return {
+		routes : routes,
+		activeRoute : function(route) {
+			return route.path === $location.path();
+		}
+	};
+});
+
+app.directive('navigation', function(routeNavigation) {
+	return {
+		restrict : "E",
+		replace : true,
+		templateUrl : "/web/assets/templates/navigation.html",
+		controller : function($scope) {
+			$scope.routes = routeNavigation.routes;
+			$scope.activeRoute = routeNavigation.activeRoute;
+		}
+	};
 });
 
 app.service("asyncQueue", function($http, $q) {
@@ -51,6 +97,9 @@ app.service("asyncQueue", function($http, $q) {
 		});
 		return deferred.promise;
 	};
+});
+
+app.controller("dashboard", function($scope) {
 });
 
 app.controller("users", function($scope, $http, ModalService, asyncQueue) {
