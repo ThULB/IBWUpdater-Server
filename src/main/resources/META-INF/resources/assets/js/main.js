@@ -25,7 +25,7 @@ app.run(function($animate) {
 
 app.config(function($translateProvider, $routeProvider, $locationProvider) {
 	$translateProvider.useStaticFilesLoader({
-		prefix : "/web/assets/i18n/i18n-",
+		prefix : "/assets/i18n/i18n-",
 		suffix : ".json"
 	});
 
@@ -33,15 +33,15 @@ app.config(function($translateProvider, $routeProvider, $locationProvider) {
 	$translateProvider.fallbackLanguage("en_US");
 
 	$routeProvider.when("/", {
-		templateUrl : "/web/assets/templates/dashboard.html",
+		templateUrl : "/assets/templates/dashboard.html",
 		name : "dashboard",
 		icon : "fa fa-tachometer"
 	}).when("/users", {
-		templateUrl : "/web/assets/templates/users.html",
+		templateUrl : "/assets/templates/users.html",
 		name : "users",
 		icon : "fa fa-user"
 	}).when("/groups", {
-		templateUrl : "/web/assets/templates/groups.html",
+		templateUrl : "/assets/templates/groups.html",
 		name : "groups",
 		icon : "fa fa-users"
 	}).otherwise({
@@ -72,7 +72,7 @@ app.directive('navigation', function(routeNavigation) {
 	return {
 		restrict : "E",
 		replace : true,
-		templateUrl : "/web/assets/templates/navigation.html",
+		templateUrl : "/assets/templates/navigation.html",
 		controller : function($scope) {
 			$scope.routes = routeNavigation.routes;
 			$scope.activeRoute = routeNavigation.activeRoute;
@@ -125,7 +125,7 @@ app.controller("users", function($scope, $log, $http, ModalService, asyncQueue) 
 
 	$scope.showUserDialog = function(user) {
 		ModalService.showModal({
-			templateUrl : "/web/assets/templates/user-dialog.html",
+			templateUrl : "/assets/templates/user-dialog.html",
 			controller : "userDialog",
 			inputs : {
 				user : angular.copy(user),
@@ -196,7 +196,7 @@ app.controller("groups", function($scope, $http, $log, ModalService, asyncQueue)
 
 	$scope.showGroupDialog = function(group) {
 		ModalService.showModal({
-			templateUrl : "/web/assets/templates/group-dialog.html",
+			templateUrl : "/assets/templates/group-dialog.html",
 			controller : "groupDialog",
 			inputs : {
 				group : group,

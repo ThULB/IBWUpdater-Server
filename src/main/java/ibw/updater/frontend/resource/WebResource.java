@@ -41,7 +41,7 @@ import ibw.updater.frontend.entity.ResourceWrapper;
  * @author Ren\u00E9 Adler (eagle)
  *
  */
-@Path("web")
+@Path("/")
 @Singleton
 public class WebResource {
 
