@@ -15,10 +15,11 @@
   "dependencies": {
   },
   "devDependencies": {
-    "angular": "~1.5.6",
-    "angular-animate": "~1.5.6",
+    "angular": "~1.5.8",
+    "angular-animate": "~1.5.8",
     "angular-modal-service": "~0.10.1",
-    "angular-sanitize" : "~1.5.6",
+    "angular-route": "~1.5.8",
+    "angular-sanitize" : "~1.5.8",
     "angular-translate": "~2.11.0",
     "angular-translate-loader-static-files": "~2.11.0",
     "bootstrap": "~3.3.6",

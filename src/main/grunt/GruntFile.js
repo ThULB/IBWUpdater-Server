@@ -35,6 +35,7 @@ module.exports = function(grunt) {
 									'angular/*.min.*',
 									'angular-animate/*.min.*',
 									'angular-modal-service/dst/*.min.*',
+									'angular-route/*.min.*',
 									'angular-sanitize/*.min.*',
 									'angular-translate/*.min.*',
 									'angular-translate-loader-static-files/*.min.*',

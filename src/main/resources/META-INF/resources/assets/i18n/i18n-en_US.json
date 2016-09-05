@@ -5,7 +5,8 @@
     "btn.close": "Close",
     
     "nav.dashboard" : "Dashboard",
-	"nav.settings" : "Settings",
+	"nav.users" : "Users",
+    "nav.groups" : "Groups",
 	
 	"groups.headline" : "Gruppen",
     
