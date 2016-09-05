@@ -8,7 +8,8 @@
 		</div>
 		<div id="navbar" class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
-				<li ng-repeat="route in routes" ng-class="{active: activeRoute(route)}"><a href="#{{ route.path }}">{{ 'nav.' + route.name | translate }}</a></li>
+				<li ng-repeat="route in routes" ng-class="{active: activeRoute(route)}"><a href="#{{ route.path }}"><span class="{{ route.icon }}"
+						aria-hidden="true" ng-if="route.icon !== undefined"></span> {{ 'nav.' + route.name | translate }}</a></li>
 			</ul>
 		</div>
 	</div>

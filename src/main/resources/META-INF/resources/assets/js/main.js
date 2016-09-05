@@ -34,13 +34,16 @@ app.config(function($translateProvider, $routeProvider, $locationProvider) {
 
 	$routeProvider.when("/", {
 		templateUrl : "/web/assets/templates/dashboard.html",
-		name : "dashboard"
+		name : "dashboard",
+		icon : "fa fa-tachometer"
 	}).when("/users", {
 		templateUrl : "/web/assets/templates/users.html",
-		name : "users"
+		name : "users",
+		icon : "fa fa-user"
 	}).when("/groups", {
 		templateUrl : "/web/assets/templates/groups.html",
-		name : "groups"
+		name : "groups",
+		icon : "fa fa-users"
 	}).otherwise({
 		redirectTo : '/'
 	});
@@ -52,7 +55,8 @@ app.factory('routeNavigation', function($route, $location) {
 		if (route.name) {
 			routes.push({
 				path : path,
-				name : route.name
+				name : route.name,
+				icon : route.icon
 			});
 		}
 	});
