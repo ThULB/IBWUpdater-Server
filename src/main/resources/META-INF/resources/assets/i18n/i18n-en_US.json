@@ -5,9 +5,22 @@
     "btn.close": "Close",
     
     "nav.dashboard" : "Dashboard",
+    "nav.packages" : "Packages",
 	"nav.users" : "Users",
     "nav.groups" : "Groups",
 	
+	"packages.headline" : "Packages",
+    
+    "package.headline.create" : "Create Package",
+    "package.headline.edit" : "Edit Package",
+    "package.type" : "Type",
+    "package.type.common" : "Common",
+    "package.type.user" : "User",
+    "package.version" : "Version",
+    "package.name" : "Name",
+    "package.description" : "Description",
+    "package.startupScript" : "Start Script",
+    
 	"groups.headline" : "Gruppen",
     
     "group.headline.create" : "Create Group",

@@ -1,0 +1,39 @@
+<div class="modal fade" id="package-dialog" tabindex="-1" role="dialog" aria-labelledby="package-label">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-label="{{'btn.close' | translate}}">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="package-label">{{headline | translate}}</h4>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="form-group">
+						<label for="type">{{'package.type' | translate}}</label> <select class="form-control" id="type" ng-model="package.type">
+							<option value="common">{{'package.type.common' | translate}}</option>
+							<option value="user">{{'package.type.user' | translate}}</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="name">{{'package.name' | translate}}</label> <input type="text" class="form-control" id="name" placeholder="{{'package.name' | translate}}"
+							ng-model="package.name">
+					</div>
+					<div class="form-group">
+						<label for="description">{{'package.description' | translate}}</label>
+						<textarea class="form-control" id="description" rows="3" placeholder="{{'package.description' | translate}}" ng-model="package.description">
+                        </textarea>
+					</div>
+					<div class="form-group" ng-if="package.type === 'common'">
+						<label for="startupScript">{{'package.startupScript' | translate}}</label> <input type="text" class="form-control" id="startupScript"
+							placeholder="{{'package.startupScript' | translate}}" ng-model="package.startupScript">
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" ng-click="save()" class="btn btn-primary" data-dismiss="modal">{{'btn.save' | translate}}</button>
+				<button type="button" ng-click="close()" class="btn btn-default" data-dismiss="modal">{{'btn.close' | translate}}</button>
+			</div>
+		</div>
+	</div>
+</div>

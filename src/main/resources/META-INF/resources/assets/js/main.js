@@ -36,6 +36,10 @@ app.config(function($translateProvider, $routeProvider, $locationProvider) {
 		templateUrl : "/assets/templates/dashboard.html",
 		name : "dashboard",
 		icon : "fa fa-tachometer"
+	}).when("/packages", {
+		templateUrl : "/assets/templates/packages.html",
+		name : "packages",
+		icon : "fa fa-cubes"
 	}).when("/users", {
 		templateUrl : "/assets/templates/users.html",
 		name : "users",
@@ -101,6 +105,72 @@ app.service("asyncQueue", function($http, $q) {
 });
 
 app.controller("dashboard", function($scope) {
+});
+
+app.controller("packages", function($scope, $log, $http, ModalService, asyncQueue) {
+	$scope.packages = {};
+
+	$scope.loadData = function() {
+		asyncQueue.load([ "/manage/packages" ]).then(function(results) {
+			results.forEach(function(result) {
+				if (result.status === 200) {
+					if (result.config.url.indexOf("/packages") != -1) {
+						$scope.packages = result.data;
+					}
+				}
+			});
+		}, function(error) {
+			$log.error(error);
+		});
+	};
+
+	$scope.showPackageDialog = function(p) {
+		ModalService.showModal({
+			templateUrl : "/assets/templates/package-dialog.html",
+			controller : "packageDialog",
+			inputs : {
+				p : angular.copy(p),
+			}
+		}).then(function(modal) {
+			modal.element.modal();
+			modal.close.then(function(p) {
+				if (p !== undefined) {
+					$scope.updatePackage(p);
+				}
+			});
+		});
+	};
+
+	$scope.updatePackage = function(p) {
+		$http.post("/manage/packages/update", p).then(function() {
+			for ( var i in $scope.packages["package"]) {
+				if ($scope.packages["package"][i].id == p.id) {
+					$scope.packages["package"][i] = p;
+					return;
+				}
+			}
+			$scope.packages["package"].push(p);
+		}, function(e) {
+			$log.error(e);
+		});
+	}
+
+	$scope.loadData();
+});
+
+app.controller('packageDialog', function($scope, p, close) {
+
+	$scope["package"] = p;
+	$scope.headline = 'package.headline.' + (p === undefined ? 'create' : 'edit');
+
+	$scope.close = function(result) {
+		close(result, 500);
+	};
+
+	$scope.save = function() {
+		close($scope["package"], 500);
+	};
+
 });
 
 app.controller("users", function($scope, $log, $http, ModalService, asyncQueue) {

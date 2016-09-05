@@ -1,12 +1,25 @@
 {
-    "app.headline" : "IBWUpdater",
+	"app.headline" : "IBWUpdater",
     
     "btn.save" : "Speichern", 
     "btn.close" : "Schliessen",
     
     "nav.dashboard" : "Übersicht",
+    "nav.packages" : "Pakete",
 	"nav.users" : "Benutzer",
 	"nav.groups" : "Gruppen",
+	
+	"packages.headline" : "Pakete",
+    
+    "package.headline.create" : "Paket erstellen",
+    "package.headline.edit" : "Paket bearbeiten",
+    "package.type" : "Typ",
+    "package.type.common" : "Allgemein",
+    "package.type.user" : "Benutzer",
+    "package.version" : "Version",
+    "package.name" : "Name",
+    "package.description" : "Beschreibung",
+    "package.startupScript" : "Start Skript",
 	
 	"groups.headline" : "Gruppen",
 	
