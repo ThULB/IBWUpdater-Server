@@ -34,15 +34,12 @@ app.config(function($translateProvider, $routeProvider, $locationProvider) {
 
 	$routeProvider.when("/", {
 		templateUrl : "/web/assets/templates/dashboard.html",
-		controller : "dashboard",
 		name : "dashboard"
 	}).when("/users", {
 		templateUrl : "/web/assets/templates/users.html",
-		controller : "users",
 		name : "users"
 	}).when("/groups", {
 		templateUrl : "/web/assets/templates/groups.html",
-		controller : "groups",
 		name : "groups"
 	}).otherwise({
 		redirectTo : '/'
@@ -111,9 +108,9 @@ app.controller("users", function($scope, $http, ModalService, asyncQueue) {
 			results.forEach(function(result) {
 				if (result.status === 200) {
 					if (result.config.url.indexOf("/users") != -1) {
-						angular.merge($scope.users, result.data);
+						$scope.users = result.data;
 					} else if (result.config.url.indexOf("groups") != -1) {
-						angular.merge($scope.groups, result.data);
+						$scope.groups = result.data;
 					}
 				}
 			});
