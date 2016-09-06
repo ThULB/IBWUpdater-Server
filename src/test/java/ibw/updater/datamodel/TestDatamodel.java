@@ -94,13 +94,28 @@ public class TestDatamodel extends JPATestCase {
 	}
 
 	@Test
-	public void testPackage() {
+	public void testPackageCommon() {
 		entitymanager.getTransaction().begin();
 
-		Package p = new Package(Package.Type.USER, "test", "Test Package");
+		Package p = new Package(Package.Type.COMMON, "test", "Test Package");
 		p.setStartupScript("scripts/testStartup.js");
 
 		assertNotNull("package id should not null", p.getId());
+
+		entitymanager.persist(p);
+		entitymanager.getTransaction().commit();
+	}
+
+	@Test
+	public void testPackageUser() {
+		entitymanager.getTransaction().begin();
+
+		Package p = new Package(Package.Type.USER, "test", "Test Package");
+		Function f = new Function(p, "test", null, "alert(\"Hello World!\"");
+		p.setFunction(f);
+
+		assertNotNull("package id should not null", p.getId());
+		assertEquals("function id should package id", p.getId(), f.getPackage().getId());
 
 		entitymanager.persist(p);
 		entitymanager.getTransaction().commit();
