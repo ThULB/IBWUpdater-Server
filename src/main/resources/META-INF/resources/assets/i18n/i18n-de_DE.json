@@ -32,6 +32,8 @@
 	
 	"group.headline.create" : "Gruppe erstellen",
     "group.headline.edit" : "Gruppe bearbeiten",
+    "group.headline.delete" : "Gruppe löschen?",
+    "group.message.delete" : "Wollen Sie wirklich die Gruppe mit dem Name \"{0}\" löschen?",
     "group.name" : "Name",
     "group.description" : "Beschreibung",
     "group.users" : "Gruppen-Mitglieder",
@@ -40,6 +42,8 @@
 	
 	"user.headline.create" : "Benutzer erstellen",
 	"user.headline.edit" : "Benutzer bearbeiten",
+	"user.headline.delete" : "Benutzer löschen?",
+    "user.message.delete" : "Wollen Sie wirklich den Benutzer mit dem Name \"{0}\" löschen?",
 	"user.name" : "Name",
 	"user.description" : "Vollständiger Name",
 	"user.groups" : "Gruppen-Mitgliedschaft"

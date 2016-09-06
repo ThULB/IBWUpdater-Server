@@ -32,6 +32,8 @@
     
     "group.headline.create" : "Create Group",
     "group.headline.edit" : "Edit Group",
+    "group.headline.delete" : "Delete Group?",
+    "group.message.delete" : "Do you want really delete the group with name \"{0}\"?",
     "group.name" : "Name",
     "group.description" : "Description",
     "group.users" : "Group-Members",
@@ -40,6 +42,8 @@
 	
 	"user.headline.create" : "Create User",
     "user.headline.edit" : "Edit User",
+    "user.headline.delete" : "Delete User?",
+    "user.message.delete" : "Do you want really delete the user with name \"{0}\"?",
     "user.name" : "Name",
     "user.description" : "Real-Name",
     "user.groups" : "Group-Membership"

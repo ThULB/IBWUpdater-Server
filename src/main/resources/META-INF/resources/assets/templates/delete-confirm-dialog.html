@@ -1,17 +1,17 @@
-<div class="modal fade" id="package-delete-dialog" tabindex="-1" role="dialog" aria-labelledby="package-label">
+<div class="modal fade" id="delete-confirm-dialog" tabindex="-1" role="dialog" aria-labelledby="delete-label">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-label="{{'btn.close' | translate}}">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<h4 class="modal-title" id="package-label">{{'package.headline.delete' | translate}}</h4>
+				<h4 class="modal-title" id="delete-label">{{options.headline}}</h4>
 			</div>
 			<div class="modal-body">
-				<p>{{('package.message.delete' | translate).replace('{0}', package.name)}}</p>
+				<p>{{options.message}}</p>
 			</div>
 			<div class="modal-footer">
-				<button type="button" ng-click="close(package)" class="btn btn-danger" data-dismiss="modal">{{'btn.yes' | translate}}</button>
+				<button type="button" ng-click="close(options.object)" class="btn btn-danger" data-dismiss="modal">{{'btn.yes' | translate}}</button>
 				<button type="button" ng-click="close()" class="btn btn-default" data-dismiss="modal">{{'btn.no' | translate}}</button>
 			</div>
 		</div>
