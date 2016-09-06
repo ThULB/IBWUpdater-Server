@@ -107,7 +107,15 @@ app.service("asyncQueue", function($http, $q) {
 app.controller("dashboard", function($scope) {
 });
 
-app.controller("packages", function($scope, $log, $http, ModalService, asyncQueue) {
+app.controller('deleteConfirmDialog', function($scope, options, close) {
+	$scope.options = options;
+
+	$scope.close = function(result) {
+		close(result, 500);
+	};
+});
+
+app.controller("packages", function($scope, $log, $http, $translate, ModalService, asyncQueue) {
 	$scope.packages = {};
 
 	$scope.loadData = function() {
@@ -141,6 +149,27 @@ app.controller("packages", function($scope, $log, $http, ModalService, asyncQueu
 		});
 	};
 
+	$scope.showPackageDeleteDialog = function(p) {
+		ModalService.showModal({
+			templateUrl : "/assets/templates/delete-confirm-dialog.html",
+			controller : "deleteConfirmDialog",
+			inputs : {
+				options : {
+					headline : $translate.instant("package.headline.delete"),
+					message : $translate.instant("package.message.delete").replace("{0}", p.name),
+					object : angular.copy(p)
+				},
+			}
+		}).then(function(modal) {
+			modal.element.modal();
+			modal.close.then(function(p) {
+				if (p !== undefined) {
+					$scope.deletePackage(p);
+				}
+			});
+		});
+	};
+
 	$scope.updatePackage = function(p) {
 		if (p.id === undefined) {
 			$http.post("/manage/packages/add", p).then(function(result) {
@@ -165,7 +194,17 @@ app.controller("packages", function($scope, $log, $http, ModalService, asyncQueu
 				$log.error(e);
 			});
 		}
-	}
+	};
+
+	$scope.deletePackage = function(p) {
+		$http.post("/manage/packages/delete", p).then(function(result) {
+			if (result.status == 200) {
+				$scope.loadData();
+			}
+		}, function(e) {
+			$log.error(e);
+		});
+	};
 
 	$scope.loadData();
 });
@@ -200,7 +239,7 @@ app.controller('packageDialog', function($scope, p, close) {
 
 });
 
-app.controller("users", function($scope, $log, $http, ModalService, asyncQueue) {
+app.controller("users", function($scope, $log, $http, $translate, ModalService, asyncQueue) {
 	$scope.users = {};
 	$scope.groups = {};
 
@@ -238,6 +277,27 @@ app.controller("users", function($scope, $log, $http, ModalService, asyncQueue) 
 		});
 	};
 
+	$scope.showUserDeleteDialog = function(user) {
+		ModalService.showModal({
+			templateUrl : "/assets/templates/delete-confirm-dialog.html",
+			controller : "deleteConfirmDialog",
+			inputs : {
+				options : {
+					headline : $translate.instant("user.headline.delete"),
+					message : $translate.instant("user.message.delete").replace("{0}", user.name),
+					object : angular.copy(user)
+				},
+			}
+		}).then(function(modal) {
+			modal.element.modal();
+			modal.close.then(function(user) {
+				if (user !== undefined) {
+					$scope.deleteUser(user);
+				}
+			});
+		});
+	};
+
 	$scope.updateUser = function(user) {
 		if (user.id === undefined) {
 			$http.post("/manage/users/add", user).then(function(result) {
@@ -262,7 +322,17 @@ app.controller("users", function($scope, $log, $http, ModalService, asyncQueue) 
 				$log.error(e);
 			});
 		}
-	}
+	};
+
+	$scope.deleteUser = function(user) {
+		$http.post("/manage/users/delete", user).then(function(result) {
+			if (result.status == 200) {
+				$scope.loadData();
+			}
+		}, function(e) {
+			$log.error(e);
+		});
+	};
 
 	$scope.loadData();
 });
@@ -283,7 +353,7 @@ app.controller('userDialog', function($scope, user, groups, close) {
 
 });
 
-app.controller("groups", function($scope, $http, $log, ModalService, asyncQueue) {
+app.controller("groups", function($scope, $http, $log, $translate, ModalService, asyncQueue) {
 	$scope.groups = {};
 	$scope.users = {};
 
@@ -308,7 +378,7 @@ app.controller("groups", function($scope, $http, $log, ModalService, asyncQueue)
 			templateUrl : "/assets/templates/group-dialog.html",
 			controller : "groupDialog",
 			inputs : {
-				group : group,
+				group : angular.copy(group),
 				users : $scope.users
 			}
 		}).then(function(modal) {
@@ -316,6 +386,27 @@ app.controller("groups", function($scope, $http, $log, ModalService, asyncQueue)
 			modal.close.then(function(group) {
 				if (group !== undefined) {
 					$scope.updateGroup(group);
+				}
+			});
+		});
+	};
+
+	$scope.showGroupDeleteDialog = function(group) {
+		ModalService.showModal({
+			templateUrl : "/assets/templates/delete-confirm-dialog.html",
+			controller : "deleteConfirmDialog",
+			inputs : {
+				options : {
+					headline : $translate.instant("group.headline.delete"),
+					message : $translate.instant("group.message.delete").replace("{0}", group.name),
+					object : angular.copy(group)
+				},
+			}
+		}).then(function(modal) {
+			modal.element.modal();
+			modal.close.then(function(group) {
+				if (group !== undefined) {
+					$scope.deleteGroup(group);
 				}
 			});
 		});
@@ -345,7 +436,17 @@ app.controller("groups", function($scope, $http, $log, ModalService, asyncQueue)
 				$log.error(e);
 			});
 		}
-	}
+	};
+
+	$scope.deleteGroup = function(group) {
+		$http.post("/manage/groups/delete", group).then(function(result) {
+			if (result.status == 200) {
+				$scope.loadData();
+			}
+		}, function(e) {
+			$log.error(e);
+		});
+	};
 
 	$scope.loadData();
 });
