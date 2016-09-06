@@ -161,7 +161,7 @@ app.controller("packages", function($scope, $log, $http, ModalService, asyncQueu
 app.controller('packageDialog', function($scope, p, close) {
 	$scope.headline = 'package.headline.' + (p === undefined ? 'create' : 'edit');
 
-	if (p["function"] !== undefined) {
+	if (p !== undefined && p["function"] !== undefined) {
 		var func = p["function"];
 		func.value = "function " + func.name + "(" + (func.params || "") + ") {\n" + func.value + "\n}";
 	}
