@@ -19,6 +19,7 @@ package ibw.updater.datamodel;
 import java.util.UUID;
 
 import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -257,7 +258,7 @@ public class Package {
 	/**
 	 * @return the function
 	 */
-	@OneToOne(mappedBy = "package")
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "package")
 	@XmlElement(name = "function")
 	public Function getFunction() {
 		return function;
