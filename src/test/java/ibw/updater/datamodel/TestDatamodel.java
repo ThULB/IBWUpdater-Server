@@ -101,6 +101,7 @@ public class TestDatamodel extends JPATestCase {
 		p.setStartupScript("scripts/testStartup.js");
 
 		assertNotNull("package id should not null", p.getId());
+		assertEquals("version id should be 1", new Integer(1), p.getVersion());
 
 		entitymanager.persist(p);
 		entitymanager.getTransaction().commit();
@@ -111,11 +112,12 @@ public class TestDatamodel extends JPATestCase {
 		entitymanager.getTransaction().begin();
 
 		Package p = new Package(Package.Type.USER, "test", "Test Package");
-		Function f = new Function(p, "test", null, "alert(\"Hello World!\"");
+		Function f = new Function("test", null, "alert(\"Hello World!\")");
 		p.setFunction(f);
 
 		assertNotNull("package id should not null", p.getId());
 		assertEquals("function id should package id", p.getId(), f.getPackage().getId());
+		assertEquals("version id should be 1", new Integer(1), p.getVersion());
 
 		entitymanager.persist(p);
 		entitymanager.getTransaction().commit();

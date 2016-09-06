@@ -18,6 +18,7 @@ package ibw.updater.persistency;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import javax.persistence.EntityExistsException;
@@ -25,7 +26,9 @@ import javax.persistence.EntityExistsException;
 import org.junit.Test;
 
 import ibw.updater.backend.jpa.JPATestCase;
+import ibw.updater.datamodel.Function;
 import ibw.updater.datamodel.Group;
+import ibw.updater.datamodel.Package;
 import ibw.updater.datamodel.User;
 
 /**
@@ -184,6 +187,66 @@ public class TestPersistency extends JPATestCase {
 		g = GroupManager.update(g);
 
 		assertEquals("group should have no user", 0, g.getUsers().size());
+	}
+
+	@Test
+	public void savePackageCommon() {
+		Package p = new Package(Package.Type.COMMON, "test", "Test Package");
+		p.setStartupScript("scripts/testStartup.js");
+
+		p = PackageManager.save(p);
+
+		assertNotNull("package id should not null", p.getId());
+		assertEquals("version id should be 1", new Integer(1), p.getVersion());
+	}
+
+	@Test
+	public void updatePackageCommon() {
+		Package p = new Package(Package.Type.COMMON, "test", "Test Package");
+		p.setStartupScript("scripts/testStartup.js");
+
+		p = PackageManager.save(p);
+
+		assertNotNull("package id should not null", p.getId());
+		assertEquals("version id should be 1", new Integer(1), p.getVersion());
+
+		p.setDescription("Updated Description");
+
+		p = PackageManager.update(p);
+
+		assertEquals("Updated Description", p.getDescription());
+	}
+
+	@Test
+	public void savePackageUser() {
+		Package p = new Package(Package.Type.USER, "test", "Test Package");
+		Function f = new Function("test", null, "alert(\"Hello World!\")");
+		p.setFunction(f);
+
+		p = PackageManager.save(p);
+
+		assertNotNull("package id should not null", p.getId());
+		assertEquals("function id should package id", p.getId(), f.getPackage().getId());
+		assertEquals("version id should be 1", new Integer(1), p.getVersion());
+	}
+
+	@Test
+	public void updatePackageUser() {
+		Package p = new Package(Package.Type.USER, "test", "Test Package");
+		Function f = new Function("test", null, "alert(\"Hello World!\")");
+		p.setFunction(f);
+
+		p = PackageManager.save(p);
+
+		assertNotNull("package id should not null", p.getId());
+		assertEquals("function id should package id", p.getId(), f.getPackage().getId());
+		assertEquals("version id should be 1", new Integer(1), p.getVersion());
+
+		f.setCode("alert(\"Hello World!\");");
+
+		p = PackageManager.update(p);
+
+		assertEquals("version id should increased", new Integer(2), p.getVersion());
 	}
 
 }
