@@ -106,12 +106,17 @@ public class PackageManager {
 
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			Package inDB = get(p.getName());
+			Package inDB = get(p.getId());
 			if (inDB != null) {
 				p.setId(inDB.getId());
 				em.detach(inDB);
 			}
 			em.getTransaction().begin();
+
+			if (inDB.getFunction() != null && p.getFunction() != null && !inDB.getFunction().equals(p.getFunction())) {
+				p.setVersion(p.getVersion() + 1);
+			}
+
 			em.merge(p);
 			em.getTransaction().commit();
 
