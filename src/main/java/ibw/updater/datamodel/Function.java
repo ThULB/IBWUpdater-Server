@@ -53,6 +53,17 @@ public class Function {
 	}
 
 	/**
+	 * @param name
+	 * @param params
+	 * @param code
+	 */
+	public Function(String name, String params, String code) {
+		this.name = name;
+		this.params = params;
+		this.code = code;
+	}
+
+	/**
 	 * @param packageId
 	 * @param name
 	 * @param description
@@ -145,7 +156,6 @@ public class Function {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((packAge == null) ? 0 : packAge.hashCode());
 		result = prime * result + ((code == null) ? 0 : code.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((params == null) ? 0 : params.hashCode());
@@ -166,11 +176,6 @@ public class Function {
 		if (getClass() != obj.getClass())
 			return false;
 		Function other = (Function) obj;
-		if (packAge == null) {
-			if (other.packAge != null)
-				return false;
-		} else if (!packAge.equals(other.packAge))
-			return false;
 		if (code == null) {
 			if (other.code != null)
 				return false;
