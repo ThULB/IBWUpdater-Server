@@ -239,17 +239,29 @@ app.controller("users", function($scope, $log, $http, ModalService, asyncQueue) 
 	};
 
 	$scope.updateUser = function(user) {
-		$http.post("/manage/users/update", user).then(function() {
-			for ( var i in $scope.users.user) {
-				if ($scope.users.user[i].id == user.id) {
-					$scope.users.user[i] = user;
-					return;
+		if (user.id === undefined) {
+			$http.post("/manage/users/add", user).then(function(result) {
+				if (result.status == 200) {
+					$scope.users.user.push(result.data);
 				}
-			}
-			$scope.users.user.push(user);
-		}, function(e) {
-			$log.error(e);
-		});
+			}, function(e) {
+				$log.error(e);
+			});
+		} else {
+			$http.post("/manage/users/update", user).then(function(result) {
+				if (result.status == 200) {
+					user = result.data;
+					for ( var i in $scope.users.user) {
+						if ($scope.users.user[i].id == user.id) {
+							$scope.users.user[i] = user;
+							return;
+						}
+					}
+				}
+			}, function(e) {
+				$log.error(e);
+			});
+		}
 	}
 
 	$scope.loadData();
@@ -310,17 +322,29 @@ app.controller("groups", function($scope, $http, $log, ModalService, asyncQueue)
 	};
 
 	$scope.updateGroup = function(group) {
-		$http.post("/manage/groups/update", group).then(function() {
-			for ( var i in $scope.groups.group) {
-				if ($scope.groups.group[i].id == group.id) {
-					$scope.groups.group[i] = group;
-					return;
+		if (group.id === undefined) {
+			$http.post("/manage/groups/add", group).then(function(result) {
+				if (result.status == 200) {
+					$scope.groups.group.push(result.data);
 				}
-			}
-			$scope.groups.group.push(group);
-		}, function(e) {
-			$log.error(e);
-		});
+			}, function(e) {
+				$log.error(e);
+			});
+		} else {
+			$http.post("/manage/groups/update", group).then(function(result) {
+				if (result.status == 200) {
+					group = result.data;
+					for ( var i in $scope.groups.group) {
+						if ($scope.groups.group[i].id == group.id) {
+							$scope.groups.group[i] = group;
+							return;
+						}
+					}
+				}
+			}, function(e) {
+				$log.error(e);
+			});
+		}
 	}
 
 	$scope.loadData();
