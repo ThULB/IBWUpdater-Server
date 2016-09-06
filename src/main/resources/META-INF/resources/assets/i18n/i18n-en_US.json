@@ -1,8 +1,12 @@
 {
     "app.headline" : "IBWUpdater",
     
+    "general.actions": "Actions",
+    
     "btn.save" : "Save",
     "btn.close": "Close",
+    "btn.yes" : "Yes",
+    "btn.no" : "No",
     
     "nav.dashboard" : "Dashboard",
     "nav.packages" : "Packages",
@@ -13,6 +17,8 @@
     
     "package.headline.create" : "Create Package",
     "package.headline.edit" : "Edit Package",
+    "package.headline.delete" : "Delete Package?",
+    "package.message.delete" : "Do you want really delete the package with name \"{0}\"?",
     "package.type" : "Type",
     "package.type.common" : "Common",
     "package.type.user" : "User",
