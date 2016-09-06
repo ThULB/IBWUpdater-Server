@@ -59,8 +59,7 @@ public class GroupResource {
 	public Response add(final Group group) {
 		try {
 			LOGGER.info("Add " + group);
-			GroupManager.save(group);
-			return Response.ok().status(Response.Status.OK).build();
+			return Response.ok().status(Response.Status.OK).entity(GroupManager.save(group)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
@@ -74,8 +73,7 @@ public class GroupResource {
 	public Response update(final Group group) {
 		try {
 			LOGGER.info("Update " + group);
-			GroupManager.update(group);
-			return Response.ok().status(Response.Status.OK).build();
+			return Response.ok().status(Response.Status.OK).entity(GroupManager.update(group)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));

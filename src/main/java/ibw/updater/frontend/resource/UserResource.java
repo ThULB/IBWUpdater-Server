@@ -59,8 +59,7 @@ public class UserResource {
 	public Response add(final User user) {
 		try {
 			LOGGER.info("Add " + user);
-			UserManager.save(user);
-			return Response.ok().status(Response.Status.OK).build();
+			return Response.ok().status(Response.Status.OK).entity(UserManager.save(user)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
@@ -74,8 +73,7 @@ public class UserResource {
 	public Response update(final User user) {
 		try {
 			LOGGER.info("Update " + user);
-			UserManager.update(user);
-			return Response.ok().status(Response.Status.OK).build();
+			return Response.ok().status(Response.Status.OK).entity(UserManager.update(user)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));

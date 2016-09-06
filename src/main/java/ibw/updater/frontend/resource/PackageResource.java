@@ -59,8 +59,7 @@ public class PackageResource {
 	public Response add(final Package p) {
 		try {
 			LOGGER.info("Add " + p);
-			PackageManager.save(p);
-			return Response.ok().status(Response.Status.OK).build();
+			return Response.ok().status(Response.Status.OK).entity(PackageManager.save(p)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
@@ -74,8 +73,7 @@ public class PackageResource {
 	public Response update(final Package p) {
 		try {
 			LOGGER.info("Update " + p);
-			PackageManager.update(p);
-			return Response.ok().status(Response.Status.OK).build();
+			return Response.ok().status(Response.Status.OK).entity(PackageManager.update(p)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
