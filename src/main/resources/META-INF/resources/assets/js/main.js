@@ -142,17 +142,29 @@ app.controller("packages", function($scope, $log, $http, ModalService, asyncQueu
 	};
 
 	$scope.updatePackage = function(p) {
-		$http.post("/manage/packages/update", p).then(function() {
-			for ( var i in $scope.packages["package"]) {
-				if ($scope.packages["package"][i].id == p.id) {
-					$scope.packages["package"][i] = p;
-					return;
+		if (p.id === undefined) {
+			$http.post("/manage/packages/add", p).then(function(result) {
+				if (result.status == 200) {
+					$scope.packages["package"].push(result.data);
 				}
-			}
-			$scope.packages["package"].push(p);
-		}, function(e) {
-			$log.error(e);
-		});
+			}, function(e) {
+				$log.error(e);
+			});
+		} else {
+			$http.post("/manage/packages/update", p).then(function(result) {
+				if (result.status == 200) {
+					p = result.data;
+					for ( var i in $scope.packages["package"]) {
+						if ($scope.packages["package"][i].id == p.id) {
+							$scope.packages["package"][i] = p;
+							return;
+						}
+					}
+				}
+			}, function(e) {
+				$log.error(e);
+			});
+		}
 	}
 
 	$scope.loadData();
@@ -176,6 +188,7 @@ app.controller('packageDialog', function($scope, p, close) {
 			var regexp = /function\s([^\(]+)\(([^\)]*)\)\s*{([^}]*)}/g;
 			var match = regexp.exec($scope["package"]["function"].value);
 			if (match) {
+				$scope["package"]["function"] = {};
 				$scope["package"]["function"].name = match[1].trim();
 				$scope["package"]["function"].params = match[2].trim();
 				$scope["package"]["function"].value = match[3].trim();
