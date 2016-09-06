@@ -19,12 +19,13 @@ package ibw.updater.datamodel;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlValue;
 
 /**
@@ -37,9 +38,7 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlRootElement(name = "function")
 public class Function {
 
-	private int id;
-
-	private String packageId;
+	private Package packAge;
 
 	private String name;
 
@@ -60,47 +59,30 @@ public class Function {
 	 * @param params
 	 * @param code
 	 */
-	public Function(String packageId, String name, String params, String code) {
-		this.packageId = packageId;
+	public Function(Package packAge, String name, String params, String code) {
+		this.packAge = packAge;
 		this.name = name;
 		this.params = params;
 		this.code = code;
 	}
 
 	/**
-	 * @return the id
+	 * @return the package
 	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	@XmlAttribute(name = "id")
-	public int getId() {
-		return id;
+	@OneToOne
+	@JoinColumn(name = "packageId")
+	@XmlTransient
+	public Package getPackage() {
+		return packAge;
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
+	 * @param packAge
+	 *            the package to set
 	 */
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the packageId
-	 */
-	@Column(name = "packageId", length = 36, nullable = false)
-	@XmlAttribute(name = "packageId")
-	public String getPackageId() {
-		return packageId;
-	}
-
-	/**
-	 * @param packageId
-	 *            the packageId to set
-	 */
-	public void setPackageId(String packageId) {
-		this.packageId = packageId;
+	public void setPackage(Package packAge) {
+		this.packAge = packAge;
 	}
 
 	/**
@@ -163,10 +145,9 @@ public class Function {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((packAge == null) ? 0 : packAge.hashCode());
 		result = prime * result + ((code == null) ? 0 : code.hashCode());
-		result = prime * result + id;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((packageId == null) ? 0 : packageId.hashCode());
 		result = prime * result + ((params == null) ? 0 : params.hashCode());
 		return result;
 	}
@@ -185,22 +166,20 @@ public class Function {
 		if (getClass() != obj.getClass())
 			return false;
 		Function other = (Function) obj;
+		if (packAge == null) {
+			if (other.packAge != null)
+				return false;
+		} else if (!packAge.equals(other.packAge))
+			return false;
 		if (code == null) {
 			if (other.code != null)
 				return false;
 		} else if (!code.equals(other.code))
 			return false;
-		if (id != other.id)
-			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
-			return false;
-		if (packageId == null) {
-			if (other.packageId != null)
-				return false;
-		} else if (!packageId.equals(other.packageId))
 			return false;
 		if (params == null) {
 			if (other.params != null)
@@ -217,8 +196,7 @@ public class Function {
 	 */
 	@Override
 	public String toString() {
-		return "Function [id=" + id + ", packageId=" + packageId + ", name=" + name + ", params=" + params + ", code="
-				+ code + "]";
+		return "Function [name=" + name + ", params=" + params + ", code=" + code + "]";
 	}
 
 }

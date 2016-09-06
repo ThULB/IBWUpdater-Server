@@ -26,6 +26,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -106,6 +107,8 @@ public class Package {
 	private String url;
 
 	private String startupScript;
+
+	private Function function;
 
 	/**
 	 * 
@@ -249,6 +252,26 @@ public class Package {
 	 */
 	public void setStartupScript(String startupScript) {
 		this.startupScript = startupScript;
+	}
+
+	/**
+	 * @return the function
+	 */
+	@OneToOne(mappedBy = "package")
+	@XmlElement(name = "function")
+	public Function getFunction() {
+		return function;
+	}
+
+	/**
+	 * @param function
+	 *            the function to set
+	 */
+	public void setFunction(Function function) {
+		if (function != null && function.getPackage() == null) {
+			function.setPackage(this);
+		}
+		this.function = function;
 	}
 
 	/*

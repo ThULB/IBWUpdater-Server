@@ -19,6 +19,7 @@
     "package.version" : "Version",
     "package.name" : "Name",
     "package.description" : "Description",
+    "package.function" : "Function",
     "package.startupScript" : "Start Script",
     
 	"groups.headline" : "Gruppen",

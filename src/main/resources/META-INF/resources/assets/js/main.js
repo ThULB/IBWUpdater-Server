@@ -159,15 +159,29 @@ app.controller("packages", function($scope, $log, $http, ModalService, asyncQueu
 });
 
 app.controller('packageDialog', function($scope, p, close) {
-
-	$scope["package"] = p;
 	$scope.headline = 'package.headline.' + (p === undefined ? 'create' : 'edit');
+
+	if (p["function"] !== undefined) {
+		var func = p["function"];
+		func.value = "function " + func.name + "(" + (func.params || "") + ") {\n" + func.value + "\n}";
+	}
+	$scope["package"] = p;
 
 	$scope.close = function(result) {
 		close(result, 500);
 	};
 
 	$scope.save = function() {
+		if ($scope["package"]["function"] !== undefined) {
+			var regexp = /function\s([^\(]+)\(([^\)]*)\)\s*{([^}]*)}/g;
+			var match = regexp.exec($scope["package"]["function"].value);
+			if (match) {
+				$scope["package"]["function"].name = match[1].trim();
+				$scope["package"]["function"].params = match[2].trim();
+				$scope["package"]["function"].value = match[3].trim();
+			}
+		}
+
 		close($scope["package"], 500);
 	};
 

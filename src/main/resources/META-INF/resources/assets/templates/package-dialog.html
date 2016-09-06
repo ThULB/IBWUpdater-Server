@@ -28,6 +28,11 @@
 						<label for="startupScript">{{'package.startupScript' | translate}}</label> <input type="text" class="form-control" id="startupScript"
 							placeholder="{{'package.startupScript' | translate}}" ng-model="package.startupScript">
 					</div>
+					<div class="form-group" ng-if="package.type === 'user'">
+						<label for="function">{{'package.function' | translate}}</label>
+						<textarea class="form-control" id="function" rows="3" placeholder="{{'package.function' | translate}}" ng-model="package.function.value">
+                        </textarea>
+					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
