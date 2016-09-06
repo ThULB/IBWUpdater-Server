@@ -285,11 +285,11 @@ public class Package {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((function == null) ? 0 : function.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((startupScript == null) ? 0 : startupScript.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		result = prime * result + ((url == null) ? 0 : url.hashCode());
 		result = prime * result + ((version == null) ? 0 : version.hashCode());
 		return result;
 	}
@@ -313,6 +313,11 @@ public class Package {
 				return false;
 		} else if (!description.equals(other.description))
 			return false;
+		if (function == null) {
+			if (other.function != null)
+				return false;
+		} else if (!function.equals(other.function))
+			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -330,11 +335,6 @@ public class Package {
 			return false;
 		if (type != other.type)
 			return false;
-		if (url == null) {
-			if (other.url != null)
-				return false;
-		} else if (!url.equals(other.url))
-			return false;
 		if (version == null) {
 			if (other.version != null)
 				return false;
@@ -351,7 +351,7 @@ public class Package {
 	@Override
 	public String toString() {
 		return "Package [id=" + id + ", type=" + type + ", version=" + version + ", name=" + name + ", description="
-				+ description + ", url=" + url + ", startupScript=" + startupScript + "]";
+				+ description + "]";
 	}
 
 }
