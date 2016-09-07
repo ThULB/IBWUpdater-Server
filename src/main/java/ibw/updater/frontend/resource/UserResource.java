@@ -50,7 +50,7 @@ public class UserResource {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response list() {
-		return Response.ok().status(Response.Status.OK).entity(UserManager.get()).build();
+		return Response.ok().entity(UserManager.get()).build();
 	}
 
 	@POST
@@ -59,7 +59,7 @@ public class UserResource {
 	public Response add(final User user) {
 		try {
 			LOGGER.info("Add " + user);
-			return Response.ok().status(Response.Status.OK).entity(UserManager.save(user)).build();
+			return Response.ok().entity(UserManager.save(user)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
@@ -73,7 +73,7 @@ public class UserResource {
 	public Response update(final User user) {
 		try {
 			LOGGER.info("Update " + user);
-			return Response.ok().status(Response.Status.OK).entity(UserManager.update(user)).build();
+			return Response.ok().entity(UserManager.update(user)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
@@ -88,7 +88,7 @@ public class UserResource {
 		try {
 			LOGGER.info("Remove " + user);
 			UserManager.delete(user);
-			return Response.ok().status(Response.Status.OK).build();
+			return Response.ok().build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
@@ -102,7 +102,7 @@ public class UserResource {
 		try {
 			LOGGER.info("Remove user with id " + uid);
 			UserManager.delete(uid);
-			return Response.ok().status(Response.Status.OK).build();
+			return Response.ok().build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));

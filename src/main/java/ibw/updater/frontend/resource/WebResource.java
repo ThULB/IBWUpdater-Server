@@ -73,7 +73,7 @@ public class WebResource {
 				cc.setMustRevalidate(true);
 				cc.setPrivate(true);
 
-				return Response.ok().status(Response.Status.OK).tag(r.getETag()).type(r.getMimeType())
+				return Response.ok().tag(r.getETag()).type(r.getMimeType())
 						.entity(r.getContent()).cacheControl(cc).build();
 			} else {
 				LOGGER.error("resource \"" + fileName + "\" not found.");

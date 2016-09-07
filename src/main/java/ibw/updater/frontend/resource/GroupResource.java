@@ -50,7 +50,7 @@ public class GroupResource {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response list() {
-		return Response.ok().status(Response.Status.OK).entity(GroupManager.get()).build();
+		return Response.ok().entity(GroupManager.get()).build();
 	}
 
 	@POST
@@ -59,7 +59,7 @@ public class GroupResource {
 	public Response add(final Group group) {
 		try {
 			LOGGER.info("Add " + group);
-			return Response.ok().status(Response.Status.OK).entity(GroupManager.save(group)).build();
+			return Response.ok().entity(GroupManager.save(group)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
@@ -73,7 +73,7 @@ public class GroupResource {
 	public Response update(final Group group) {
 		try {
 			LOGGER.info("Update " + group);
-			return Response.ok().status(Response.Status.OK).entity(GroupManager.update(group)).build();
+			return Response.ok().entity(GroupManager.update(group)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
@@ -88,7 +88,7 @@ public class GroupResource {
 		try {
 			LOGGER.info("Remove " + group);
 			GroupManager.delete(group);
-			return Response.ok().status(Response.Status.OK).build();
+			return Response.ok().build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
@@ -102,7 +102,7 @@ public class GroupResource {
 		try {
 			LOGGER.info("Remove group with id " + gid);
 			GroupManager.delete(gid);
-			return Response.ok().status(Response.Status.OK).build();
+			return Response.ok().build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
