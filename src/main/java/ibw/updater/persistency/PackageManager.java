@@ -16,11 +16,20 @@
  */
 package ibw.updater.persistency;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.zip.ZipInputStream;
 
 import javax.persistence.EntityManager;
 
 import ibw.updater.backend.jpa.EntityManagerProvider;
+import ibw.updater.common.config.ConfigurationDir;
 import ibw.updater.datamodel.Package;
 import ibw.updater.datamodel.Packages;
 
@@ -93,6 +102,39 @@ public class PackageManager {
 	}
 
 	/**
+	 * Saves given {@link Package} and file {@link InputStream}.
+	 * 
+	 * @param p
+	 *            the {@link Package} to save
+	 * @param is
+	 *            the file {@link InputStream} to save
+	 * @return the saved {@link Package} object
+	 * @throws IOException
+	 *             thrown on is close()
+	 */
+	public static Package save(Package p, InputStream is) throws IOException {
+		try {
+			if (p.getType() == Package.Type.COMMON) {
+				BufferedInputStream bis = new BufferedInputStream(is);
+				try {
+					if (isValidPackage(bis)) {
+						writePackage(p.getId(), bis);
+					} else {
+						throw new UnsupportedOperationException("Uploaded file isn't a ZIP file.");
+					}
+				} finally {
+					bis.close();
+				}
+			}
+			return save(p);
+		} finally {
+			if (is != null) {
+				is.close();
+			}
+		}
+	}
+
+	/**
 	 * Updates given {@link Package}.
 	 * 
 	 * @param p
@@ -127,6 +169,56 @@ public class PackageManager {
 	}
 
 	/**
+	 * Updates given {@link Package}.
+	 * 
+	 * @param p
+	 *            the {@link Package} to update
+	 * @return the updated {@link Package} object
+	 * @throws IOException
+	 */
+	public static Package update(Package p, InputStream is) throws IOException {
+		if (!exists(p.getId())) {
+			return save(p, is);
+		}
+
+		EntityManager em = EntityManagerProvider.getEntityManager();
+		try {
+			Package inDB = get(p.getId());
+			if (inDB != null) {
+				p.setId(inDB.getId());
+				em.detach(inDB);
+			}
+			em.getTransaction().begin();
+
+			if (p.getType() == Package.Type.USER) {
+				if (inDB.getFunction() != null && p.getFunction() != null
+						&& !inDB.getFunction().equals(p.getFunction())) {
+					p.setVersion(p.getVersion() + 1);
+				}
+			} else if (p.getType() == Package.Type.COMMON) {
+				BufferedInputStream bis = new BufferedInputStream(is);
+				try {
+					if (isValidPackage(bis)) {
+						writePackage(p.getId(), bis);
+						p.setVersion(p.getVersion() + 1);
+					} else {
+						throw new UnsupportedOperationException("Uploaded file isn't a ZIP file.");
+					}
+				} finally {
+					bis.close();
+				}
+			}
+
+			em.merge(p);
+			em.getTransaction().commit();
+
+			return p;
+		} finally {
+			em.close();
+		}
+	}
+
+	/**
 	 * Deletes given {@link Package#getId()}.
 	 * 
 	 * @param id
@@ -141,6 +233,21 @@ public class PackageManager {
 		} finally {
 			em.close();
 		}
+	}
+
+	private static boolean isValidPackage(InputStream is) throws IOException {
+		return new ZipInputStream(is).getNextEntry() != null;
+	}
+
+	private static void writePackage(String id, InputStream is) throws IOException {
+		Path packageDir = Paths.get(ConfigurationDir.getConfigFile("packages").toURI());
+		Path file = packageDir.resolve(id + ".zip");
+
+		if (Files.notExists(packageDir)) {
+			Files.createDirectories(packageDir);
+		}
+
+		Files.copy(is, file, StandardCopyOption.REPLACE_EXISTING);
 	}
 
 }

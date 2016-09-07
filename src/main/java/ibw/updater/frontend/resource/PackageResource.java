@@ -16,6 +16,7 @@
  */
 package ibw.updater.frontend.resource;
 
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
@@ -33,6 +34,8 @@ import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import ibw.updater.datamodel.Package;
 import ibw.updater.persistency.PackageManager;
@@ -50,16 +53,33 @@ public class PackageResource {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response list() {
-		return Response.ok().status(Response.Status.OK).entity(PackageManager.get()).build();
+		return Response.ok().entity(PackageManager.get()).build();
 	}
 
 	@POST
 	@Path("add")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response add(final Package p) {
 		try {
 			LOGGER.info("Add " + p);
-			return Response.ok().status(Response.Status.OK).entity(PackageManager.save(p)).build();
+			return Response.ok().entity(PackageManager.save(p)).build();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(so).build();
+		}
+	}
+
+	@POST
+	@Path("add")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Response add(@FormDataParam("package") FormDataBodyPart obj, @FormDataParam("file") InputStream is) {
+		try {
+			Package p = obj.getValueAs(Package.class);
+			LOGGER.info("Add " + p);
+			return Response.ok().entity(PackageManager.save(p, is)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
@@ -70,10 +90,27 @@ public class PackageResource {
 	@POST
 	@Path("update")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response update(final Package p) {
 		try {
 			LOGGER.info("Update " + p);
-			return Response.ok().status(Response.Status.OK).entity(PackageManager.update(p)).build();
+			return Response.ok().entity(PackageManager.update(p)).build();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(so).build();
+		}
+	}
+
+	@POST
+	@Path("update")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Response update(@FormDataParam("package") FormDataBodyPart obj, @FormDataParam("file") InputStream is) {
+		try {
+			Package p = obj.getValueAs(Package.class);
+			LOGGER.info("Update " + p);
+			return Response.ok().entity(PackageManager.update(p, is)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
@@ -88,7 +125,7 @@ public class PackageResource {
 		try {
 			LOGGER.info("Remove " + p);
 			PackageManager.delete(p.getId());
-			return Response.ok().status(Response.Status.OK).build();
+			return Response.ok().build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
@@ -102,7 +139,7 @@ public class PackageResource {
 		try {
 			LOGGER.info("Remove package with id " + pid);
 			PackageManager.delete(pid);
-			return Response.ok().status(Response.Status.OK).build();
+			return Response.ok().build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));

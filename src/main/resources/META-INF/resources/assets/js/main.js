@@ -171,8 +171,23 @@ app.controller("packages", function($scope, $log, $http, $translate, ModalServic
 	};
 
 	$scope.updatePackage = function(p) {
+		function toFormData(p, f) {
+			var fd = new FormData();
+			p.file = undefined;
+			fd.append("package", new Blob([ angular.toJson(p) ], {
+				type : 'application/json'
+			}));
+			fd.append("file", f, f.name);
+			return fd;
+		}
+
 		if (p.id === undefined) {
-			$http.post("/manage/packages/add", p).then(function(result) {
+			$http.post("/manage/packages/add", p.file !== undefined ? toFormData(angular.copy(p), p.file) : p, p.file !== undefined ? {
+				transformRequest : angular.identity,
+				headers : {
+					'Content-Type' : undefined
+				}
+			} : {}).then(function(result) {
 				if (result.status == 200) {
 					$scope.packages["package"].push(result.data);
 				}
@@ -180,7 +195,12 @@ app.controller("packages", function($scope, $log, $http, $translate, ModalServic
 				$log.error(e);
 			});
 		} else {
-			$http.post("/manage/packages/update", p).then(function(result) {
+			$http.post("/manage/packages/update", p.file !== undefined ? toFormData(angular.copy(p), p.file) : p, p.file !== undefined ? {
+				transformRequest : angular.identity,
+				headers : {
+					'Content-Type' : undefined
+				}
+			} : {}).then(function(result) {
 				if (result.status == 200) {
 					p = result.data;
 					for ( var i in $scope.packages["package"]) {
@@ -209,7 +229,7 @@ app.controller("packages", function($scope, $log, $http, $translate, ModalServic
 	$scope.loadData();
 });
 
-app.controller('packageDialog', function($scope, p, close) {
+app.controller('packageDialog', function($scope, $element, p, close) {
 	$scope.headline = 'package.headline.' + (p === undefined ? 'create' : 'edit');
 
 	if (p !== undefined && p["function"] !== undefined) {
@@ -223,6 +243,10 @@ app.controller('packageDialog', function($scope, p, close) {
 	};
 
 	$scope.save = function() {
+		if ($scope["package"].type == "common") {
+			$scope["package"].file = $($element).find("#file")[0].files[0];
+		}
+
 		if ($scope["package"]["function"] !== undefined) {
 			var regexp = /function\s([^\(]+)\(([^\)]*)\)\s*{([^}]*)}/g;
 			var match = regexp.exec($scope["package"]["function"].value);
