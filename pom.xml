@@ -300,13 +300,18 @@
       <artifactId>jersey-container-jdk-http</artifactId>
       <version>${jersey.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.media</groupId>
+      <artifactId>jersey-media-multipart</artifactId>
+      <version>${jersey.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>org.reflections</groupId>
       <artifactId>reflections</artifactId>
       <version>0.9.10</version>
     </dependency>
-    
+
     <dependency>
       <groupId>com.beust</groupId>
       <artifactId>jcommander</artifactId>

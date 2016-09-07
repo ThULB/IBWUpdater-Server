@@ -28,6 +28,7 @@ import javax.ws.rs.core.UriBuilderException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.moxy.json.MoxyJsonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -71,7 +72,7 @@ public class EmbeddedHttpServer {
 	private HttpServer createHttpServer()
 			throws IOException, IllegalArgumentException, UriBuilderException, URISyntaxException {
 		ResourceConfig resourceConfig = new ResourceConfig().packages("ibw.updater.frontend.resource")
-				.register(MoxyJsonFeature.class);
+				.register(MoxyJsonFeature.class).register(MultiPartFeature.class);
 		return JdkHttpServerFactory.createHttpServer(getURI(), resourceConfig, false);
 	}
 
