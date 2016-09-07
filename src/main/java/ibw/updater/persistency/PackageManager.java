@@ -16,9 +16,12 @@
  */
 package ibw.updater.persistency;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,6 +41,18 @@ import ibw.updater.datamodel.Packages;
  *
  */
 public class PackageManager {
+
+	private static Path PACKAGE_DIR = Paths.get(ConfigurationDir.getConfigFile("packages").toURI());
+
+	static {
+		try {
+			if (Files.notExists(PACKAGE_DIR)) {
+				Files.createDirectories(PACKAGE_DIR);
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
 
 	/**
 	 * Returns all {@link Package}s.
@@ -114,16 +129,18 @@ public class PackageManager {
 	 */
 	public static Package save(Package p, InputStream is) throws IOException {
 		try {
-			if (p.getType() == Package.Type.COMMON) {
-				BufferedInputStream bis = new BufferedInputStream(is);
+			if (p.getType() == Package.Type.COMMON && is != null) {
+				Path tmpFile = createTempFile(p.getId(), is);
+				Path pFile = PACKAGE_DIR.resolve(p.getId() + ".zip");
+
 				try {
-					if (isValidPackage(bis)) {
-						writePackage(p.getId(), bis);
+					if (isValidPackage(tmpFile)) {
+						Files.copy(tmpFile, pFile, StandardCopyOption.REPLACE_EXISTING);
 					} else {
 						throw new UnsupportedOperationException("Uploaded file isn't a ZIP file.");
 					}
 				} finally {
-					bis.close();
+					Files.delete(tmpFile);
 				}
 			}
 			return save(p);
@@ -195,17 +212,21 @@ public class PackageManager {
 						&& !inDB.getFunction().equals(p.getFunction())) {
 					p.setVersion(p.getVersion() + 1);
 				}
-			} else if (p.getType() == Package.Type.COMMON) {
-				BufferedInputStream bis = new BufferedInputStream(is);
+			} else if (p.getType() == Package.Type.COMMON && is != null) {
+				Path tmpFile = createTempFile(p.getId(), is);
+				Path pFile = PACKAGE_DIR.resolve(p.getId() + ".zip");
+
 				try {
-					if (isValidPackage(bis)) {
-						writePackage(p.getId(), bis);
-						p.setVersion(p.getVersion() + 1);
+					if (isValidPackage(tmpFile)) {
+						if (!isEqualPackage(pFile, tmpFile)) {
+							Files.copy(tmpFile, pFile, StandardCopyOption.REPLACE_EXISTING);
+							p.setVersion(p.getVersion() + 1);
+						}
 					} else {
 						throw new UnsupportedOperationException("Uploaded file isn't a ZIP file.");
 					}
 				} finally {
-					bis.close();
+					Files.delete(tmpFile);
 				}
 			}
 
@@ -213,7 +234,9 @@ public class PackageManager {
 			em.getTransaction().commit();
 
 			return p;
-		} finally {
+		} finally
+
+		{
 			em.close();
 		}
 	}
@@ -235,19 +258,40 @@ public class PackageManager {
 		}
 	}
 
-	private static boolean isValidPackage(InputStream is) throws IOException {
-		return new ZipInputStream(is).getNextEntry() != null;
+	private static Path createTempFile(String id, InputStream is) throws IOException {
+		Path tmpFile = Files.createTempFile(id, null);
+		Files.copy(is, tmpFile, StandardCopyOption.REPLACE_EXISTING);
+		return tmpFile;
 	}
 
-	private static void writePackage(String id, InputStream is) throws IOException {
-		Path packageDir = Paths.get(ConfigurationDir.getConfigFile("packages").toURI());
-		Path file = packageDir.resolve(id + ".zip");
+	private static boolean isValidPackage(Path pFile) throws IOException {
+		return new ZipInputStream(Channels.newInputStream(FileChannel.open(pFile))).getNextEntry() != null;
+	}
 
-		if (Files.notExists(packageDir)) {
-			Files.createDirectories(packageDir);
+	private static boolean isEqualPackage(Path p1, Path p2) throws IOException {
+		ReadableByteChannel ch1 = FileChannel.open(p1);
+		ReadableByteChannel ch2 = FileChannel.open(p2);
+
+		ByteBuffer buf1 = ByteBuffer.allocateDirect(1024);
+		ByteBuffer buf2 = ByteBuffer.allocateDirect(1024);
+
+		while (true) {
+
+			int n1 = ch1.read(buf1);
+			int n2 = ch2.read(buf2);
+
+			if (n1 == -1 || n2 == -1)
+				return n1 == n2;
+
+			buf1.flip();
+			buf2.flip();
+
+			for (int i = 0; i < Math.min(n1, n2); i++)
+				if (buf1.get() != buf2.get())
+					return false;
+
+			buf1.compact();
+			buf2.compact();
 		}
-
-		Files.copy(is, file, StandardCopyOption.REPLACE_EXISTING);
 	}
-
 }
