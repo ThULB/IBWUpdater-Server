@@ -27,9 +27,9 @@
                 <span aria-hidden="true">&times;</span>
             </button>
             <h4>{{alertObj.headline}}</h4>
-            <p>
-                <span class="caret" data-toggle="collapse" data-target="#collapseStackTrace" aria-expanded="false" aria-controls="collapseStackTrace" aria-hidden="true"
-                    ng-if="alertObj.stackTrace"></span> {{alertObj.message}}
+            <p ng-if="!alertObj.stackTrace">{{alertObj.message}}</p>
+            <p ng-if="alertObj.stackTrace" data-toggle="collapse" data-target="#collapseStackTrace" aria-expanded="false" aria-controls="collapseStackTrace">
+                <span class="caret" aria-hidden="true"></span> {{alertObj.message}}
             </p>
             <div class="collapse" id="collapseStackTrace" ng-if="alertObj.stackTrace">
                 <pre class="pre-scrollable">{{alertObj.stackTrace}}</pre>
