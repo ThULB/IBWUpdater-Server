@@ -192,7 +192,7 @@ public class Package {
 	 * @return the name
 	 */
 	@Column(name = "name", length = 64, nullable = false)
-	@XmlAttribute(name = "name", required = true)
+	@XmlElement(name = "name", required = true)
 	public String getName() {
 		return name;
 	}
