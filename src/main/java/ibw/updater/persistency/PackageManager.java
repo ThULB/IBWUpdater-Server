@@ -106,6 +106,34 @@ public class PackageManager {
 	}
 
 	/**
+	 * Returns the {@link Package} file/content for given id.
+	 * 
+	 * @param id
+	 *            the {@link Package#id}
+	 * @return a {@link InputStream} with content
+	 * @throws IOException
+	 */
+	public static InputStream getContent(String id) throws IOException {
+		Package p = get(id);
+		if (p.getType() != Package.Type.COMMON) {
+			throw new UnsupportedOperationException("Get file is unsupported for package type " + p.getType() + ".");
+		}
+		return Channels.newInputStream(FileChannel.open(PACKAGE_DIR.resolve(p.getId() + ".zip")));
+	}
+
+	/**
+	 * Returns the {@link Package} file/content for given filename.
+	 * 
+	 * @param fileName
+	 *            the fileName
+	 * @return a {@link InputStream} with content
+	 * @throws IOException
+	 */
+	public static InputStream getContentByFileName(String fileName) throws IOException {
+		return Channels.newInputStream(FileChannel.open(PACKAGE_DIR.resolve(fileName)));
+	}
+
+	/**
 	 * Checks if {@link Package} is exists.
 	 * 
 	 * @param id

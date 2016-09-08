@@ -26,6 +26,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -36,6 +37,7 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import ibw.updater.datamodel.Package;
 import ibw.updater.frontend.entity.ExceptionWrapper;
+import ibw.updater.frontend.entity.ResourceWrapper;
 import ibw.updater.persistency.PackageManager;
 
 /**
@@ -53,6 +55,24 @@ public class PackageResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response listExtended() {
 		return Response.ok().entity(PackageManager.getExtended()).build();
+	}
+
+	@GET
+	@Path("packages/{fileName:.+}")
+	@Produces("*/*")
+	public Response getPackageFile(@PathParam("fileName") String fileName) {
+		try {
+			ResourceWrapper r = new ResourceWrapper(fileName, PackageManager.getContentByFileName(fileName));
+
+			CacheControl cc = new CacheControl();
+			cc.setNoCache(true);
+			cc.setNoStore(true);
+
+			return Response.ok().tag(r.getETag()).type(r.getMimeType()).entity(r.getContent()).cacheControl(cc).build();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ExceptionWrapper(e)).build();
+		}
 	}
 
 	@GET
