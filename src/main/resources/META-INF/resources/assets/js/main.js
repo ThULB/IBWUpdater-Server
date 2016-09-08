@@ -105,20 +105,25 @@ app.service("asyncQueue", function($http, $q) {
 });
 
 app.controller("alertCtrl", function($rootScope, $scope, $translate) {
-	$scope.alert = undefined;
+	$scope.alertObj = {};
 
 	$rootScope.$on("alertEvent", function(event, type, obj) {
-		$scope.alert = {};
-		$scope.alert.type = type;
+		console.log($scope.alertObj);
+		$scope.alertObj.type = type;
+		$scope.alertObj.show = true;
 		if (typeof obj === "string") {
-			$scope.alert.headline = $translate.instant("alert.type." + type);
-			$scope.alert.message = obj;
+			$scope.alertObj.headline = $translate.instant("alert.type." + type);
+			$scope.alertObj.message = obj;
 		} else {
-			$scope.alert.headline = $translate.instant("alert.type." + type);
-			$scope.alert.message = obj.message;
-			$scope.alert.stackTrace = obj.stackTrace;
+			$scope.alertObj.headline = $translate.instant("alert.type." + type);
+			$scope.alertObj.message = obj.message;
+			$scope.alertObj.stackTrace = obj.stackTrace;
 		}
 	});
+
+	$scope.clear = function() {
+		$scope.alertObj.show = false;
+	}
 });
 
 app.controller("dashboardCtrl", function($rootScope, $scope) {

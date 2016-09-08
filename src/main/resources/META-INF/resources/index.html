@@ -21,18 +21,18 @@
 
     <!-- .container -->
     <div class="container">
-        <div class="alert alert-dismissible" role="alert" ng-controller="alertCtrl" ng-show="alert"
-            ng-class="{'alert-danger': alert.type == 'error', 'alert-info': alert.type == 'info', 'alert-warning': alert.type == 'warning', 'alert-success': alert.type == 'success'}">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <div class="alert alert-dismissible" role="alert" ng-controller="alertCtrl" ng-show="alertObj.show"
+            ng-class="{'alert-danger': alertObj.type == 'error', 'alert-info': alertObj.type == 'info', 'alert-warning': alertObj.type == 'warning', 'alert-success': alertObj.type == 'success'}">
+            <button type="button" class="close" aria-label="Close" ng-click="clear()">
                 <span aria-hidden="true">&times;</span>
             </button>
-            <h4>{{alert.headline}}</h4>
+            <h4>{{alertObj.headline}}</h4>
             <p>
                 <span class="caret" data-toggle="collapse" data-target="#collapseStackTrace" aria-expanded="false" aria-controls="collapseStackTrace" aria-hidden="true"
-                    ng-if="alert.stackTrace"></span> {{alert.message}}
+                    ng-if="alertObj.stackTrace"></span> {{alertObj.message}}
             </p>
-            <div class="collapse" id="collapseStackTrace" ng-if="alert.stackTrace">
-                <pre class="pre-scrollable">{{alert.stackTrace}}</pre>
+            <div class="collapse" id="collapseStackTrace" ng-if="alertObj.stackTrace">
+                <pre class="pre-scrollable">{{alertObj.stackTrace}}</pre>
             </div>
         </div>
         <div class="content-container" ng-view></div>
