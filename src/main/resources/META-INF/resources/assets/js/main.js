@@ -108,15 +108,15 @@ app.controller("alertCtrl", function($rootScope, $scope, $translate) {
 	$scope.alertObj = {};
 
 	$rootScope.$on("alertEvent", function(event, type, obj) {
-		console.log($scope.alertObj);
 		$scope.alertObj.type = type;
 		$scope.alertObj.show = true;
 		if (typeof obj === "string") {
 			$scope.alertObj.headline = $translate.instant("alert.type." + type);
 			$scope.alertObj.message = obj;
 		} else {
-			$scope.alertObj.headline = $translate.instant("alert.type." + type);
-			$scope.alertObj.message = obj.message;
+			$scope.alertObj.headline = obj.localizedHeadline ? $translate.instant(obj.localizedHeadline) : undefined ||
+					$translate.instant("alert.type." + type);
+			$scope.alertObj.message = obj.localizedMessage ? $translate.instant(obj.localizedMessage) : undefined || obj.message;
 			$scope.alertObj.stackTrace = obj.stackTrace;
 		}
 	});
