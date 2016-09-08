@@ -16,9 +16,6 @@
  */
 package ibw.updater.frontend.resource;
 
-import java.io.OutputStream;
-import java.io.PrintStream;
-
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -29,12 +26,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import ibw.updater.datamodel.User;
+import ibw.updater.frontend.entity.ExceptionWrapper;
 import ibw.updater.persistency.UserManager;
 
 /**
@@ -62,8 +59,7 @@ public class UserResource {
 			return Response.ok().entity(UserManager.save(user)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(so).build();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ExceptionWrapper(e)).build();
 		}
 	}
 
@@ -76,8 +72,7 @@ public class UserResource {
 			return Response.ok().entity(UserManager.update(user)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(so).build();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ExceptionWrapper(e)).build();
 		}
 	}
 
@@ -91,8 +86,7 @@ public class UserResource {
 			return Response.ok().build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(so).build();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ExceptionWrapper(e)).build();
 		}
 	}
 
@@ -105,8 +99,7 @@ public class UserResource {
 			return Response.ok().build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(so).build();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ExceptionWrapper(e)).build();
 		}
 	}
 

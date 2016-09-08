@@ -19,8 +19,6 @@ package ibw.updater.frontend.resource;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.Optional;
 
 import javax.inject.Singleton;
@@ -30,11 +28,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ibw.updater.frontend.entity.ExceptionWrapper;
 import ibw.updater.frontend.entity.ResourceWrapper;
 
 /**
@@ -81,8 +79,7 @@ public class WebResource {
 			}
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			final StreamingOutput so = (OutputStream os) -> e.printStackTrace(new PrintStream(os));
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(so).build();
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ExceptionWrapper(e)).build();
 		}
 	}
 
