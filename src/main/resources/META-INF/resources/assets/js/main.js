@@ -53,7 +53,7 @@ app.config(function($translateProvider, $routeProvider, $locationProvider) {
 	});
 });
 
-app.factory('routeNavigation', function($route, $location) {
+app.factory("routeNavigation", function($route, $location) {
 	var routes = [];
 	angular.forEach($route.routes, function(route, path) {
 		if (route.name) {
@@ -72,7 +72,7 @@ app.factory('routeNavigation', function($route, $location) {
 	};
 });
 
-app.directive('navigation', function(routeNavigation) {
+app.directive("navigation", function(routeNavigation) {
 	return {
 		restrict : "E",
 		replace : true,
@@ -104,10 +104,27 @@ app.service("asyncQueue", function($http, $q) {
 	};
 });
 
-app.controller("dashboard", function($scope) {
+app.controller("alertCtrl", function($rootScope, $scope, $translate) {
+	$scope.alert = undefined;
+
+	$rootScope.$on("alertEvent", function(event, type, obj) {
+		$scope.alert = {};
+		$scope.alert.type = type;
+		if (typeof obj === "string") {
+			$scope.alert.headline = $translate.instant("alert.type." + type);
+			$scope.alert.message = obj;
+		} else {
+			$scope.alert.headline = $translate.instant("alert.type." + type);
+			$scope.alert.message = obj.message;
+			$scope.alert.stackTrace = obj.stackTrace;
+		}
+	});
 });
 
-app.controller('deleteConfirmDialog', function($scope, options, close) {
+app.controller("dashboardCtrl", function($rootScope, $scope) {
+});
+
+app.controller("deleteConfirmDialogCtrl", function($scope, options, close) {
 	$scope.options = options;
 
 	$scope.close = function(result) {
@@ -115,7 +132,7 @@ app.controller('deleteConfirmDialog', function($scope, options, close) {
 	};
 });
 
-app.controller("packages", function($scope, $log, $http, $translate, ModalService, asyncQueue) {
+app.controller("packagesCtrl", function($rootScope, $scope, $log, $http, $translate, ModalService, asyncQueue) {
 	$scope.packages = {};
 
 	$scope.loadData = function() {
@@ -128,6 +145,7 @@ app.controller("packages", function($scope, $log, $http, $translate, ModalServic
 				}
 			});
 		}, function(error) {
+			$rootScope.$emit("alertEvent", "error", e.data);
 			$log.error(error);
 		});
 	};
@@ -135,7 +153,7 @@ app.controller("packages", function($scope, $log, $http, $translate, ModalServic
 	$scope.showPackageDialog = function(p) {
 		ModalService.showModal({
 			templateUrl : "/assets/templates/package-dialog.html",
-			controller : "packageDialog",
+			controller : "packageDialogCtrl",
 			inputs : {
 				p : angular.copy(p),
 			}
@@ -152,7 +170,7 @@ app.controller("packages", function($scope, $log, $http, $translate, ModalServic
 	$scope.showPackageDeleteDialog = function(p) {
 		ModalService.showModal({
 			templateUrl : "/assets/templates/delete-confirm-dialog.html",
-			controller : "deleteConfirmDialog",
+			controller : "deleteConfirmDialogCtrl",
 			inputs : {
 				options : {
 					headline : $translate.instant("package.headline.delete"),
@@ -192,6 +210,7 @@ app.controller("packages", function($scope, $log, $http, $translate, ModalServic
 					$scope.packages["package"].push(result.data);
 				}
 			}, function(e) {
+				$rootScope.$emit("alertEvent", "error", e.data);
 				$log.error(e);
 			});
 		} else {
@@ -211,6 +230,7 @@ app.controller("packages", function($scope, $log, $http, $translate, ModalServic
 					}
 				}
 			}, function(e) {
+				$rootScope.$emit("alertEvent", "error", e.data);
 				$log.error(e);
 			});
 		}
@@ -222,6 +242,7 @@ app.controller("packages", function($scope, $log, $http, $translate, ModalServic
 				$scope.loadData();
 			}
 		}, function(e) {
+			$rootScope.$emit("alertEvent", "error", e.data);
 			$log.error(e);
 		});
 	};
@@ -229,7 +250,7 @@ app.controller("packages", function($scope, $log, $http, $translate, ModalServic
 	$scope.loadData();
 });
 
-app.controller('packageDialog', function($scope, $element, p, close) {
+app.controller("packageDialogCtrl", function($scope, $element, p, close) {
 	$scope.headline = 'package.headline.' + (p === undefined ? 'create' : 'edit');
 
 	if (p !== undefined && p["function"] !== undefined) {
@@ -263,7 +284,7 @@ app.controller('packageDialog', function($scope, $element, p, close) {
 
 });
 
-app.controller("users", function($scope, $log, $http, $translate, ModalService, asyncQueue) {
+app.controller("usersCtrl", function($rootScope, $scope, $log, $http, $translate, ModalService, asyncQueue) {
 	$scope.users = {};
 	$scope.groups = {};
 
@@ -279,6 +300,7 @@ app.controller("users", function($scope, $log, $http, $translate, ModalService, 
 				}
 			});
 		}, function(error) {
+			$rootScope.$emit("alertEvent", "error", e.data);
 			$log.error(error);
 		});
 	};
@@ -286,7 +308,7 @@ app.controller("users", function($scope, $log, $http, $translate, ModalService, 
 	$scope.showUserDialog = function(user) {
 		ModalService.showModal({
 			templateUrl : "/assets/templates/user-dialog.html",
-			controller : "userDialog",
+			controller : "userDialogCtrl",
 			inputs : {
 				user : angular.copy(user),
 				groups : $scope.groups
@@ -304,7 +326,7 @@ app.controller("users", function($scope, $log, $http, $translate, ModalService, 
 	$scope.showUserDeleteDialog = function(user) {
 		ModalService.showModal({
 			templateUrl : "/assets/templates/delete-confirm-dialog.html",
-			controller : "deleteConfirmDialog",
+			controller : "deleteConfirmDialogCtrl",
 			inputs : {
 				options : {
 					headline : $translate.instant("user.headline.delete"),
@@ -329,6 +351,7 @@ app.controller("users", function($scope, $log, $http, $translate, ModalService, 
 					$scope.users.user.push(result.data);
 				}
 			}, function(e) {
+				$rootScope.$emit("alertEvent", "error", e.data);
 				$log.error(e);
 			});
 		} else {
@@ -343,6 +366,7 @@ app.controller("users", function($scope, $log, $http, $translate, ModalService, 
 					}
 				}
 			}, function(e) {
+				$rootScope.$emit("alertEvent", "error", e.data);
 				$log.error(e);
 			});
 		}
@@ -354,6 +378,7 @@ app.controller("users", function($scope, $log, $http, $translate, ModalService, 
 				$scope.loadData();
 			}
 		}, function(e) {
+			$rootScope.$emit("alertEvent", "error", e.data);
 			$log.error(e);
 		});
 	};
@@ -361,7 +386,7 @@ app.controller("users", function($scope, $log, $http, $translate, ModalService, 
 	$scope.loadData();
 });
 
-app.controller('userDialog', function($scope, user, groups, close) {
+app.controller('userDialogCtrl', function($scope, user, groups, close) {
 
 	$scope.user = user;
 	$scope.groups = groups;
@@ -377,7 +402,7 @@ app.controller('userDialog', function($scope, user, groups, close) {
 
 });
 
-app.controller("groups", function($scope, $http, $log, $translate, ModalService, asyncQueue) {
+app.controller("groupsCtrl", function($rootScope, $scope, $http, $log, $translate, ModalService, asyncQueue) {
 	$scope.groups = {};
 	$scope.users = {};
 
@@ -393,6 +418,7 @@ app.controller("groups", function($scope, $http, $log, $translate, ModalService,
 				}
 			});
 		}, function(error) {
+			$rootScope.$emit("alertEvent", "error", e.data);
 			$log.error(error);
 		});
 	};
@@ -400,7 +426,7 @@ app.controller("groups", function($scope, $http, $log, $translate, ModalService,
 	$scope.showGroupDialog = function(group) {
 		ModalService.showModal({
 			templateUrl : "/assets/templates/group-dialog.html",
-			controller : "groupDialog",
+			controller : "groupDialogCtrl",
 			inputs : {
 				group : angular.copy(group),
 				users : $scope.users
@@ -418,7 +444,7 @@ app.controller("groups", function($scope, $http, $log, $translate, ModalService,
 	$scope.showGroupDeleteDialog = function(group) {
 		ModalService.showModal({
 			templateUrl : "/assets/templates/delete-confirm-dialog.html",
-			controller : "deleteConfirmDialog",
+			controller : "deleteConfirmDialogCtrl",
 			inputs : {
 				options : {
 					headline : $translate.instant("group.headline.delete"),
@@ -443,6 +469,7 @@ app.controller("groups", function($scope, $http, $log, $translate, ModalService,
 					$scope.groups.group.push(result.data);
 				}
 			}, function(e) {
+				$rootScope.$emit("alertEvent", "error", e.data);
 				$log.error(e);
 			});
 		} else {
@@ -457,6 +484,7 @@ app.controller("groups", function($scope, $http, $log, $translate, ModalService,
 					}
 				}
 			}, function(e) {
+				$rootScope.$emit("alertEvent", "error", e.data);
 				$log.error(e);
 			});
 		}
@@ -468,6 +496,7 @@ app.controller("groups", function($scope, $http, $log, $translate, ModalService,
 				$scope.loadData();
 			}
 		}, function(e) {
+			$rootScope.$emit("alertEvent", "error", e.data);
 			$log.error(e);
 		});
 	};
@@ -475,7 +504,7 @@ app.controller("groups", function($scope, $http, $log, $translate, ModalService,
 	$scope.loadData();
 });
 
-app.controller('groupDialog', function($scope, group, users, close) {
+app.controller("groupDialogCtrl", function($scope, group, users, close) {
 
 	$scope.group = group;
 	$scope.users = users;

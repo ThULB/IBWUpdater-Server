@@ -1,50 +1,55 @@
 {
-    "app.headline" : "IBWUpdater",
-    
-    "general.actions": "Actions",
-    
-    "btn.save" : "Save",
-    "btn.close": "Close",
-    "btn.yes" : "Yes",
-    "btn.no" : "No",
-    
-    "nav.dashboard" : "Dashboard",
-    "nav.packages" : "Packages",
+	"app.headline" : "IBWUpdater",
+
+	"general.actions" : "Actions",
+
+	"btn.save" : "Save",
+	"btn.close" : "Close",
+	"btn.yes" : "Yes",
+	"btn.no" : "No",
+
+	"alert.type.error" : "Error",
+	"alert.type.info" : "Info",
+	"alert.type.warning" : "Warning",
+	"alert.type.success" : "Success",
+
+	"nav.dashboard" : "Dashboard",
+	"nav.packages" : "Packages",
 	"nav.users" : "Users",
-    "nav.groups" : "Groups",
-	
+	"nav.groups" : "Groups",
+
 	"packages.headline" : "Packages",
-    
-    "package.headline.create" : "Create Package",
-    "package.headline.edit" : "Edit Package",
-    "package.headline.delete" : "Delete Package?",
-    "package.message.delete" : "Do you want really delete the package with name \"{0}\"?",
-    "package.type" : "Type",
-    "package.type.common" : "Common",
-    "package.type.user" : "User",
-    "package.version" : "Version",
-    "package.name" : "Name",
-    "package.description" : "Description",
-    "package.function" : "Function",
-    "package.startupScript" : "Start Script",
-    
+
+	"package.headline.create" : "Create Package",
+	"package.headline.edit" : "Edit Package",
+	"package.headline.delete" : "Delete Package?",
+	"package.message.delete" : "Do you want really delete the package with name \"{0}\"?",
+	"package.type" : "Type",
+	"package.type.common" : "Common",
+	"package.type.user" : "User",
+	"package.version" : "Version",
+	"package.name" : "Name",
+	"package.description" : "Description",
+	"package.function" : "Function",
+	"package.startupScript" : "Start Script",
+
 	"groups.headline" : "Gruppen",
-    
-    "group.headline.create" : "Create Group",
-    "group.headline.edit" : "Edit Group",
-    "group.headline.delete" : "Delete Group?",
-    "group.message.delete" : "Do you want really delete the group with name \"{0}\"?",
-    "group.name" : "Name",
-    "group.description" : "Description",
-    "group.users" : "Group-Members",
-    
+
+	"group.headline.create" : "Create Group",
+	"group.headline.edit" : "Edit Group",
+	"group.headline.delete" : "Delete Group?",
+	"group.message.delete" : "Do you want really delete the group with name \"{0}\"?",
+	"group.name" : "Name",
+	"group.description" : "Description",
+	"group.users" : "Group-Members",
+
 	"users.headline" : "Users",
-	
+
 	"user.headline.create" : "Create User",
-    "user.headline.edit" : "Edit User",
-    "user.headline.delete" : "Delete User?",
-    "user.message.delete" : "Do you want really delete the user with name \"{0}\"?",
-    "user.name" : "Name",
-    "user.description" : "Real-Name",
-    "user.groups" : "Group-Membership"
+	"user.headline.edit" : "Edit User",
+	"user.headline.delete" : "Delete User?",
+	"user.message.delete" : "Do you want really delete the user with name \"{0}\"?",
+	"user.name" : "Name",
+	"user.description" : "Real-Name",
+	"user.groups" : "Group-Membership"
 }
