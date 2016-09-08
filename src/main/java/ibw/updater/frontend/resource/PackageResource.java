@@ -42,20 +42,28 @@ import ibw.updater.persistency.PackageManager;
  * @author Ren\u00E9 Adler (eagle)
  *
  */
-@Path("manage/packages")
+@Path("")
 @Singleton
 public class PackageResource {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	@GET
+	@Path("packages")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Response listExtended() {
+		return Response.ok().entity(PackageManager.getExtended()).build();
+	}
+
+	@GET
+	@Path("manage/packages")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response list() {
 		return Response.ok().entity(PackageManager.get()).build();
 	}
 
 	@POST
-	@Path("add")
+	@Path("manage/packages/add")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response add(final Package p) {
@@ -69,7 +77,7 @@ public class PackageResource {
 	}
 
 	@POST
-	@Path("add")
+	@Path("manage/packages/add")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response add(@FormDataParam("package") FormDataBodyPart obj, @FormDataParam("file") InputStream is) {
@@ -84,7 +92,7 @@ public class PackageResource {
 	}
 
 	@POST
-	@Path("update")
+	@Path("manage/packages/update")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response update(final Package p) {
@@ -98,7 +106,7 @@ public class PackageResource {
 	}
 
 	@POST
-	@Path("update")
+	@Path("manage/packages/update")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response update(@FormDataParam("package") FormDataBodyPart obj, @FormDataParam("file") InputStream is) {
@@ -113,7 +121,7 @@ public class PackageResource {
 	}
 
 	@POST
-	@Path("delete")
+	@Path("manage/packages/delete")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response delete(final Package p) {
 		try {
@@ -127,7 +135,7 @@ public class PackageResource {
 	}
 
 	@DELETE
-	@Path("delete/{pid}")
+	@Path("manage/packages/delete/{pid}")
 	public Response delete(@PathParam("pid") final String pid) {
 		try {
 			LOGGER.info("Remove package with id " + pid);

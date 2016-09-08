@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.zip.ZipInputStream;
 
 import javax.persistence.EntityManager;
@@ -63,6 +64,26 @@ public class PackageManager {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
 			return new Packages(em.createNamedQuery("Package.findAll", Package.class).getResultList());
+		} finally {
+			em.close();
+		}
+	}
+
+	/**
+	 * Returns all {@link Package}s with extende informations.
+	 * 
+	 * @return a {@link List} of {@link Package}s
+	 */
+	public static Packages getExtended() {
+		EntityManager em = EntityManagerProvider.getEntityManager();
+		try {
+			List<Package> packages = em.createNamedQuery("Package.findAll", Package.class).getResultList();
+			return new Packages(packages.stream().map(p -> {
+				if (p.getType() == Package.Type.COMMON) {
+					p.setUrl("packages/" + p.getId() + ".zip");
+				}
+				return p;
+			}).collect(Collectors.toList()));
 		} finally {
 			em.close();
 		}
