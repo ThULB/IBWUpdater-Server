@@ -2,6 +2,9 @@
 	"app.headline" : "IBWUpdater",
 
 	"general.actions" : "Actions",
+	"general.actions.add" : "Add",
+	"general.actions.edit" : "Edit",
+	"general.actions.delete" : "Delete",
 	"general.pleaseSelect" : "(please select)",
 
 	"btn.save" : "Save",
