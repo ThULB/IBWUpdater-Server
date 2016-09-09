@@ -204,7 +204,6 @@ app.controller("packagesCtrl", function($rootScope, $scope, $log, $http, $transl
 			modal.element.modal();
 			modal.close.then(function(permissions) {
 				if (permissions !== undefined) {
-					console.log(permissions);
 					$scope.updatePermissions(permissions);
 				}
 			});
