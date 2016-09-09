@@ -49,8 +49,7 @@ import ibw.updater.persistency.PackageAdapter;
 @IdClass(value = PermissionId.class)
 @Table(name = "IBWPermission")
 @NamedQueries({ @NamedQuery(name = "Permission.findAll", query = "SELECT p FROM Permission p"),
-		@NamedQuery(name = "Permission.findAllByPackage", query = "SELECT p FROM Permission p WHERE p.package = :package"),
-		@NamedQuery(name = "Permission.findByTypeSourcePackageAction", query = "SELECT p FROM Permission p WHERE p.type = :type AND p.sourceId = :sourceId AND p.package = :package AND p.action = :action") })
+		@NamedQuery(name = "Permission.findAllByPackage", query = "SELECT p FROM Permission p WHERE p.package = :package") })
 @XmlRootElement(name = "permission")
 public class Permission {
 	/**
