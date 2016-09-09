@@ -330,7 +330,7 @@ app.controller("permissionDialogCtrl", function($scope, $log, $http, asyncQueue,
 				if (result.status === 200) {
 					if (result.config.url.indexOf("permissions") != -1) {
 						$scope.permissions = result.data;
-						if ($scope.permissions) {
+						if ($scope.permissions && $scope.permissions.permission && $scope.permissions.permission.length == 0) {
 							$scope.permissions.permission.push({})
 						}
 					} else if (result.config.url.indexOf("users") != -1) {
