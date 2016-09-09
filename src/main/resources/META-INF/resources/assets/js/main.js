@@ -193,6 +193,24 @@ app.controller("packagesCtrl", function($rootScope, $scope, $log, $http, $transl
 		});
 	};
 
+	$scope.showPermissionDialog = function(p) {
+		ModalService.showModal({
+			templateUrl : "/assets/templates/permission-dialog.html",
+			controller : "permissionDialogCtrl",
+			inputs : {
+				p : angular.copy(p),
+			}
+		}).then(function(modal) {
+			modal.element.modal();
+			modal.close.then(function(permissions) {
+				if (permissions !== undefined) {
+					console.log(permissions);
+					$scope.updatePermissions(permissions);
+				}
+			});
+		});
+	};
+
 	$scope.updatePackage = function(p) {
 		function toFormData(p, f) {
 			var fd = new FormData();
@@ -252,6 +270,17 @@ app.controller("packagesCtrl", function($rootScope, $scope, $log, $http, $transl
 		});
 	};
 
+	$scope.updatePermissions = function(permissions) {
+		$http.post("/manage/permissions/update", permissions).then(function(result) {
+			if (result.status == 200) {
+				$scope.loadData();
+			}
+		}, function(e) {
+			$rootScope.$emit("alertEvent", "error", e.data);
+			$log.error(e);
+		});
+	};
+
 	$scope.loadData();
 });
 
@@ -287,6 +316,58 @@ app.controller("packageDialogCtrl", function($scope, $element, p, close) {
 		close($scope["package"], 500);
 	};
 
+});
+
+app.controller("permissionDialogCtrl", function($scope, $log, $http, asyncQueue, p, close) {
+	$scope["package"] = p;
+	$scope.permissions = {};
+	$scope.users = {};
+	$scope.groups = {};
+
+	$scope.loadData = function() {
+		asyncQueue.load([ "/manage/permissions/" + p.id, "/manage/users", "/manage/groups" ]).then(function(results) {
+			results.forEach(function(result) {
+				if (result.status === 200) {
+					if (result.config.url.indexOf("permissions") != -1) {
+						$scope.permissions = result.data;
+						if ($scope.permissions) {
+							$scope.permissions.permission.push({})
+						}
+					} else if (result.config.url.indexOf("users") != -1) {
+						$scope.users = result.data;
+					} else if (result.config.url.indexOf("groups") != -1) {
+						$scope.groups = result.data;
+					}
+				}
+			});
+		}, function(error) {
+			$log.error(error);
+		});
+	};
+
+	$scope.getSources = function(permission) {
+		return permission.sourceType == 'g' ? $scope.groups.group : permission.sourceType == 'u' ? $scope.users.user : undefined;
+	};
+
+	$scope.deletePermission = function(permission) {
+		$http.post("/manage/permissions/delete", permission).then(function(result) {
+			if (result.status == 200) {
+				$scope.loadData();
+			}
+		}, function(e) {
+			$log.error(e);
+		});
+	};
+
+	$scope.close = function(result) {
+		close(result, 500);
+	};
+
+	$scope.save = function() {
+		close($scope.permissions, 500);
+	};
+
+	$scope.loadData();
 });
 
 app.controller("usersCtrl", function($rootScope, $scope, $log, $http, $translate, ModalService, asyncQueue) {

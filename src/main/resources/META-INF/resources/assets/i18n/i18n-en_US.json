@@ -2,6 +2,7 @@
 	"app.headline" : "IBWUpdater",
 
 	"general.actions" : "Actions",
+	"general.pleaseSelect" : "(please select)",
 
 	"btn.save" : "Save",
 	"btn.close" : "Close",
@@ -33,7 +34,13 @@
 	"package.function" : "Function",
 	"package.startupScript" : "Start Script",
 
-	"groups.headline" : "Gruppen",
+	"permissions.headline" : "Permissions",
+	"permission.type" : "Source type",
+	"permission.type.group" : "Group",
+	"permission.type.user" : "User",
+	"permission.selectSourceType" : "(please select source type)",
+
+	"groups.headline" : "Groups",
 
 	"group.headline.create" : "Create Group",
 	"group.headline.edit" : "Edit Group",

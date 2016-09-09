@@ -26,6 +26,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -33,8 +35,10 @@ import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import ibw.updater.datamodel.Permission.PermissionId;
+import ibw.updater.persistency.PackageAdapter;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -44,6 +48,9 @@ import ibw.updater.datamodel.Permission.PermissionId;
 @Cacheable
 @IdClass(value = PermissionId.class)
 @Table(name = "IBWPermission")
+@NamedQueries({ @NamedQuery(name = "Permission.findAll", query = "SELECT p FROM Permission p"),
+		@NamedQuery(name = "Permission.findAllByPackage", query = "SELECT p FROM Permission p WHERE p.package = :package"),
+		@NamedQuery(name = "Permission.findByTypeSourcePackageAction", query = "SELECT p FROM Permission p WHERE p.type = :type AND p.sourceId = :sourceId AND p.package = :package AND p.action = :action") })
 @XmlRootElement(name = "permission")
 public class Permission {
 	/**
@@ -227,6 +234,7 @@ public class Permission {
 	@OneToOne
 	@JoinColumn(name = "packageId", nullable = false)
 	@XmlAttribute(name = "packageId")
+	@XmlJavaTypeAdapter(PackageAdapter.class)
 	public Package getPackage() {
 		return _package;
 	}
@@ -310,6 +318,13 @@ public class Permission {
 		 * 
 		 */
 		public PermissionId() {
+		}
+
+		public PermissionId(Permission permission) {
+			this.type = permission.getType();
+			this.sourceId = permission.getSourceId();
+			this.packageId = permission.getPackage().getId();
+			this.action = permission.getAction();
 		}
 
 		/**

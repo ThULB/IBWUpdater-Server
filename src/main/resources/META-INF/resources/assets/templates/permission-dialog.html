@@ -1,0 +1,51 @@
+<div class="modal fade" id="permission-dialog" tabindex="-1" role="dialog" aria-labelledby="permission-label">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-label="{{'btn.close' | translate}}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="permission-label">{{'permissions.headline' | translate}}</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row margin-bottom" ng-repeat="permission in permissions.permission" ng-init="permission.packageId = package.id; permission.action = 'r'">
+                        <div class="col-xs-9">
+                            <div class="input-group">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{'permission.type' + (permission.type ? '.' + permission.type : '') | translate}} <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="" ng-click="permission.sourceType = 'g'; permission.sourceId = undefined;">{{'permission.type.group' | translate}}</a></li>
+                                        <li><a href="" ng-click="permission.sourceType = 'u'; permission.sourceId = undefined;">{{'permission.type.user' | translate}}</a></li>
+                                    </ul>
+                                    <input type="hidden" value="{{permission.sourceType}}" ng-model="permission.sourceType" />
+                                </div>
+                                <select class="form-control" id="sourceId" ng-model="permission.sourceId"
+                                    ng-options="source.id as (source.description + ' (' + source.name + ')') for source in getSources(permission)">
+                                    <option value="" ng-if="!getSources(permission) || !permission.sourceId">{{!getSources(permission) ? ('permission.selectSourceType' |
+                                        translate) : !permission.sourceId ? ('general.pleaseSelect' | translate) : ''}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="btn-group btn-group" role="group" aria-label="{{'general.actions' | translate}}">
+                                <button type="button" class="btn btn-default" ng-click="permissions.permission.push({})">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <span class="sr-only">{{'general.actions.add' | translate}}</span>
+                                </button>
+                                <button type="button" class="btn btn-danger" ng-click="deletePermission(permission)">
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> <span class="sr-only">{{'general.actions.delete' | translate}}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-click="save()" class="btn btn-primary" data-dismiss="modal">{{'btn.save' | translate}}</button>
+                <button type="button" ng-click="close()" class="btn btn-default" data-dismiss="modal">{{'btn.close' | translate}}</button>
+            </div>
+        </div>
+    </div>
+</div>

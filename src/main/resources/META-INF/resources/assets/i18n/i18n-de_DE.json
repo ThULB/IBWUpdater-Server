@@ -2,6 +2,7 @@
 	"app.headline" : "IBWUpdater",
 
 	"general.actions" : "Aktionen",
+	"general.pleaseSelect" : "(bitte wählen)",
 
 	"btn.save" : "Speichern",
 	"btn.close" : "Schliessen",
@@ -32,6 +33,12 @@
 	"package.description" : "Beschreibung",
 	"package.function" : "Funktion",
 	"package.startupScript" : "Start Skript",
+
+	"permissions.headline" : "Zugriffsberechtigung",
+	"permission.type" : "Quelltyp",
+	"permission.type.group" : "Gruppe",
+	"permission.type.user" : "Benutzer",
+	"permission.selectSourceType" : "(bitte Quelltyp wählen)",
 
 	"groups.headline" : "Gruppen",
 
