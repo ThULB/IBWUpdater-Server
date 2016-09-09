@@ -36,6 +36,9 @@ import ibw.updater.backend.jpa.EntityManagerProvider;
 import ibw.updater.common.config.ConfigurationDir;
 import ibw.updater.datamodel.Package;
 import ibw.updater.datamodel.Packages;
+import ibw.updater.datamodel.Permission;
+import ibw.updater.datamodel.Permissions;
+import ibw.updater.datamodel.User;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -87,6 +90,37 @@ public class PackageManager {
 		} finally {
 			em.close();
 		}
+	}
+
+	/**
+	 * Returns all {@link Package}s with extended informations for given uid.
+	 * 
+	 * @param uid
+	 *            the user name
+	 * @return a {@link List} of {@link Package}s
+	 */
+	public static Packages getExtended(String uid) {
+		return getExtended(uid != null ? UserManager.get(uid) : null);
+	}
+
+	/**
+	 * Returns all {@link Package}s with extended informations for given uid.
+	 * 
+	 * @param uid
+	 *            the user name
+	 * @return a {@link List} of {@link Package}s
+	 */
+	public static Packages getExtended(User user) {
+		Packages packages = getExtended();
+		return new Packages(packages.getPackages().stream().filter(p -> {
+			Permissions permissions = PermissionManager.get(p.getId());
+			return permissions.getPermissions().isEmpty()
+					|| user != null && permissions.getPermissions().stream().filter(permission -> {
+						return permission.getType() == Permission.Type.USER && permission.getSourceId() == user.getId()
+								|| permission.getType() == Permission.Type.GROUP
+										&& GroupManager.get(permission.getSourceId()).isMember(user);
+					}).count() != 0;
+		}).collect(Collectors.toList()));
 	}
 
 	/**
