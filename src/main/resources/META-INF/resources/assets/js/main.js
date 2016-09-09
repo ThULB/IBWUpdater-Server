@@ -364,7 +364,17 @@ app.controller("permissionDialogCtrl", function($scope, $log, $http, asyncQueue,
 	};
 
 	$scope.save = function() {
-		close($scope.permissions, 500);
+		var permissions = [];
+		for (var i = 0; i < $scope.permissions.permission.length; i++) {
+			var p = $scope.permissions.permission[i];
+			if (p.sourceType && p.sourceId && p.sourceId != 0 && p.packageId && p.action) {
+				permissions.push(p);
+			}
+		}
+
+		close({
+			permission : permissions
+		}, 500);
 	};
 
 	$scope.loadData();
