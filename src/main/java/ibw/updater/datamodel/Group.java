@@ -179,6 +179,24 @@ public class Group {
 		}
 	}
 
+	/**
+	 * Checks if given user is member of {@link Group}.
+	 * 
+	 * @param user
+	 *            the {@link User}
+	 * @return <code>true</code> if user is group member, <code>false</code>
+	 *         isn't
+	 */
+	@Transient
+	public boolean isMember(User user) {
+		if (users != null) {
+			return users.stream().filter(u -> u.getId() == user.getId() || u.getName().equalsIgnoreCase(user.getName()))
+					.count() != 0;
+		}
+
+		return false;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
