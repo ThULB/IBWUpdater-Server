@@ -297,7 +297,7 @@ public class Permission {
 	 */
 	@Override
 	public String toString() {
-		return "Permission [type=" + type + ", sourceId=" + sourceId + ", action=" + action + ", _package=" + _package
+		return "Permission [type=" + type + ", sourceId=" + sourceId + ", action=" + action + ", package=" + _package
 				+ "]";
 	}
 
