@@ -70,7 +70,7 @@ public class PackageManager {
 	}
 
 	/**
-	 * Returns all {@link Package}s with extende informations.
+	 * Returns all {@link Package}s with extended informations.
 	 * 
 	 * @return a {@link List} of {@link Package}s
 	 */
