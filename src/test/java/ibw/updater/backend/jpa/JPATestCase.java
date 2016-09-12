@@ -16,9 +16,6 @@
  */
 package ibw.updater.backend.jpa;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -26,8 +23,6 @@ import javax.persistence.Persistence;
 
 import org.junit.After;
 import org.junit.Before;
-
-import ibw.updater.common.config.ConfigurationDir;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -44,13 +39,6 @@ public class JPATestCase {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		String tmpDir = System.getProperty("java.io.tmpdir");
-		Path tmp = Paths.get(tmpDir, "IBWUpdaterTests");
-		if (Files.notExists(tmp)) {
-			Files.createDirectories(tmp);
-		}
-		ConfigurationDir.setConfigurationDirectory(tmpDir);
-		
 		EntityManagerProvider.init(Persistence.createEntityManagerFactory(EntityManagerProvider.PERSISTENCE_UNIT_NAME));
 		entitymanager = EntityManagerProvider.getEntityManager();
 	}
