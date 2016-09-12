@@ -39,7 +39,7 @@ public class ConfigurationDir {
 		}
 	}
 
-	private static File getConfigurationDirectory() {
+	public static File getConfigurationDirectory() {
 		if (configDir != null) {
 			return new File(configDir);
 		}
