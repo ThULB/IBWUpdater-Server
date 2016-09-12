@@ -34,7 +34,7 @@ public class ConfigurationDir {
 	private static String configDir;
 
 	public static void setConfigurationDirectory(String configDir) {
-		if (ConfigurationDir.configDir != null) {
+		if (configDir != null) {
 			ConfigurationDir.configDir = configDir;
 		}
 	}
