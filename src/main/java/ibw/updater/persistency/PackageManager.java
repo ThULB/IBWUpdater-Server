@@ -302,20 +302,30 @@ public class PackageManager {
 					p.setVersion(p.getVersion() + 1);
 				}
 			} else if (p.getType() == Package.Type.COMMON && is != null) {
+				boolean incVer = false;
 				Path tmpFile = createTempFile(p.getId(), is);
 				Path pFile = PACKAGE_DIR.resolve(p.getId() + ".zip");
 
+				if (inDB.getStartupScript() == null && p.getStartupScript() != null || inDB.getStartupScript() != null
+						&& p.getStartupScript() != null && !inDB.getStartupScript().equals(p.getStartupScript())) {
+					incVer = true;
+				}
+				
 				try {
 					if (isValidPackage(tmpFile)) {
 						if (!isEqualPackage(pFile, tmpFile)) {
 							Files.copy(tmpFile, pFile, StandardCopyOption.REPLACE_EXISTING);
-							p.setVersion(p.getVersion() + 1);
+							incVer = true;
 						}
 					} else {
 						throw new UnsupportedOperationException("Uploaded file isn't a ZIP file.");
 					}
 				} finally {
 					Files.delete(tmpFile);
+				}
+
+				if (incVer) {
+					p.setVersion(p.getVersion() + 1);
 				}
 			}
 
