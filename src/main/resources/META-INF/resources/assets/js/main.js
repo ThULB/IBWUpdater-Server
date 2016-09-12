@@ -108,6 +108,10 @@ app.controller("alertCtrl", function($rootScope, $scope, $translate) {
 	$scope.alertObj = {};
 
 	$rootScope.$on("alertEvent", function(event, type, obj) {
+		if (obj === null) {
+			return;
+		}
+
 		$scope.alertObj.type = type;
 		$scope.alertObj.show = true;
 		if (typeof obj === "string") {
@@ -150,7 +154,7 @@ app.controller("packagesCtrl", function($rootScope, $scope, $log, $http, $transl
 				}
 			});
 		}, function(error) {
-			$rootScope.$emit("alertEvent", "error", e.data);
+			$rootScope.$emit("alertEvent", "error", error.data);
 			$log.error(error);
 		});
 	};
@@ -395,7 +399,7 @@ app.controller("usersCtrl", function($rootScope, $scope, $log, $http, $translate
 				}
 			});
 		}, function(error) {
-			$rootScope.$emit("alertEvent", "error", e.data);
+			$rootScope.$emit("alertEvent", "error", error.data);
 			$log.error(error);
 		});
 	};
@@ -513,7 +517,7 @@ app.controller("groupsCtrl", function($rootScope, $scope, $http, $log, $translat
 				}
 			});
 		}, function(error) {
-			$rootScope.$emit("alertEvent", "error", e.data);
+			$rootScope.$emit("alertEvent", "error", error.data);
 			$log.error(error);
 		});
 	};
@@ -578,9 +582,9 @@ app.controller("groupsCtrl", function($rootScope, $scope, $http, $log, $translat
 						}
 					}
 				}
-			}, function(e) {
-				$rootScope.$emit("alertEvent", "error", e.data);
-				$log.error(e);
+			}, function(error) {
+				$rootScope.$emit("alertEvent", "error", error.data);
+				$log.error(error);
 			});
 		}
 	};
@@ -590,9 +594,9 @@ app.controller("groupsCtrl", function($rootScope, $scope, $http, $log, $translat
 			if (result.status == 200) {
 				$scope.loadData();
 			}
-		}, function(e) {
-			$rootScope.$emit("alertEvent", "error", e.data);
-			$log.error(e);
+		}, function(error) {
+			$rootScope.$emit("alertEvent", "error", error.data);
+			$log.error(error);
 		});
 	};
 
