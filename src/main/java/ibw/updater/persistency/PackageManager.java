@@ -46,10 +46,16 @@ import ibw.updater.datamodel.User;
  */
 public class PackageManager {
 
-	private static Path PACKAGE_DIR = Paths.get(ConfigurationDir.getConfigFile("packages").toURI());
+	private static Path PACKAGE_DIR;
 
 	static {
 		try {
+			Path cfgDir = Paths.get(ConfigurationDir.getConfigurationDirectory().getAbsolutePath());
+			if (Files.notExists(cfgDir)) {
+				Files.createDirectories(cfgDir);
+			}
+
+			PACKAGE_DIR = Paths.get(ConfigurationDir.getConfigFile("packages").toURI());
 			if (Files.notExists(PACKAGE_DIR)) {
 				Files.createDirectories(PACKAGE_DIR);
 			}
