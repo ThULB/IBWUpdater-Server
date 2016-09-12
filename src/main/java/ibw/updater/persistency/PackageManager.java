@@ -261,7 +261,13 @@ public class PackageManager {
 			}
 			em.getTransaction().begin();
 
-			if (inDB.getFunction() != null && p.getFunction() != null && !inDB.getFunction().equals(p.getFunction())) {
+			if (p.getType() == Package.Type.USER && inDB.getFunction() != null && p.getFunction() != null
+					&& !inDB.getFunction().equals(p.getFunction())) {
+				p.setVersion(p.getVersion() + 1);
+			} else if (p.getType() == Package.Type.COMMON
+					&& (inDB.getStartupScript() == null && p.getStartupScript() != null
+							|| inDB.getStartupScript() != null && p.getStartupScript() != null
+									&& !inDB.getStartupScript().equals(p.getStartupScript()))) {
 				p.setVersion(p.getVersion() + 1);
 			}
 
@@ -301,27 +307,30 @@ public class PackageManager {
 						&& !inDB.getFunction().equals(p.getFunction())) {
 					p.setVersion(p.getVersion() + 1);
 				}
-			} else if (p.getType() == Package.Type.COMMON && is != null) {
+			} else if (p.getType() == Package.Type.COMMON) {
 				boolean incVer = false;
-				Path tmpFile = createTempFile(p.getId(), is);
-				Path pFile = PACKAGE_DIR.resolve(p.getId() + ".zip");
 
 				if (inDB.getStartupScript() == null && p.getStartupScript() != null || inDB.getStartupScript() != null
 						&& p.getStartupScript() != null && !inDB.getStartupScript().equals(p.getStartupScript())) {
 					incVer = true;
 				}
-				
-				try {
-					if (isValidPackage(tmpFile)) {
-						if (!isEqualPackage(pFile, tmpFile)) {
-							Files.copy(tmpFile, pFile, StandardCopyOption.REPLACE_EXISTING);
-							incVer = true;
+
+				if (is != null) {
+					Path tmpFile = createTempFile(p.getId(), is);
+					Path pFile = PACKAGE_DIR.resolve(p.getId() + ".zip");
+
+					try {
+						if (isValidPackage(tmpFile)) {
+							if (!isEqualPackage(pFile, tmpFile)) {
+								Files.copy(tmpFile, pFile, StandardCopyOption.REPLACE_EXISTING);
+								incVer = true;
+							}
+						} else {
+							throw new UnsupportedOperationException("Uploaded file isn't a ZIP file.");
 						}
-					} else {
-						throw new UnsupportedOperationException("Uploaded file isn't a ZIP file.");
+					} finally {
+						Files.delete(tmpFile);
 					}
-				} finally {
-					Files.delete(tmpFile);
 				}
 
 				if (incVer) {
