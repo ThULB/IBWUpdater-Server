@@ -215,6 +215,14 @@ public class TestPersistency extends JPATestCase {
 		p = PackageManager.update(p);
 
 		assertEquals("Updated Description", p.getDescription());
+
+		assertEquals("version id should be 1", new Integer(1), p.getVersion());
+
+		p.setStartupScript("scripts/testStartup-new.js");
+
+		p = PackageManager.update(p);
+
+		assertEquals("version id should increased", new Integer(2), p.getVersion());
 	}
 
 	@Test
