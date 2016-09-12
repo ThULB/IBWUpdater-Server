@@ -163,7 +163,7 @@
           <finalName>${project.artifactId}</finalName>
           <archive>
             <manifest>
-              <mainClass>org.mycore.vidconv.Application</mainClass>
+              <mainClass>ibw.updater.Application</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
