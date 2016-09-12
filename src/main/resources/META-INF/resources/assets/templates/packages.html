@@ -27,7 +27,10 @@
 					<th>{{'package.description' | translate}}</th>
 				</tr>
 			</thead>
-			<tr ng-repeat="package in packages.package | orderBy:'name'">
+			<tr ng-if="!packages.package || packages.package.length === 0">
+				<td class="text-center" colspan="5"><strong>{{'packages.emptyList' | translate}}</strong></td>
+			</tr>
+			<tr ng-repeat="package in packages.package | orderBy:'name'" ng-if="packages.package.length !== 0">
 				<td class="text-center">
 					<div class="btn-group btn-group-xs" role="group" aria-label="{{'general.actions' | translate}}">
 						<button type="button" class="btn btn-default" ng-click="showPackageDialog(package)">

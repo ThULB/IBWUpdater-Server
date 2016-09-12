@@ -23,6 +23,7 @@
 	"nav.groups" : "Groups",
 
 	"packages.headline" : "Packages",
+	"packages.emptyList" : "No packages available",
 
 	"package.headline.create" : "Create Package",
 	"package.headline.edit" : "Edit Package",
@@ -44,6 +45,7 @@
 	"permission.selectSourceType" : "(please select source type)",
 
 	"groups.headline" : "Groups",
+	"groups.emptyList" : "No groups available",
 
 	"group.headline.create" : "Create Group",
 	"group.headline.edit" : "Edit Group",
@@ -54,6 +56,7 @@
 	"group.users" : "Group-Members",
 
 	"users.headline" : "Users",
+	"users.emptyList" : "No users available",
 
 	"user.headline.create" : "Create User",
 	"user.headline.edit" : "Edit User",

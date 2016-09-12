@@ -25,7 +25,10 @@
 					<th>{{'group.users' | translate}}</th>
 				</tr>
 			</thead>
-			<tr ng-repeat="group in groups.group | orderBy:'name'">
+			<tr ng-if="!groups.group || groups.group.length === 0">
+				<td class="text-center" colspan="5"><strong>{{'groups.emptyList' | translate}}</strong></td>
+			</tr>
+			<tr ng-repeat="group in groups.group | orderBy:'name'" ng-if="groups.group.length !== 0">
 				<td class="text-center">
 					<div class="btn-group btn-group-xs" role="group" aria-label="{{'general.actions' | translate}}">
 						<button type="button" class="btn btn-default" ng-click="showGroupDialog(group)">

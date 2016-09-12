@@ -23,6 +23,7 @@
 	"nav.groups" : "Gruppen",
 
 	"packages.headline" : "Pakete",
+	"packages.emptyList" : "Keine Pakete verfügbar",
 
 	"package.headline.create" : "Paket erstellen",
 	"package.headline.edit" : "Paket bearbeiten",
@@ -44,6 +45,7 @@
 	"permission.selectSourceType" : "(bitte Quelltyp wählen)",
 
 	"groups.headline" : "Gruppen",
+	"groups.emptyList" : "Keine Gruppen verfügbar",
 
 	"group.headline.create" : "Gruppe erstellen",
 	"group.headline.edit" : "Gruppe bearbeiten",
@@ -54,6 +56,7 @@
 	"group.users" : "Gruppen-Mitglieder",
 
 	"users.headline" : "Benutzer",
+	"users.emptyList" : "Keine Benutzer verfügbar",
 
 	"user.headline.create" : "Benutzer erstellen",
 	"user.headline.edit" : "Benutzer bearbeiten",
