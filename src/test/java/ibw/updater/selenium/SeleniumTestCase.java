@@ -54,8 +54,7 @@ public class SeleniumTestCase {
 			configDir.mkdirs();
 		}
 
-		profileDir = new File(System.getProperty("java.io.tmpdir") + File.separator
-				+ SeleniumTestCase.class.getSimpleName() + File.separator + "profile");
+		profileDir = new File(configDir, "profile");
 		if (!profileDir.exists()) {
 			profileDir.mkdirs();
 		}
