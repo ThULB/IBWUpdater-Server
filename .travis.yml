@@ -6,7 +6,6 @@ addons:
 before_script:
   - "export DISPLAY=:99.0"
   - "export TEMPDIR=~/tmp"
-  - "sh -e mkdir ~/tmp"
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
 deploy:
