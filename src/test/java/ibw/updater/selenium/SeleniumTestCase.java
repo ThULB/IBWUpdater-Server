@@ -26,14 +26,12 @@ import org.junit.BeforeClass;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.io.TemporaryFilesystem;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import ibw.updater.Application;
-import io.github.bonigarcia.wdm.MarionetteDriverManager;
+import io.github.bonigarcia.wdm.ChromeDriverManager;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -42,8 +40,6 @@ import io.github.bonigarcia.wdm.MarionetteDriverManager;
 public class SeleniumTestCase {
 
 	protected static final long MAX_WAIT_TIME = 5;
-
-	private static File profileDir;
 
 	protected WebDriver driver;
 
@@ -55,25 +51,14 @@ public class SeleniumTestCase {
 			configDir.mkdirs();
 		}
 
-		File tmpDir = new File(configDir, "tmp");
-		if (!tmpDir.exists()) {
-			tmpDir.mkdirs();
-		}
-		TemporaryFilesystem.setTemporaryDirectory(tmpDir);
-
-		profileDir = new File(configDir, "profile");
-		if (!profileDir.exists()) {
-			profileDir.mkdirs();
-		}
-
 		Application.main(new String[] { "--configDir", configDir.getAbsolutePath() });
 
-		MarionetteDriverManager.getInstance().setup();
+		ChromeDriverManager.getInstance().setup();
 	}
 
 	@Before
 	public void setupUp() throws Exception {
-		driver = new FirefoxDriver(new FirefoxProfile(profileDir));
+		driver = new ChromeDriver();
 		driver.get("http://" + getHostName() + ":8085");
 	}
 
