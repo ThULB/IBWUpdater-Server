@@ -16,11 +16,14 @@
  */
 package ibw.updater.backend.jpa;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
+import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.junit.After;
 import org.junit.Before;
 
@@ -39,7 +42,10 @@ public class JPATestCase {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		EntityManagerProvider.init(Persistence.createEntityManagerFactory(EntityManagerProvider.PERSISTENCE_UNIT_NAME));
+		Map<String, String> propertiesMap = new HashMap<>();
+		propertiesMap.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.DROP_AND_CREATE);
+		
+		EntityManagerProvider.init(Persistence.createEntityManagerFactory(EntityManagerProvider.PERSISTENCE_UNIT_NAME, propertiesMap));
 		entitymanager = EntityManagerProvider.getEntityManager();
 	}
 
