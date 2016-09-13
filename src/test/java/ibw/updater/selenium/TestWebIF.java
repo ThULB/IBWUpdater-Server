@@ -202,8 +202,10 @@ public class TestWebIF extends SeleniumTestCase {
 
 		waitForElement(By.id("package-dialog"));
 		waitAndClick(By.xpath("//select[@id='type']//option[@value='user']"));
+
 		waitForElement(By.id("name")).sendKeys(TP_NAME);
 		waitForElement(By.id("description")).sendKeys(TP_DESCRIPTION);
+		waitForElement(By.id("function")).sendKeys("function hello() {\nalert(\"Hello World!\");\n}");
 
 		waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));
 
