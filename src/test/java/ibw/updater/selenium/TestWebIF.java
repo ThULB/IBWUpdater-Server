@@ -40,13 +40,18 @@ public class TestWebIF extends SeleniumTestCase {
 	@Test
 	public void testCreateUser() throws InterruptedException {
 		createUser();
+		driver.navigate().refresh();
+		
 		deleteUser();
 	}
 
 	@Test
 	public void testEditUser() throws InterruptedException {
 		createGroup();
+		driver.navigate().refresh();
+
 		createUser();
+		driver.navigate().refresh();
 
 		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showUserDialog')]"));
 
@@ -55,12 +60,12 @@ public class TestWebIF extends SeleniumTestCase {
 		WebElement description = waitForElement(By.id("description"));
 		description.clear();
 		description.sendKeys(TU_DESCRIPTION_UPDATE);
-
 		waitAndClick(By.cssSelector("#groups option"));
 
 		waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));
-
+		
 		Thread.sleep(MAX_WAIT_TIME * 1000);
+		driver.navigate().refresh();
 
 		description = waitForElement(By.xpath("//tbody/tr[1]/td[3]"));
 		WebElement group = waitForElement(By.xpath("//tbody/tr[1]/td[4]"));
@@ -69,19 +74,26 @@ public class TestWebIF extends SeleniumTestCase {
 		assertEquals(TG_NAME, group.getText());
 
 		deleteUser();
+		driver.navigate().refresh();
+		
 		deleteGroup();
 	}
 
 	@Test
 	public void testCreateGroup() throws InterruptedException {
 		createGroup();
+		driver.navigate().refresh();
+		
 		deleteGroup();
 	}
 
 	@Test
 	public void testEditGroup() throws InterruptedException {
 		createUser();
+		driver.navigate().refresh();
+		
 		createGroup();
+		driver.navigate().refresh();
 
 		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showGroupDialog')]"));
 
@@ -105,19 +117,22 @@ public class TestWebIF extends SeleniumTestCase {
 		assertEquals(TU_NAME, user.getText());
 
 		deleteGroup();
+		driver.navigate().refresh();
+		
 		deleteUser();
 	}
 
-	private void createUser() {
+	private void createUser() throws InterruptedException {
 		waitAndClick(By.xpath("//div[@id='navbar']//a[contains(@href, '/users')]"));
 
 		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@ng-if, '!users.user')]")) != null);
 
 		waitAndClick(By.id("btnCreateUser"));
-		waitForElement(By.id("user-dialog"));
 
+		waitForElement(By.id("user-dialog"));
 		waitForElement(By.id("name")).sendKeys(TU_NAME);
 		waitForElement(By.id("description")).sendKeys(TU_DESCRIPTION);
+
 		waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));
 
 		WebElement name = waitForElement(By.xpath("//tbody/tr[1]/td[2]"));
@@ -144,10 +159,11 @@ public class TestWebIF extends SeleniumTestCase {
 		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@ng-if, '!groups.group')]")) != null);
 
 		waitAndClick(By.id("btnCreateGroup"));
-		waitForElement(By.id("group-dialog"));
 
+		waitForElement(By.id("group-dialog"));
 		waitForElement(By.id("name")).sendKeys(TG_NAME);
 		waitForElement(By.id("description")).sendKeys(TG_DESCRIPTION);
+
 		waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));
 
 		WebElement name = waitForElement(By.xpath("//tbody/tr[1]/td[2]"));
