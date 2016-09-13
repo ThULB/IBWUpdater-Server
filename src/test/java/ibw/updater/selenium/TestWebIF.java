@@ -109,15 +109,15 @@ public class TestWebIF extends SeleniumTestCase {
 	}
 
 	private void createUser() {
-		waitAndClick(By.cssSelector("#navbar a[href='#/users']"));
+		waitAndClick(By.xpath("//div[@id='navbar']//a[contains(@href, '/users')]"));
 
 		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@ng-if, '!users.user')]")) != null);
 
 		waitAndClick(By.id("btnCreateUser"));
 		waitForElement(By.id("user-dialog"));
 
-		driver.findElement(By.id("name")).sendKeys(TU_NAME);
-		driver.findElement(By.id("description")).sendKeys(TU_DESCRIPTION);
+		waitForElement(By.id("name")).sendKeys(TU_NAME);
+		waitForElement(By.id("description")).sendKeys(TU_DESCRIPTION);
 		waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));
 
 		WebElement name = waitForElement(By.xpath("//tbody/tr[1]/td[2]"));
@@ -128,7 +128,7 @@ public class TestWebIF extends SeleniumTestCase {
 	}
 
 	private void deleteUser() {
-		waitAndClick(By.cssSelector("#navbar a[href='#/users']"));
+		waitAndClick(By.xpath("//div[@id='navbar']//a[contains(@href, '/users')]"));
 
 		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showUserDeleteDialog')]"));
 
@@ -139,15 +139,15 @@ public class TestWebIF extends SeleniumTestCase {
 	}
 
 	private void createGroup() {
-		waitAndClick(By.cssSelector("#navbar a[href='#/groups']"));
+		waitAndClick(By.xpath("//div[@id='navbar']//a[contains(@href, '/groups')]"));
 
 		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@ng-if, '!groups.group')]")) != null);
 
 		waitAndClick(By.id("btnCreateGroup"));
 		waitForElement(By.id("group-dialog"));
 
-		driver.findElement(By.id("name")).sendKeys(TG_NAME);
-		driver.findElement(By.id("description")).sendKeys(TG_DESCRIPTION);
+		waitForElement(By.id("name")).sendKeys(TG_NAME);
+		waitForElement(By.id("description")).sendKeys(TG_DESCRIPTION);
 		waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));
 
 		WebElement name = waitForElement(By.xpath("//tbody/tr[1]/td[2]"));
@@ -158,7 +158,7 @@ public class TestWebIF extends SeleniumTestCase {
 	}
 
 	private void deleteGroup() {
-		waitAndClick(By.cssSelector("#navbar a[href='#/groups']"));
+		waitAndClick(By.xpath("//div[@id='navbar']//a[contains(@href, '/groups')]"));
 
 		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showGroupDeleteDialog')]"));
 
