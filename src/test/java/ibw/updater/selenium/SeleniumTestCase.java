@@ -31,13 +31,14 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import ibw.updater.Application;
+import ibw.updater.backend.jpa.JPATestCase;
 import io.github.bonigarcia.wdm.ChromeDriverManager;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
  *
  */
-public class SeleniumTestCase {
+public class SeleniumTestCase extends JPATestCase {
 
 	protected static final long MAX_WAIT_TIME = 5;
 
@@ -58,6 +59,7 @@ public class SeleniumTestCase {
 
 	@Before
 	public void setupUp() throws Exception {
+		super.setUp();
 		driver = new ChromeDriver();
 		driver.get("http://" + getHostName() + ":8085");
 	}
@@ -67,6 +69,7 @@ public class SeleniumTestCase {
 		if (driver != null) {
 			driver.quit();
 		}
+		super.tearDown();
 	}
 
 	public WebElement waitAndClick(By by) {

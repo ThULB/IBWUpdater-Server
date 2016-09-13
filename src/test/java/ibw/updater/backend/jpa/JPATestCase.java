@@ -43,9 +43,10 @@ public class JPATestCase {
 	@Before
 	public void setUp() throws Exception {
 		Map<String, String> propertiesMap = new HashMap<>();
-		propertiesMap.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.DROP_AND_CREATE);
-		
-		EntityManagerProvider.init(Persistence.createEntityManagerFactory(EntityManagerProvider.PERSISTENCE_UNIT_NAME, propertiesMap));
+		propertiesMap.put("javax.persistence.jdbc.url", "jdbc:h2:mem:" + getClass().getSimpleName());
+		propertiesMap.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.CREATE_ONLY);
+		EntityManagerProvider.init(
+				Persistence.createEntityManagerFactory(EntityManagerProvider.PERSISTENCE_UNIT_NAME, propertiesMap));
 		entitymanager = EntityManagerProvider.getEntityManager();
 	}
 
