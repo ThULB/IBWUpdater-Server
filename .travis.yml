@@ -1,13 +1,12 @@
 language: java
 jdk:
   - oraclejdk8
-env:
-  global:
-    - TMPDIR=/tmp
 addons:
   firefox: "latest"
 before_script:
   - "export DISPLAY=:99.0"
+  - "export TEMPDIR=~/tmp"
+  - "sh -e mkdir ~/tmp"
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
 deploy:
