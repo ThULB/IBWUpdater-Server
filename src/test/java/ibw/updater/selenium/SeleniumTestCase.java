@@ -28,6 +28,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.io.TemporaryFilesystem;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -53,6 +54,12 @@ public class SeleniumTestCase {
 		if (!configDir.exists()) {
 			configDir.mkdirs();
 		}
+
+		File tmpDir = new File(configDir, "tmp");
+		if (!tmpDir.exists()) {
+			tmpDir.mkdirs();
+		}
+		TemporaryFilesystem.setTemporaryDirectory(tmpDir);
 
 		profileDir = new File(configDir, "profile");
 		if (!profileDir.exists()) {
