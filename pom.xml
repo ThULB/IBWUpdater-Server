@@ -56,6 +56,7 @@
   <properties>
     <jersey.version>2.23.2</jersey.version>
     <log4j.version>2.6.2</log4j.version>
+    <selenium.version>2.53.1</selenium.version>
     <grunt.projectBase>${project.build.directory}/grunt</grunt.projectBase>
     <template.assetsdir>${project.build.directory}/classes/META-INF/resources/assets</template.assetsdir>
     <encoding>UTF-8</encoding>
@@ -264,13 +265,13 @@
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
-      <version>3.0.0-beta3</version>
+      <version>${selenium.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-chrome-driver</artifactId>
-      <version>3.0.0-beta3</version>
+      <version>${selenium.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
