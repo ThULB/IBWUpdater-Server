@@ -17,6 +17,8 @@
 package ibw.updater.selenium;
 
 import java.io.File;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,6 +27,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -39,6 +42,8 @@ public class SeleniumTestCase {
 
 	protected static final long MAX_WAIT_TIME = 5;
 
+	private static File profileDir;
+
 	protected WebDriver driver;
 
 	@BeforeClass
@@ -49,6 +54,12 @@ public class SeleniumTestCase {
 			configDir.mkdirs();
 		}
 
+		profileDir = new File(System.getProperty("java.io.tmpdir") + File.separator
+				+ SeleniumTestCase.class.getSimpleName() + File.separator + "profile");
+		if (!profileDir.exists()) {
+			profileDir.mkdirs();
+		}
+
 		Application.main(new String[] { "--configDir", configDir.getAbsolutePath() });
 
 		MarionetteDriverManager.getInstance().setup();
@@ -56,8 +67,8 @@ public class SeleniumTestCase {
 
 	@Before
 	public void setupUp() throws Exception {
-		driver = new FirefoxDriver();
-		driver.get("http://localhost:8085");
+		driver = new FirefoxDriver(new FirefoxProfile(profileDir));
+		driver.get("http://" + getHostName() + ":8085");
 	}
 
 	@After
@@ -81,5 +92,16 @@ public class SeleniumTestCase {
 		wait.until(ExpectedConditions.visibilityOfElementLocated(by));
 		WebElement elm = driver.findElement(by);
 		return elm;
+	}
+
+	private String getHostName() {
+		String hostName = "localhost";
+		try {
+			hostName = InetAddress.getLocalHost().getCanonicalHostName();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+
+		return hostName;
 	}
 }
