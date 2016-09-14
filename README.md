@@ -21,7 +21,7 @@ Before first start of the Server we need a **persistence.xml**, like this. (By d
           <property name="javax.persistence.jdbc.url" value="jdbc:h2:file:{DataDir}ibwupdater"/>
           <property name="javax.persistence.jdbc.user" value="sa" />
           <property name="javax.persistence.jdbc.password" value="" />
-          <roperty name="eclipselink.logging.level" value="FINE" />
+          <property name="eclipselink.logging.level" value="WARNING" />
           <property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
         </properties>
       </persistence-unit>
