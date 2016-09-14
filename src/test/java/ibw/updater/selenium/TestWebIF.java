@@ -224,7 +224,44 @@ public class TestWebIF extends SeleniumTestCase {
 		deletePackage();
 	}
 
-	private void createUser() throws InterruptedException {
+	@Test
+	public void testPackagePermission() throws InterruptedException {
+		createGroup();
+		driver.navigate().refresh();
+
+		createUserPackage();
+		driver.navigate().refresh();
+
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showPermissionDialog')]"));
+
+		waitForElement(By.id("permission-dialog"));
+
+		waitAndClick(By.xpath("//form//button[contains(@class, 'dropdown-toggle')][1]"));
+		waitAndClick(By.xpath("//form//ul[contains(@class, 'dropdown-menu')][1]//li[1]/a"));
+		waitAndClick(By.xpath("//form//select[@id = 'sourceId'][1]/option[2]"));
+
+		waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));
+
+		Thread.sleep(MAX_WAIT_TIME * 1000);
+		driver.navigate().refresh();
+
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showPermissionDialog')]"));
+
+		waitForElement(By.id("permission-dialog"));
+
+		waitAndClick(By.xpath("//form//button[starts-with(@ng-click, 'deletePermission')][1]"));
+
+		waitAndClick(By.cssSelector(".modal-footer button.btn-default"));
+
+		Thread.sleep(MAX_WAIT_TIME * 1000);
+
+		deletePackage();
+		driver.navigate().refresh();
+
+		deleteGroup();
+	}
+
+	private void createUser() {
 		switchNavLink("/users");
 
 		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@ng-if, '!users.user')]")) != null);
