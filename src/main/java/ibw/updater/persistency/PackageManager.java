@@ -26,11 +26,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.zip.ZipInputStream;
 
 import javax.persistence.EntityManager;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import ibw.updater.backend.jpa.EntityManagerProvider;
 import ibw.updater.common.config.ConfigurationDir;
@@ -45,6 +49,8 @@ import ibw.updater.datamodel.User;
  *
  */
 public class PackageManager {
+	
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	private static Path PACKAGE_DIR;
 
@@ -72,6 +78,7 @@ public class PackageManager {
 	public static Packages get() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info("List all packages");
 			return new Packages(em.createNamedQuery("Package.findAll", Package.class).getResultList());
 		} finally {
 			em.close();
@@ -86,6 +93,7 @@ public class PackageManager {
 	public static Packages getExtended() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info("List all packages with extended informations");
 			List<Package> packages = em.createNamedQuery("Package.findAll", Package.class).getResultList();
 			return new Packages(packages.stream().map(p -> {
 				if (p.getType() == Package.Type.COMMON) {
@@ -118,6 +126,7 @@ public class PackageManager {
 	 */
 	public static Packages getExtended(User user) {
 		Packages packages = getExtended();
+		LOGGER.info(MessageFormat.format("Filter packages by user: {0}", user));
 		return new Packages(packages.getPackages().stream().filter(p -> {
 			Permissions permissions = PermissionManager.get(p.getId());
 			return permissions.getPermissions().isEmpty()
@@ -139,6 +148,7 @@ public class PackageManager {
 	public static Package get(String id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info(MessageFormat.format("Get package by id: {0}", id));
 			return em.find(Package.class, id);
 		} finally {
 			em.close();
@@ -195,6 +205,7 @@ public class PackageManager {
 	public static Package save(Package p) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info(MessageFormat.format("Save package: {0}", p));
 			em.getTransaction().begin();
 			em.persist(p);
 			em.getTransaction().commit();
@@ -270,6 +281,8 @@ public class PackageManager {
 									&& !inDB.getStartupScript().equals(p.getStartupScript()))) {
 				p.setVersion(p.getVersion() + 1);
 			}
+			
+			LOGGER.info(MessageFormat.format("Update package: {0}", p));
 
 			em.merge(p);
 			em.getTransaction().commit();
@@ -337,6 +350,8 @@ public class PackageManager {
 					p.setVersion(p.getVersion() + 1);
 				}
 			}
+			
+			LOGGER.info(MessageFormat.format("Update package: {0}", p));
 
 			em.merge(p);
 			em.getTransaction().commit();
@@ -358,6 +373,7 @@ public class PackageManager {
 	public static void delete(String id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info(MessageFormat.format("Delete package with id: {0}", id));
 			em.getTransaction().begin();
 			em.remove(em.find(Package.class, id));
 			em.getTransaction().commit();

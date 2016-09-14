@@ -55,7 +55,6 @@ public class UserResource {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response add(final User user) {
 		try {
-			LOGGER.info("Add " + user);
 			return Response.ok().entity(UserManager.save(user)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -68,7 +67,6 @@ public class UserResource {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response update(final User user) {
 		try {
-			LOGGER.info("Update " + user);
 			return Response.ok().entity(UserManager.update(user)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -81,7 +79,6 @@ public class UserResource {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response delete(final User user) {
 		try {
-			LOGGER.info("Remove " + user);
 			UserManager.delete(user);
 			return Response.ok().build();
 		} catch (Exception e) {
@@ -94,7 +91,6 @@ public class UserResource {
 	@Path("delete/{uid}")
 	public Response delete(@PathParam("uid") final int uid) {
 		try {
-			LOGGER.info("Remove user with id " + uid);
 			UserManager.delete(uid);
 			return Response.ok().build();
 		} catch (Exception e) {

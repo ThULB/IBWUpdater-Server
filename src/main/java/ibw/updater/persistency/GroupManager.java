@@ -16,12 +16,16 @@
  */
 package ibw.updater.persistency;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import ibw.updater.backend.jpa.EntityManagerProvider;
 import ibw.updater.datamodel.Group;
@@ -33,6 +37,8 @@ import ibw.updater.datamodel.Groups;
  */
 public class GroupManager {
 
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	/**
 	 * Returns all {@link Group}s.
 	 * 
@@ -41,6 +47,7 @@ public class GroupManager {
 	public static Groups get() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info("List all groups");
 			return new Groups(em.createNamedQuery("Group.findAll", Group.class).getResultList());
 		} finally {
 			em.close();
@@ -58,6 +65,7 @@ public class GroupManager {
 	public static Group get(int id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info(MessageFormat.format("Get group by id: {0}", id));
 			return em.find(Group.class, id);
 		} finally {
 			em.close();
@@ -75,6 +83,7 @@ public class GroupManager {
 	public static Group get(String name) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info(MessageFormat.format("Get group by name: {0}", name));
 			TypedQuery<Group> query = em.createNamedQuery("Group.findByName", Group.class);
 			query.setParameter("name", name);
 
@@ -124,6 +133,7 @@ public class GroupManager {
 
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info(MessageFormat.format("Save group: {0}", group));
 			em.getTransaction().begin();
 			em.persist(group);
 			em.getTransaction().commit();
@@ -153,6 +163,7 @@ public class GroupManager {
 				group.setId(inDB.getId());
 				em.detach(inDB);
 			}
+			LOGGER.info(MessageFormat.format("Update group: {0}", group));
 			em.getTransaction().begin();
 			em.merge(group);
 			em.getTransaction().commit();
@@ -172,6 +183,7 @@ public class GroupManager {
 	public static void delete(int gid) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info(MessageFormat.format("Delete group with id: {0}", gid));
 			em.getTransaction().begin();
 			em.remove(em.find(Group.class, gid));
 			em.getTransaction().commit();

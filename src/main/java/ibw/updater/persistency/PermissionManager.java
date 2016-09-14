@@ -16,10 +16,14 @@
  */
 package ibw.updater.persistency;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import ibw.updater.backend.jpa.EntityManagerProvider;
 import ibw.updater.datamodel.Package;
@@ -37,6 +41,8 @@ import ibw.updater.datamodel.Permissions;
  */
 public class PermissionManager {
 
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	/**
 	 * Returns all {@link Permission}s.
 	 * 
@@ -45,6 +51,7 @@ public class PermissionManager {
 	public static Permissions get() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info("List all permissions");
 			return new Permissions(em.createNamedQuery("Permission.findAll", Permission.class).getResultList());
 		} finally {
 			em.close();
@@ -59,6 +66,7 @@ public class PermissionManager {
 	public static Permissions get(String packageId) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info(MessageFormat.format("List permissions for packageId: {0}", packageId));
 			Package p = PackageManager.get(packageId);
 			return new Permissions(em.createNamedQuery("Permission.findAllByPackage", Permission.class)
 					.setParameter("package", p).getResultList());
@@ -77,6 +85,7 @@ public class PermissionManager {
 	public static Permission get(PermissionId id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info(MessageFormat.format("Get permission for permissionId: {0}", id));
 			return em.find(Permission.class, id);
 		} finally {
 			em.close();
@@ -120,6 +129,7 @@ public class PermissionManager {
 
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info(MessageFormat.format("Save permission: {0}", permission));
 			em.getTransaction().begin();
 			em.persist(permission);
 			em.getTransaction().commit();
@@ -156,6 +166,7 @@ public class PermissionManager {
 
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info(MessageFormat.format("Update permission: {0}", permission));
 			em.getTransaction().begin();
 			em.merge(permission);
 			em.getTransaction().commit();
@@ -187,6 +198,7 @@ public class PermissionManager {
 	public static void delete(PermissionId permissionId) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info(MessageFormat.format("Delete permission: {0}", permissionId));
 			em.getTransaction().begin();
 			em.remove(em.find(Permission.class, permissionId));
 			em.getTransaction().commit();

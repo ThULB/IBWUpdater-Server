@@ -16,12 +16,16 @@
  */
 package ibw.updater.persistency;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import ibw.updater.backend.jpa.EntityManagerProvider;
 import ibw.updater.datamodel.User;
@@ -33,6 +37,8 @@ import ibw.updater.datamodel.Users;
  */
 public class UserManager {
 
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	/**
 	 * Returns all {@link User}s.
 	 * 
@@ -41,6 +47,7 @@ public class UserManager {
 	public static Users get() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info("List all users");
 			return new Users(em.createNamedQuery("User.findAll", User.class).getResultList());
 		} finally {
 			em.close();
@@ -58,6 +65,7 @@ public class UserManager {
 	public static User get(int id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info(MessageFormat.format("Get user by id: {0}", id));
 			return em.find(User.class, id);
 		} finally {
 			em.close();
@@ -75,6 +83,7 @@ public class UserManager {
 	public static User get(String name) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info(MessageFormat.format("Get user by name: {0}", name));
 			TypedQuery<User> query = em.createNamedQuery("User.findByName", User.class);
 			query.setParameter("name", name);
 
@@ -124,6 +133,7 @@ public class UserManager {
 
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info(MessageFormat.format("Save user: {0}", user));
 			em.getTransaction().begin();
 			em.persist(user);
 			em.getTransaction().commit();
@@ -153,6 +163,8 @@ public class UserManager {
 				user.setId(inDB.getId());
 				em.detach(inDB);
 			}
+
+			LOGGER.info(MessageFormat.format("Update user: {0}", user));
 			em.getTransaction().begin();
 			em.merge(user);
 			em.getTransaction().commit();
@@ -172,6 +184,7 @@ public class UserManager {
 	public static void delete(int uid) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
+			LOGGER.info(MessageFormat.format("Delete user with id: {0}", uid));
 			em.getTransaction().begin();
 			em.remove(em.find(User.class, uid));
 			em.getTransaction().commit();

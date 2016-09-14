@@ -55,7 +55,6 @@ public class GroupResource {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response add(final Group group) {
 		try {
-			LOGGER.info("Add " + group);
 			return Response.ok().entity(GroupManager.save(group)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -68,7 +67,6 @@ public class GroupResource {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response update(final Group group) {
 		try {
-			LOGGER.info("Update " + group);
 			return Response.ok().entity(GroupManager.update(group)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -81,7 +79,6 @@ public class GroupResource {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response delete(final Group group) {
 		try {
-			LOGGER.info("Remove " + group);
 			GroupManager.delete(group);
 			return Response.ok().build();
 		} catch (Exception e) {
@@ -94,7 +91,6 @@ public class GroupResource {
 	@Path("delete/{gid}")
 	public Response delete(@PathParam("gid") final int gid) {
 		try {
-			LOGGER.info("Remove group with id " + gid);
 			GroupManager.delete(gid);
 			return Response.ok().build();
 		} catch (Exception e) {

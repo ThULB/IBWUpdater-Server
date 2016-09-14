@@ -389,6 +389,16 @@ public class Permission {
 		/*
 		 * (non-Javadoc)
 		 * 
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return "PermissionId [type=" + type + ", sourceId=" + sourceId + ", action=" + action + "]";
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Object#hashCode()
 		 */
 		@Override

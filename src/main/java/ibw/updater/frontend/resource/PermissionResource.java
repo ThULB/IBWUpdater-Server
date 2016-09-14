@@ -72,7 +72,6 @@ public class PermissionResource {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response update(final Permissions permissions) {
 		try {
-			LOGGER.info("Save/Update permissions");
 			return Response.ok().entity(PermissionManager.update(permissions)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -85,7 +84,6 @@ public class PermissionResource {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response delete(final Permission permission) {
 		try {
-			LOGGER.info("Remove " + permission);
 			PermissionManager.delete(permission);
 			return Response.ok().build();
 		} catch (Exception e) {

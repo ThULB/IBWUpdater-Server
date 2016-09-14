@@ -89,7 +89,6 @@ public class PackageResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response add(final Package p) {
 		try {
-			LOGGER.info("Add " + p);
 			return Response.ok().entity(PackageManager.save(p)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -104,7 +103,6 @@ public class PackageResource {
 	public Response add(@FormDataParam("package") FormDataBodyPart obj, @FormDataParam("file") InputStream is) {
 		try {
 			Package p = obj.getValueAs(Package.class);
-			LOGGER.info("Add " + p);
 			return Response.ok().entity(PackageManager.save(p, is)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -118,7 +116,6 @@ public class PackageResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response update(final Package p) {
 		try {
-			LOGGER.info("Update " + p);
 			return Response.ok().entity(PackageManager.update(p)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -133,7 +130,6 @@ public class PackageResource {
 	public Response update(@FormDataParam("package") FormDataBodyPart obj, @FormDataParam("file") InputStream is) {
 		try {
 			Package p = obj.getValueAs(Package.class);
-			LOGGER.info("Update " + p);
 			return Response.ok().entity(PackageManager.update(p, is)).build();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
@@ -146,7 +142,6 @@ public class PackageResource {
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Response delete(final Package p) {
 		try {
-			LOGGER.info("Remove " + p);
 			PackageManager.delete(p.getId());
 			return Response.ok().build();
 		} catch (Exception e) {
@@ -159,7 +154,6 @@ public class PackageResource {
 	@Path("manage/packages/delete/{pid}")
 	public Response delete(@PathParam("pid") final String pid) {
 		try {
-			LOGGER.info("Remove package with id " + pid);
 			PackageManager.delete(pid);
 			return Response.ok().build();
 		} catch (Exception e) {
