@@ -51,7 +51,7 @@ public class PermissionManager {
 	public static Permissions get() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info("List all permissions");
+			LOGGER.debug("List all permissions");
 			return new Permissions(em.createNamedQuery("Permission.findAll", Permission.class).getResultList());
 		} finally {
 			em.close();
@@ -66,7 +66,7 @@ public class PermissionManager {
 	public static Permissions get(String packageId) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info(MessageFormat.format("List permissions for packageId: {0}", packageId));
+			LOGGER.debug(MessageFormat.format("List permissions for packageId: {0}", packageId));
 			Package p = PackageManager.get(packageId);
 			return new Permissions(em.createNamedQuery("Permission.findAllByPackage", Permission.class)
 					.setParameter("package", p).getResultList());
@@ -85,7 +85,7 @@ public class PermissionManager {
 	public static Permission get(PermissionId id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info(MessageFormat.format("Get permission for permissionId: {0}", id));
+			LOGGER.debug(MessageFormat.format("Get permission for permissionId: {0}", id));
 			return em.find(Permission.class, id);
 		} finally {
 			em.close();

@@ -47,7 +47,7 @@ public class UserManager {
 	public static Users get() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info("List all users");
+			LOGGER.debug("List all users");
 			return new Users(em.createNamedQuery("User.findAll", User.class).getResultList());
 		} finally {
 			em.close();
@@ -65,7 +65,7 @@ public class UserManager {
 	public static User get(int id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info(MessageFormat.format("Get user by id: {0}", id));
+			LOGGER.debug(MessageFormat.format("Get user by id: {0}", id));
 			return em.find(User.class, id);
 		} finally {
 			em.close();
@@ -83,7 +83,7 @@ public class UserManager {
 	public static User get(String name) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info(MessageFormat.format("Get user by name: {0}", name));
+			LOGGER.debug(MessageFormat.format("Get user by name: {0}", name));
 			TypedQuery<User> query = em.createNamedQuery("User.findByName", User.class);
 			query.setParameter("name", name);
 

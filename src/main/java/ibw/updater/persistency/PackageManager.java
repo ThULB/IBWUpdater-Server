@@ -78,7 +78,7 @@ public class PackageManager {
 	public static Packages get() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info("List all packages");
+			LOGGER.debug("List all packages");
 			return new Packages(em.createNamedQuery("Package.findAll", Package.class).getResultList());
 		} finally {
 			em.close();
@@ -93,7 +93,7 @@ public class PackageManager {
 	public static Packages getExtended() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info("List all packages with extended informations");
+			LOGGER.debug("List all packages with extended informations");
 			List<Package> packages = em.createNamedQuery("Package.findAll", Package.class).getResultList();
 			return new Packages(packages.stream().map(p -> {
 				if (p.getType() == Package.Type.COMMON) {
@@ -126,7 +126,7 @@ public class PackageManager {
 	 */
 	public static Packages getExtended(User user) {
 		Packages packages = getExtended();
-		LOGGER.info(MessageFormat.format("Filter packages by user: {0}", user));
+		LOGGER.debug(MessageFormat.format("Filter packages by user: {0}", user));
 		return new Packages(packages.getPackages().stream().filter(p -> {
 			Permissions permissions = PermissionManager.get(p.getId());
 			return permissions.getPermissions().isEmpty()
@@ -148,7 +148,7 @@ public class PackageManager {
 	public static Package get(String id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info(MessageFormat.format("Get package by id: {0}", id));
+			LOGGER.debug(MessageFormat.format("Get package by id: {0}", id));
 			return em.find(Package.class, id);
 		} finally {
 			em.close();

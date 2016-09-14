@@ -47,7 +47,7 @@ public class GroupManager {
 	public static Groups get() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info("List all groups");
+			LOGGER.debug("List all groups");
 			return new Groups(em.createNamedQuery("Group.findAll", Group.class).getResultList());
 		} finally {
 			em.close();
@@ -65,7 +65,7 @@ public class GroupManager {
 	public static Group get(int id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info(MessageFormat.format("Get group by id: {0}", id));
+			LOGGER.debug(MessageFormat.format("Get group by id: {0}", id));
 			return em.find(Group.class, id);
 		} finally {
 			em.close();
@@ -83,7 +83,7 @@ public class GroupManager {
 	public static Group get(String name) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info(MessageFormat.format("Get group by name: {0}", name));
+			LOGGER.debug(MessageFormat.format("Get group by name: {0}", name));
 			TypedQuery<Group> query = em.createNamedQuery("Group.findByName", Group.class);
 			query.setParameter("name", name);
 
