@@ -306,7 +306,7 @@ app.controller("packageDialogCtrl", function($scope, $element, p, close) {
 		}
 
 		if ($scope["package"]["function"] !== undefined) {
-			var regexp = /function\s([^\(]+)\(([^\)]*)\)\s*{([^}]*)}/g;
+			var regexp = /function\s([^\(]+)\(([^\)]*)\)\s*{([\w\W]*)}/g;
 			var match = regexp.exec($scope["package"]["function"].value);
 			if (match) {
 				$scope["package"]["function"] = {};
