@@ -74,8 +74,7 @@ public class SeleniumTestCase extends JPATestCase {
 
 	public WebElement waitAndClick(By by) {
 		WebDriverWait wait = new WebDriverWait(driver, MAX_WAIT_TIME);
-		wait.until(ExpectedConditions.elementToBeClickable(by));
-		WebElement elm = driver.findElement(by);
+		WebElement elm = wait.until(ExpectedConditions.elementToBeClickable(by));
 		elm.click();
 
 		return elm;
@@ -83,8 +82,7 @@ public class SeleniumTestCase extends JPATestCase {
 
 	public WebElement waitForElement(By by) {
 		WebDriverWait wait = new WebDriverWait(driver, MAX_WAIT_TIME);
-		wait.until(ExpectedConditions.visibilityOfElementLocated(by));
-		WebElement elm = driver.findElement(by);
+		WebElement elm = wait.until(ExpectedConditions.visibilityOfElementLocated(by));
 		return elm;
 	}
 
