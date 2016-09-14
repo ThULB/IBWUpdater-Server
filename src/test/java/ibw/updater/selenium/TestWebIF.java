@@ -144,9 +144,82 @@ public class TestWebIF extends SeleniumTestCase {
 	}
 
 	@Test
+	public void testEditCommonPackage() throws InterruptedException {
+		createCommonPackage();
+		driver.navigate().refresh();
+
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showPackageDialog')]"));
+
+		waitForElement(By.id("package-dialog"));
+
+		WebElement description = waitForElement(By.id("description"));
+		description.clear();
+		description.sendKeys(TP_DESCRIPTION_UPDATE);
+
+		waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));
+
+		Thread.sleep(MAX_WAIT_TIME * 1000);
+
+		WebElement version = waitForElement(By.xpath("//tbody/tr[1]/td[3]"));
+		description = waitForElement(By.xpath("//tbody/tr[1]/td[5]"));
+
+		assertEquals(new Integer(1), new Integer(version.getText()));
+		assertEquals(TP_DESCRIPTION_UPDATE, description.getText());
+
+		driver.navigate().refresh();
+
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showPackageDialog')]"));
+
+		waitForElement(By.id("package-dialog"));
+
+		WebElement startupScript = waitForElement(By.id("startupScript"));
+		startupScript.clear();
+		startupScript.sendKeys("scripts/startupScript-new.js");
+
+		waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));
+
+		Thread.sleep(MAX_WAIT_TIME * 1000);
+
+		version = waitForElement(By.xpath("//tbody/tr[1]/td[3]"));
+		assertEquals(new Integer(2), new Integer(version.getText()));
+
+		deletePackage();
+	}
+
+	@Test
 	public void testCreateUserPackage() {
 		createUserPackage();
 		driver.navigate().refresh();
+
+		deletePackage();
+	}
+
+	@Test
+	public void testEditUserPackage() throws InterruptedException {
+		createUserPackage();
+		driver.navigate().refresh();
+
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showPackageDialog')]"));
+
+		waitForElement(By.id("package-dialog"));
+
+		WebElement description = waitForElement(By.id("description"));
+		description.clear();
+		description.sendKeys(TP_DESCRIPTION_UPDATE);
+
+		WebElement function = waitForElement(By.id("function"));
+		function.clear();
+		function.sendKeys("function HelloAgain() {\nalert(\"Hello Again World!\");\n}");
+
+		waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));
+
+		Thread.sleep(MAX_WAIT_TIME * 1000);
+
+		WebElement version = waitForElement(By.xpath("//tbody/tr[1]/td[3]"));
+		description = waitForElement(By.xpath("//tbody/tr[1]/td[5]"));
+
+		assertEquals(new Integer(2), new Integer(version.getText()));
+		assertEquals(TP_DESCRIPTION_UPDATE, description.getText());
 
 		deletePackage();
 	}
