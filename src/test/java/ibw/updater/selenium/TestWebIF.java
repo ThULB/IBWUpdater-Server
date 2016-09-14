@@ -19,6 +19,14 @@ package ibw.updater.selenium;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Files;
+
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -40,6 +48,7 @@ public class TestWebIF extends SeleniumTestCase {
 	private static final String TP_NAME = "test";
 	private static final String TP_DESCRIPTION = "Test Package";
 	private static final String TP_DESCRIPTION_UPDATE = "Selenium Test Package";
+	private static final String TP_PACKAGE_SRC = "https://github.com/adlerre/IBWUpdater-Client/releases/download/1.1.0/IBWUpdater-Client.zip";
 
 	@Test
 	public void testCreateUser() throws InterruptedException {
@@ -127,8 +136,19 @@ public class TestWebIF extends SeleniumTestCase {
 	}
 
 	@Test
+	public void testCreateCommonPackage() {
+		createCommonPackage();
+		driver.navigate().refresh();
+
+		deletePackage();
+	}
+
+	@Test
 	public void testCreateUserPackage() {
 		createUserPackage();
+		driver.navigate().refresh();
+
+		deletePackage();
 	}
 
 	private void createUser() throws InterruptedException {
@@ -193,6 +213,41 @@ public class TestWebIF extends SeleniumTestCase {
 		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@ng-if, '!groups.group')]")) != null);
 	}
 
+	private void createCommonPackage() {
+		switchNavLink("/packages");
+
+		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@ng-if, '!packages.package')]")) != null);
+
+		waitAndClick(By.id("btnCreatePackage"));
+
+		waitForElement(By.id("package-dialog"));
+
+		try {
+			File pkg = downloadPackageSrc();
+
+			waitAndClick(By.xpath("//select[@id='type']//option[@value='common']"));
+
+			waitForElement(By.id("name")).sendKeys(TP_NAME);
+			waitForElement(By.id("description")).sendKeys(TP_DESCRIPTION);
+			waitForElement(By.id("startupScript")).sendKeys("scripts/startupScript.js");
+			waitForElement(By.id("file")).sendKeys(pkg.getAbsolutePath());
+
+			waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));
+
+			WebElement version = waitForElement(By.xpath("//tbody/tr[1]/td[3]"));
+			WebElement name = waitForElement(By.xpath("//tbody/tr[1]/td[4]"));
+			WebElement description = waitForElement(By.xpath("//tbody/tr[1]/td[5]"));
+
+			assertEquals(new Integer(1), new Integer(version.getText()));
+			assertEquals(TP_NAME, name.getText());
+			assertEquals(TP_DESCRIPTION, description.getText());
+
+			pkg.delete();
+		} catch (IOException e) {
+			assertTrue("couldn't download package src: " + TP_PACKAGE_SRC, e == null);
+		}
+	}
+
 	private void createUserPackage() {
 		switchNavLink("/packages");
 
@@ -209,15 +264,44 @@ public class TestWebIF extends SeleniumTestCase {
 
 		waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));
 
+		WebElement version = waitForElement(By.xpath("//tbody/tr[1]/td[3]"));
 		WebElement name = waitForElement(By.xpath("//tbody/tr[1]/td[4]"));
 		WebElement description = waitForElement(By.xpath("//tbody/tr[1]/td[5]"));
 
+		assertEquals(new Integer(1), new Integer(version.getText()));
 		assertEquals(TP_NAME, name.getText());
 		assertEquals(TP_DESCRIPTION, description.getText());
 	}
 
+	private void deletePackage() {
+		switchNavLink("/packages");
+
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showPackageDeleteDialog')]"));
+
+		waitForElement(By.id("delete-confirm-dialog"));
+		waitAndClick(By.cssSelector(".modal-footer button.btn-danger"));
+
+		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@ng-if, '!packages.package')]")) != null);
+	}
+
 	private void switchNavLink(String link) {
 		waitAndClick(By.xpath("//div[@id='navbar']//a[contains(@href, '" + link + "')]"));
+	}
+
+	private File downloadPackageSrc() throws IOException {
+		File tmpFile = Files.createTempFile("pkg", ".zip").toFile();
+
+		URL src = new URL(TP_PACKAGE_SRC);
+		ReadableByteChannel rbc = Channels.newChannel(src.openStream());
+
+		FileOutputStream fos = new FileOutputStream(tmpFile);
+		try {
+			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+		} finally {
+			fos.close();
+		}
+
+		return tmpFile;
 	}
 
 }
