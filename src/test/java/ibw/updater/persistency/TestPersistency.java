@@ -21,6 +21,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
 import javax.persistence.EntityExistsException;
 
 import org.junit.Test;
@@ -201,7 +203,7 @@ public class TestPersistency extends JPATestCase {
 	}
 
 	@Test
-	public void updatePackageCommon() {
+	public void updatePackageCommon() throws IOException {
 		Package p = new Package(Package.Type.COMMON, "test", "Test Package");
 		p.setStartupScript("scripts/testStartup.js");
 
@@ -239,7 +241,7 @@ public class TestPersistency extends JPATestCase {
 	}
 
 	@Test
-	public void updatePackageUser() {
+	public void updatePackageUser() throws IOException {
 		Package p = new Package(Package.Type.USER, "test", "Test Package");
 		Function f = new Function("test", null, "alert(\"Hello World!\")");
 		p.setFunction(f);

@@ -48,7 +48,9 @@ public class TestWebIF extends SeleniumTestCase {
 	private static final String TP_NAME = "test";
 	private static final String TP_DESCRIPTION = "Test Package";
 	private static final String TP_DESCRIPTION_UPDATE = "Selenium Test Package";
-	private static final String TP_PACKAGE_SRC = "https://github.com/adlerre/IBWUpdater-Client/releases/download/1.1.0/IBWUpdater-Client.zip";
+	private static final String TP_PACKAGE_SRC = "https://github.com/adlerre/IBWUpdater-Client/releases/download/1.1.1/IBWUpdater-Client.zip";
+	private static final String TP_SUS = "scripts/IBWUpdater.js";
+	private static final String TP_SUS_UPDATE = "chrome/ibw/lib/IBWUpdater.js";
 
 	@Test
 	public void testCreateUser() throws InterruptedException {
@@ -174,7 +176,7 @@ public class TestWebIF extends SeleniumTestCase {
 
 		WebElement startupScript = waitForElement(By.id("startupScript"));
 		startupScript.clear();
-		startupScript.sendKeys("scripts/startupScript-new.js");
+		startupScript.sendKeys(TP_SUS_UPDATE);
 
 		waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));
 
@@ -339,7 +341,7 @@ public class TestWebIF extends SeleniumTestCase {
 
 			waitForElement(By.id("name")).sendKeys(TP_NAME);
 			waitForElement(By.id("description")).sendKeys(TP_DESCRIPTION);
-			waitForElement(By.id("startupScript")).sendKeys("scripts/startupScript.js");
+			waitForElement(By.id("startupScript")).sendKeys(TP_SUS);
 			waitForElement(By.id("file")).sendKeys(pkg.getAbsolutePath());
 
 			waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));

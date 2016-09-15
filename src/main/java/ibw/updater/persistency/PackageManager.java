@@ -29,6 +29,7 @@ import java.nio.file.StandardCopyOption;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import javax.persistence.EntityManager;
@@ -49,7 +50,7 @@ import ibw.updater.datamodel.User;
  *
  */
 public class PackageManager {
-	
+
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	private static Path PACKAGE_DIR;
@@ -235,6 +236,10 @@ public class PackageManager {
 
 				try {
 					if (isValidPackage(tmpFile)) {
+						if (p.getStartupScript() != null && !isValidStartupScript(tmpFile, p.getStartupScript())) {
+							throw new UnsupportedOperationException("Startup-Script wasn't found in ZIP file.");
+						}
+
 						Files.copy(tmpFile, pFile, StandardCopyOption.REPLACE_EXISTING);
 					} else {
 						throw new UnsupportedOperationException("Uploaded file isn't a ZIP file.");
@@ -257,8 +262,9 @@ public class PackageManager {
 	 * @param p
 	 *            the {@link Package} to update
 	 * @return the updated {@link Package} object
+	 * @throws IOException
 	 */
-	public static Package update(Package p) {
+	public static Package update(Package p) throws IOException {
 		if (!exists(p.getId())) {
 			return save(p);
 		}
@@ -279,9 +285,12 @@ public class PackageManager {
 					&& (inDB.getStartupScript() == null && p.getStartupScript() != null
 							|| inDB.getStartupScript() != null && p.getStartupScript() != null
 									&& !inDB.getStartupScript().equals(p.getStartupScript()))) {
+				if (!isValidStartupScript(PACKAGE_DIR.resolve(p.getId() + ".zip"), p.getStartupScript())) {
+					throw new UnsupportedOperationException("Startup-Script wasn't found in ZIP file.");
+				}
 				p.setVersion(p.getVersion() + 1);
 			}
-			
+
 			LOGGER.info(MessageFormat.format("Update package: {0}", p));
 
 			em.merge(p);
@@ -335,6 +344,10 @@ public class PackageManager {
 					try {
 						if (isValidPackage(tmpFile)) {
 							if (!isEqualPackage(pFile, tmpFile)) {
+								if (p.getStartupScript() != null
+										&& !isValidStartupScript(tmpFile, p.getStartupScript())) {
+									throw new UnsupportedOperationException("Startup-Script wasn't found in ZIP file.");
+								}
 								Files.copy(tmpFile, pFile, StandardCopyOption.REPLACE_EXISTING);
 								incVer = true;
 							}
@@ -350,7 +363,7 @@ public class PackageManager {
 					p.setVersion(p.getVersion() + 1);
 				}
 			}
-			
+
 			LOGGER.info(MessageFormat.format("Update package: {0}", p));
 
 			em.merge(p);
@@ -390,6 +403,15 @@ public class PackageManager {
 
 	private static boolean isValidPackage(Path pFile) throws IOException {
 		return new ZipInputStream(Channels.newInputStream(FileChannel.open(pFile))).getNextEntry() != null;
+	}
+
+	private static boolean isValidStartupScript(Path pFile, String startupScript) throws IOException {
+		ZipFile zf = new ZipFile(pFile.toFile());
+		try {
+			return zf.getEntry(startupScript) != null;
+		} finally {
+			zf.close();
+		}
 	}
 
 	private static boolean isEqualPackage(Path p1, Path p2) throws IOException {
