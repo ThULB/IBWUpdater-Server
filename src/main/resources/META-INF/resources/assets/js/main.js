@@ -616,5 +616,14 @@ app.controller("groupDialogCtrl", function($scope, group, users, close) {
 	$scope.save = function() {
 		close($scope.group, 500);
 	};
+});
 
+// jQuery Helpers
+jQuery(document).ready(function() {
+	jQuery(this).click(function(ev) {
+		var $this = jQuery(ev.target);
+		if ($this.data("collapse-hide") !== undefined) {
+			jQuery($this.data("collapse-hide")).collapse('hide');
+		}
+	});
 });
