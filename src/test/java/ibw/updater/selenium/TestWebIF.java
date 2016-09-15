@@ -17,6 +17,7 @@
 package ibw.updater.selenium;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -184,6 +185,28 @@ public class TestWebIF extends SeleniumTestCase {
 
 		version = waitForElement(By.xpath("//tbody/tr[1]/td[3]"));
 		assertEquals(new Integer(2), new Integer(version.getText()));
+
+		deletePackage();
+	}
+
+	@Test
+	public void testCommonPackageError() throws InterruptedException {
+		createCommonPackage();
+		driver.navigate().refresh();
+
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showPackageDialog')]"));
+
+		waitForElement(By.id("package-dialog"));
+
+		WebElement startupScript = waitForElement(By.id("startupScript"));
+		startupScript.clear();
+		startupScript.sendKeys("script/no-found.js");
+
+		waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));
+
+		Thread.sleep(MAX_WAIT_TIME * 1000);
+
+		assertNotNull(waitForElement(By.cssSelector("div.alert.alert-danger")));
 
 		deletePackage();
 	}
