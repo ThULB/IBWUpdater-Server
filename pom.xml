@@ -7,7 +7,7 @@
   <packaging>jar</packaging>
   <name>WinIBW Updater</name>
 
-  <inceptionYear>2016</inceptionYear>
+  <inceptionYear>2012</inceptionYear>
 
   <scm>
     <url>scm:git:https://github.com/adlerre/IBWUpdater-Server.git</url>
