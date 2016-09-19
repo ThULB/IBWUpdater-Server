@@ -50,6 +50,20 @@ public class AutoExecutableHandler {
 	}
 
 	/**
+	 * Register class as {@link AutoExecutable}
+	 * 
+	 * @param executable
+	 *            the class to execute
+	 */
+	public static void register(Class<?> executable) {
+		if (executable.isAnnotationPresent(AutoExecutable.class)) {
+			executables.add(executable);
+		} else {
+			LOGGER.warn("Class \"" + executable.getName() + "\" should have the \"AutoExecutable\" annotation.");
+		}
+	}
+
+	/**
 	 * @return the haltOnError
 	 */
 	public static boolean isHaltOnError() {
@@ -64,6 +78,9 @@ public class AutoExecutableHandler {
 		AutoExecutableHandler.haltOnError = haltOnError;
 	}
 
+	/**
+	 * Starts registered startup hooks.
+	 */
 	public static void startup() {
 		executables.stream()
 				.sorted((o1, o2) -> Integer.compare(o2.getAnnotation(AutoExecutable.class).priority(),
@@ -71,6 +88,9 @@ public class AutoExecutableHandler {
 				.forEachOrdered(autoExecutable -> runExecutables(autoExecutable, Startup.class));
 	}
 
+	/**
+	 * Starts registered shutdown hooks.
+	 */
 	public static void shutdown() {
 		executables.stream()
 				.sorted((o1, o2) -> Integer.compare(o1.getAnnotation(AutoExecutable.class).priority(),
