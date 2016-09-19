@@ -35,6 +35,7 @@
 	"package.version" : "Version",
 	"package.name" : "Name",
 	"package.description" : "Beschreibung",
+	"package.file" : "Skript Datei",
 	"package.function" : "Funktion",
 	"package.startupScript" : "Start Skript",
 
