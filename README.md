@@ -3,11 +3,13 @@ WinIBW Updater Server
 
 ## Getting Started
 
-This Project requires at least Java 8 and Maven 3 to build.
+This Project requires at least Java 8, Maven 3 and Chrome installed to build.
 
 Build Project with this command:
 
     $ mvn clean install
+    
+or download latest [release](https://github.com/adlerre/IBWUpdater-Server/releases).
     
 Before first start of the Server we need a **persistence.xml**, like this. (By default the H2 library is included.)
     
