@@ -133,7 +133,7 @@ public class Function {
 	/**
 	 * @return the code
 	 */
-	@Column(name = "code", length = Integer.MAX_VALUE, nullable = false)
+	@Column(name = "code", length = Integer.MAX_VALUE, nullable = false, columnDefinition = "LONGTEXT")
 	@XmlValue
 	public String getCode() {
 		return code;
