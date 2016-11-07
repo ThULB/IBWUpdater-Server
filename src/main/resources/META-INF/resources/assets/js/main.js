@@ -49,7 +49,7 @@ app.config(function($translateProvider, $routeProvider, $locationProvider) {
 		name : "groups",
 		icon : "fa fa-users"
 	}).otherwise({
-		redirectTo : '/'
+		redirectTo : "/"
 	});
 });
 
@@ -207,7 +207,7 @@ app.controller("packagesCtrl", function($rootScope, $scope, $log, $http, $transl
 		}).then(function(modal) {
 			modal.element.modal();
 			modal.close.then(function(permissions) {
-				if (permissions !== undefined) {
+				if (!(permissions === undefined)) {
 					$scope.updatePermissions(permissions);
 				}
 			});
@@ -334,7 +334,7 @@ app.controller("permissionDialogCtrl", function($scope, $log, $http, asyncQueue,
 					if (result.config.url.indexOf("permissions") != -1) {
 						$scope.permissions = result.data;
 						if ($scope.permissions && $scope.permissions.permission && $scope.permissions.permission.length == 0) {
-							$scope.permissions.permission.push({})
+							$scope.permissions.permission.push({});
 						}
 					} else if (result.config.url.indexOf("users") != -1) {
 						$scope.users = result.data;
