@@ -61,7 +61,7 @@ public class SeleniumTestCase extends JPATestCase {
 	public void setupUp() throws Exception {
 		super.setUp();
 		driver = new ChromeDriver();
-		driver.get("http://localhost:8085");
+		driver.get("http://" + getHostName() + ":8085");
 	}
 
 	@After
@@ -89,7 +89,7 @@ public class SeleniumTestCase extends JPATestCase {
 	private String getHostName() {
 		String hostName = "localhost";
 		try {
-			hostName = InetAddress.getLocalHost().getCanonicalHostName();
+			hostName = InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
