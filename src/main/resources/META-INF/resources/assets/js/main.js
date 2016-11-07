@@ -127,7 +127,7 @@ app.controller("alertCtrl", function($rootScope, $scope, $translate) {
 
 	$scope.clear = function() {
 		$scope.alertObj.show = false;
-	}
+	};
 });
 
 app.controller("dashboardCtrl", function($rootScope, $scope) {
@@ -207,7 +207,7 @@ app.controller("packagesCtrl", function($rootScope, $scope, $log, $http, $transl
 		}).then(function(modal) {
 			modal.element.modal();
 			modal.close.then(function(permissions) {
-				if (!(permissions === undefined)) {
+				if (permissions !== undefined) {
 					$scope.updatePermissions(permissions);
 				}
 			});
@@ -219,7 +219,7 @@ app.controller("packagesCtrl", function($rootScope, $scope, $log, $http, $transl
 			var fd = new FormData();
 			p.file = undefined;
 			fd.append("package", new Blob([ angular.toJson(p) ], {
-				type : 'application/json'
+				type : "application/json"
 			}));
 			fd.append("file", f, f.name);
 			return fd;
@@ -229,7 +229,7 @@ app.controller("packagesCtrl", function($rootScope, $scope, $log, $http, $transl
 			$http.post("/manage/packages/add", p.file !== undefined ? toFormData(angular.copy(p), p.file) : p, p.file !== undefined ? {
 				transformRequest : angular.identity,
 				headers : {
-					'Content-Type' : undefined
+					"Content-Type" : undefined
 				}
 			} : {}).then(function(result) {
 				if (result.status == 200) {
@@ -243,7 +243,7 @@ app.controller("packagesCtrl", function($rootScope, $scope, $log, $http, $transl
 			$http.post("/manage/packages/update", p.file !== undefined ? toFormData(angular.copy(p), p.file) : p, p.file !== undefined ? {
 				transformRequest : angular.identity,
 				headers : {
-					'Content-Type' : undefined
+					"Content-Type" : undefined
 				}
 			} : {}).then(function(result) {
 				if (result.status == 200) {
@@ -288,7 +288,7 @@ app.controller("packagesCtrl", function($rootScope, $scope, $log, $http, $transl
 });
 
 app.controller("packageDialogCtrl", function($scope, $element, p, close) {
-	$scope.headline = 'package.headline.' + (p === undefined ? 'create' : 'edit');
+	$scope.headline = "package.headline." + (p === undefined ? "create" : "edit");
 
 	if (p !== undefined && p["function"] !== undefined) {
 		var func = p["function"];
@@ -349,7 +349,7 @@ app.controller("permissionDialogCtrl", function($scope, $log, $http, asyncQueue,
 	};
 
 	$scope.getSources = function(permission) {
-		return permission.sourceType == 'g' ? $scope.groups.group : permission.sourceType == 'u' ? $scope.users.user : undefined;
+		return permission.sourceType == "g" ? $scope.groups.group : permission.sourceType == "u" ? $scope.users.user : undefined;
 	};
 
 	$scope.deletePermission = function(permission) {
@@ -485,11 +485,10 @@ app.controller("usersCtrl", function($rootScope, $scope, $log, $http, $translate
 	$scope.loadData();
 });
 
-app.controller('userDialogCtrl', function($scope, user, groups, close) {
-
+app.controller("userDialogCtrl", function($scope, user, groups, close) {
 	$scope.user = user;
 	$scope.groups = groups;
-	$scope.headline = 'user.headline.' + (user === undefined ? 'create' : 'edit');
+	$scope.headline = "user.headline." + (user === undefined ? "create" : "edit");
 
 	$scope.close = function(result) {
 		close(result, 500);
@@ -607,7 +606,7 @@ app.controller("groupDialogCtrl", function($scope, group, users, close) {
 
 	$scope.group = group;
 	$scope.users = users;
-	$scope.headline = 'group.headline.' + (group === undefined ? 'create' : 'edit');
+	$scope.headline = "group.headline." + (group === undefined ? "create" : "edit");
 
 	$scope.close = function(result) {
 		close(result, 500);
@@ -623,7 +622,7 @@ jQuery(document).ready(function() {
 	jQuery(this).click(function(ev) {
 		var $this = jQuery(ev.target);
 		if ($this.data("collapse-hide") !== undefined) {
-			jQuery($this.data("collapse-hide")).collapse('hide');
+			jQuery($this.data("collapse-hide")).collapse("hide");
 		}
 	});
 });
