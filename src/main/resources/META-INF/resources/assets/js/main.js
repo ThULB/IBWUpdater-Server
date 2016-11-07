@@ -148,7 +148,7 @@ app.controller("packagesCtrl", function($rootScope, $scope, $log, $http, $transl
 		asyncQueue.load([ "/manage/packages" ]).then(function(results) {
 			results.forEach(function(result) {
 				if (result.status === 200) {
-					if (result.config.url.indexOf("/packages") != -1) {
+					if (result.config.url.indexOf("/packages") !== -1) {
 						$scope.packages = result.data;
 					}
 				}
@@ -232,7 +232,7 @@ app.controller("packagesCtrl", function($rootScope, $scope, $log, $http, $transl
 					"Content-Type" : undefined
 				}
 			} : {}).then(function(result) {
-				if (result.status == 200) {
+				if (result.status === 200) {
 					$scope.packages["package"].push(result.data);
 				}
 			}, function(e) {
@@ -249,7 +249,7 @@ app.controller("packagesCtrl", function($rootScope, $scope, $log, $http, $transl
 				if (result.status == 200) {
 					p = result.data;
 					for ( var i in $scope.packages["package"]) {
-						if ($scope.packages["package"][i].id == p.id) {
+						if ($scope.packages["package"][i].id === p.id) {
 							$scope.packages["package"][i] = p;
 							return;
 						}
@@ -301,7 +301,7 @@ app.controller("packageDialogCtrl", function($scope, $element, p, close) {
 	};
 
 	$scope.save = function() {
-		if ($scope["package"].type == "common") {
+		if ($scope["package"].type === "common") {
 			$scope["package"].file = $($element).find("#file")[0].files[0];
 		}
 
@@ -331,14 +331,14 @@ app.controller("permissionDialogCtrl", function($scope, $log, $http, asyncQueue,
 		asyncQueue.load([ "/manage/permissions/" + p.id, "/manage/users", "/manage/groups" ]).then(function(results) {
 			results.forEach(function(result) {
 				if (result.status === 200) {
-					if (result.config.url.indexOf("permissions") != -1) {
+					if (result.config.url.indexOf("permissions") !== -1) {
 						$scope.permissions = result.data;
-						if ($scope.permissions && $scope.permissions.permission && $scope.permissions.permission.length == 0) {
+						if ($scope.permissions && $scope.permissions.permission && $scope.permissions.permission.length === 0) {
 							$scope.permissions.permission.push({});
 						}
-					} else if (result.config.url.indexOf("users") != -1) {
+					} else if (result.config.url.indexOf("users") !== -1) {
 						$scope.users = result.data;
-					} else if (result.config.url.indexOf("groups") != -1) {
+					} else if (result.config.url.indexOf("groups") !== -1) {
 						$scope.groups = result.data;
 					}
 				}
@@ -349,12 +349,12 @@ app.controller("permissionDialogCtrl", function($scope, $log, $http, asyncQueue,
 	};
 
 	$scope.getSources = function(permission) {
-		return permission.sourceType == "g" ? $scope.groups.group : permission.sourceType == "u" ? $scope.users.user : undefined;
+		return permission.sourceType === "g" ? $scope.groups.group : permission.sourceType === "u" ? $scope.users.user : undefined;
 	};
 
 	$scope.deletePermission = function(permission) {
 		$http.post("/manage/permissions/delete", permission).then(function(result) {
-			if (result.status == 200) {
+			if (result.status === 200) {
 				$scope.loadData();
 			}
 		}, function(e) {
@@ -370,7 +370,7 @@ app.controller("permissionDialogCtrl", function($scope, $log, $http, asyncQueue,
 		var permissions = [];
 		for (var i = 0; i < $scope.permissions.permission.length; i++) {
 			var p = $scope.permissions.permission[i];
-			if (p.sourceType && p.sourceId && p.sourceId != 0 && p.packageId && p.action) {
+			if (p.sourceType && p.sourceId && p.sourceId !== 0 && p.packageId && p.action) {
 				permissions.push(p);
 			}
 		}
@@ -458,7 +458,7 @@ app.controller("usersCtrl", function($rootScope, $scope, $log, $http, $translate
 				if (result.status == 200) {
 					user = result.data;
 					for ( var i in $scope.users.user) {
-						if ($scope.users.user[i].id == user.id) {
+						if ($scope.users.user[i].id === user.id) {
 							$scope.users.user[i] = user;
 							return;
 						}
