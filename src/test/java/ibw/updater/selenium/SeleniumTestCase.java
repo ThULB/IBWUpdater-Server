@@ -61,7 +61,7 @@ public class SeleniumTestCase extends JPATestCase {
 	public void setupUp() throws Exception {
 		super.setUp();
 		driver = new ChromeDriver();
-		driver.get("http://" + getHostName() + ":8085");
+		driver.get("http://localhost:8085");
 	}
 
 	@After
