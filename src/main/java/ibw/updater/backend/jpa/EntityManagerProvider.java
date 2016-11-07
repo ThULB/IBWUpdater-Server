@@ -43,7 +43,7 @@ public class EntityManagerProvider {
 		return factory.createEntityManager();
 	}
 
-	static void init(EntityManagerFactory factory) {
+	protected static void init(EntityManagerFactory factory) {
 		EntityManagerProvider.factory = factory;
 	}
 
