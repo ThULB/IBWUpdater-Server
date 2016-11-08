@@ -35,7 +35,7 @@ public class Hash {
 		return getHash(1, null, text, "md5");
 	}
 
-	private static String getHash(int iterations, byte[] salt, String text, String algorithm)
+	private static String getHash(int iterations, byte[] salt, final String text, final String algorithm)
 			throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		int it = iterations;
 		MessageDigest digest;
@@ -45,11 +45,11 @@ public class Hash {
 		byte[] data;
 
 		digest = MessageDigest.getInstance(algorithm);
-		text = Normalizer.normalize(text, Form.NFC);
+		String t = Normalizer.normalize(text, Form.NFC);
 		if (salt != null) {
 			digest.update(salt);
 		}
-		data = digest.digest(text.getBytes("UTF-8"));
+		data = digest.digest(t.getBytes("UTF-8"));
 		for (int i = 0; i < it; i++) {
 			data = digest.digest(data);
 		}
