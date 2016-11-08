@@ -23,7 +23,7 @@ app.run(function($animate) {
 	$animate.enabled(true);
 });
 
-app.config(function($translateProvider, $routeProvider, $locationProvider) {
+app.config(function($translateProvider, $routeProvider) {
 	$translateProvider.useStaticFilesLoader({
 		prefix : "/assets/i18n/i18n-",
 		suffix : ".json"
@@ -130,7 +130,7 @@ app.controller("alertCtrl", function($rootScope, $scope, $translate) {
 	};
 });
 
-app.controller("dashboardCtrl", function($rootScope, $scope) {
+app.controller("dashboardCtrl", function() {
 });
 
 app.controller("deleteConfirmDialogCtrl", function($scope, options, close) {
@@ -246,7 +246,7 @@ app.controller("packagesCtrl", function($rootScope, $scope, $log, $http, $transl
 					"Content-Type" : undefined
 				}
 			} : {}).then(function(result) {
-				if (result.status == 200) {
+				if (result.status === 200) {
 					p = result.data;
 					for ( var i in $scope.packages["package"]) {
 						if ($scope.packages["package"][i].id === p.id) {
@@ -264,7 +264,7 @@ app.controller("packagesCtrl", function($rootScope, $scope, $log, $http, $transl
 
 	$scope.deletePackage = function(p) {
 		$http.post("/manage/packages/delete", p).then(function(result) {
-			if (result.status == 200) {
+			if (result.status === 200) {
 				$scope.loadData();
 			}
 		}, function(e) {
@@ -275,7 +275,7 @@ app.controller("packagesCtrl", function($rootScope, $scope, $log, $http, $transl
 
 	$scope.updatePermissions = function(permissions) {
 		$http.post("/manage/permissions/update", permissions).then(function(result) {
-			if (result.status == 200) {
+			if (result.status === 200) {
 				$scope.loadData();
 			}
 		}, function(e) {
@@ -391,9 +391,9 @@ app.controller("usersCtrl", function($rootScope, $scope, $log, $http, $translate
 		asyncQueue.load([ "/manage/users", "/manage/groups" ]).then(function(results) {
 			results.forEach(function(result) {
 				if (result.status === 200) {
-					if (result.config.url.indexOf("/users") != -1) {
+					if (result.config.url.indexOf("/users") !== -1) {
 						$scope.users = result.data;
-					} else if (result.config.url.indexOf("groups") != -1) {
+					} else if (result.config.url.indexOf("groups") !== -1) {
 						$scope.groups = result.data;
 					}
 				}
@@ -446,7 +446,7 @@ app.controller("usersCtrl", function($rootScope, $scope, $log, $http, $translate
 	$scope.updateUser = function(user) {
 		if (user.id === undefined) {
 			$http.post("/manage/users/add", user).then(function(result) {
-				if (result.status == 200) {
+				if (result.status === 200) {
 					$scope.users.user.push(result.data);
 				}
 			}, function(e) {
@@ -455,7 +455,7 @@ app.controller("usersCtrl", function($rootScope, $scope, $log, $http, $translate
 			});
 		} else {
 			$http.post("/manage/users/update", user).then(function(result) {
-				if (result.status == 200) {
+				if (result.status === 200) {
 					user = result.data;
 					for ( var i in $scope.users.user) {
 						if ($scope.users.user[i].id === user.id) {
@@ -473,7 +473,7 @@ app.controller("usersCtrl", function($rootScope, $scope, $log, $http, $translate
 
 	$scope.deleteUser = function(user) {
 		$http.post("/manage/users/delete", user).then(function(result) {
-			if (result.status == 200) {
+			if (result.status === 200) {
 				$scope.loadData();
 			}
 		}, function(e) {
@@ -508,9 +508,9 @@ app.controller("groupsCtrl", function($rootScope, $scope, $http, $log, $translat
 		asyncQueue.load([ "/manage/users", "/manage/groups" ]).then(function(results) {
 			results.forEach(function(result) {
 				if (result.status === 200) {
-					if (result.config.url.indexOf("/users") != -1) {
+					if (result.config.url.indexOf("/users") !== -1) {
 						$scope.users = result.data;
-					} else if (result.config.url.indexOf("groups") != -1) {
+					} else if (result.config.url.indexOf("groups") !== -1) {
 						$scope.groups = result.data;
 					}
 				}
@@ -563,7 +563,7 @@ app.controller("groupsCtrl", function($rootScope, $scope, $http, $log, $translat
 	$scope.updateGroup = function(group) {
 		if (group.id === undefined) {
 			$http.post("/manage/groups/add", group).then(function(result) {
-				if (result.status == 200) {
+				if (result.status === 200) {
 					$scope.groups.group.push(result.data);
 				}
 			}, function(e) {
@@ -572,10 +572,10 @@ app.controller("groupsCtrl", function($rootScope, $scope, $http, $log, $translat
 			});
 		} else {
 			$http.post("/manage/groups/update", group).then(function(result) {
-				if (result.status == 200) {
+				if (result.status === 200) {
 					group = result.data;
 					for ( var i in $scope.groups.group) {
-						if ($scope.groups.group[i].id == group.id) {
+						if ($scope.groups.group[i].id === group.id) {
 							$scope.groups.group[i] = group;
 							return;
 						}
@@ -590,7 +590,7 @@ app.controller("groupsCtrl", function($rootScope, $scope, $http, $log, $translat
 
 	$scope.deleteGroup = function(group) {
 		$http.post("/manage/groups/delete", group).then(function(result) {
-			if (result.status == 200) {
+			if (result.status === 200) {
 				$scope.loadData();
 			}
 		}, function(error) {
@@ -603,7 +603,6 @@ app.controller("groupsCtrl", function($rootScope, $scope, $http, $log, $translat
 });
 
 app.controller("groupDialogCtrl", function($scope, group, users, close) {
-
 	$scope.group = group;
 	$scope.users = users;
 	$scope.headline = "group.headline." + (group === undefined ? "create" : "edit");

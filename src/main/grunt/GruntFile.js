@@ -89,8 +89,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-jshint");
 	grunt.loadNpmTasks("grunt-contrib-less");
 	grunt.loadNpmTasks("grunt-bowercopy");
+	grunt.loadNpmTasks("grunt-eslint");
 	grunt.loadNpmTasks("grunt-google-fonts");
 
 	grunt.registerTask("test", [ "jshint" ]);
-	grunt.registerTask("default", "build static webapp resources", [ "bowercopy", "googlefonts", "less" ]);
+	grunt.registerTask("default", "build static webapp resources", [ "test", "bowercopy", "googlefonts", "less" ]);
 };
