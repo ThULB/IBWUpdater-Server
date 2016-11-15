@@ -62,9 +62,11 @@ public class Permission {
 	@XmlEnum
 	public enum Type {
 
-		@XmlEnumValue("g") GROUP("group"),
+		@XmlEnumValue("g")
+		GROUP("group"),
 
-		@XmlEnumValue("u") USER("user");
+		@XmlEnumValue("u")
+		USER("user");
 
 		private String value;
 
@@ -107,9 +109,11 @@ public class Permission {
 	@XmlType(name = "permission.action")
 	@XmlEnum
 	public enum Action {
-		@XmlEnumValue("r") READ("read"),
+		@XmlEnumValue("r")
+		READ("read"),
 
-		@XmlEnumValue("w") WRITE("write");
+		@XmlEnumValue("w")
+		WRITE("write");
 
 		private String value;
 
@@ -275,18 +279,21 @@ public class Permission {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+
 		Permission other = (Permission) obj;
 		if (_package == null) {
 			if (other._package != null)
 				return false;
 		} else if (!_package.equals(other._package))
 			return false;
+
 		if (action != other.action)
 			return false;
 		if (sourceId != other.sourceId)
 			return false;
 		if (type != other.type)
 			return false;
+
 		return true;
 	}
 
