@@ -1,4 +1,4 @@
-# IBWUpdater Server [![Build Status](https://travis-ci.org/adlerre/IBWUpdater-Server.svg?branch=master)](https://travis-ci.org/adlerre/IBWUpdater-Server)
+# IBWUpdater Server [![Build Status](https://travis-ci.org/adlerre/IBWUpdater-Server.svg?branch=master)](https://travis-ci.org/adlerre/IBWUpdater-Server)[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e276ce11390e4000bb9711c9e44864ba)](https://www.codacy.com/app/rene-adler/IBWUpdater-Server?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=adlerre/IBWUpdater-Server&amp;utm_campaign=Badge_Grade)[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/e276ce11390e4000bb9711c9e44864ba)](https://www.codacy.com/app/rene-adler/IBWUpdater-Server?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=adlerre/IBWUpdater-Server&amp;utm_campaign=Badge_Coverage)
 WinIBW Updater Server
 
 ## Getting Started
