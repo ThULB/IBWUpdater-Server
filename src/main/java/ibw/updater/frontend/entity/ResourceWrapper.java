@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 
 import ibw.updater.util.Hash;
@@ -31,66 +32,66 @@ import ibw.updater.util.MimeType;
  */
 public class ResourceWrapper implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private String fileName;
+	private String fileName;
 
-    private String mimeType;
+	private String mimeType;
 
-    private String etag;
+	private String etag;
 
-    private byte[] content;
+	private byte[] content;
 
-    public ResourceWrapper(final String fileName, final InputStream is) {
-        this(fileName, null, is);
-    }
+	public ResourceWrapper(final String fileName, final InputStream is) {
+		this(fileName, null, is);
+	}
 
-    public ResourceWrapper(final String fileName, final String mimeType, final InputStream is) {
-        try {
-            this.fileName = fileName;
-            this.mimeType = mimeType != null ? mimeType : MimeType.detect(fileName);
-            this.content = toByteArray(is);
-            this.etag = Hash.getMD5String(new String(this.content));
-        } catch (IOException | NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
+	public ResourceWrapper(final String fileName, final String mimeType, final InputStream is) {
+		try {
+			this.fileName = fileName;
+			this.mimeType = mimeType != null ? mimeType : MimeType.detect(fileName);
+			this.content = toByteArray(is);
+			this.etag = Hash.getMD5String(new String(this.content, StandardCharsets.UTF_8));
+		} catch (IOException | NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-    /**
-     * @return the fileName
-     */
-    public String getFileName() {
-        return fileName;
-    }
+	/**
+	 * @return the fileName
+	 */
+	public String getFileName() {
+		return fileName;
+	}
 
-    /**
-     * @return the mimeType
-     */
-    public String getMimeType() {
-        return mimeType;
-    }
+	/**
+	 * @return the mimeType
+	 */
+	public String getMimeType() {
+		return mimeType;
+	}
 
-    /**
-     * @return the etag
-     */
-    public String getETag() {
-        return this.etag;
-    }
+	/**
+	 * @return the etag
+	 */
+	public String getETag() {
+		return this.etag;
+	}
 
-    /**
-     * @return the content
-     */
-    public byte[] getContent() {
-        return content;
-    }
+	/**
+	 * @return the content
+	 */
+	public byte[] getContent() {
+		return content;
+	}
 
-    static byte[] toByteArray(InputStream input) throws IOException {
-        byte[] buffer = new byte[8192];
-        int bytesRead;
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        while ((bytesRead = input.read(buffer)) != -1) {
-            output.write(buffer, 0, bytesRead);
-        }
-        return output.toByteArray();
-    }
+	static byte[] toByteArray(InputStream input) throws IOException {
+		byte[] buffer = new byte[8192];
+		int bytesRead;
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		while ((bytesRead = input.read(buffer)) != -1) {
+			output.write(buffer, 0, bytesRead);
+		}
+		return output.toByteArray();
+	}
 }

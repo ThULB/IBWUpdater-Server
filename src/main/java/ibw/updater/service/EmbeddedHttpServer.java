@@ -21,6 +21,7 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.util.Locale;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriBuilderException;
@@ -58,7 +59,7 @@ public class EmbeddedHttpServer {
 		LOGGER.info("Starting Embedded HTTP Server...");
 		if (httpServer == null) {
 			httpServer = createHttpServer();
-			LOGGER.info(String.format(
+			LOGGER.info(String.format(Locale.ROOT,
 					"Jersey Application Server started with WADL available at " + "%sapplication.wadl", getURI()));
 		}
 		httpServer.start();
