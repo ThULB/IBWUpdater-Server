@@ -1,16 +1,17 @@
 module.exports = function(grunt) {
 	var path = require("path");
 
-	var getAbsoluteDir = function(dir) {
+	var getAbsoluteDir2 = function(dir) {
 		return path.isAbsolute(dir) ? dir : path.resolve(process.cwd(), dir);
 	};
+	
 	var buildDirConfig = {
-		assetsDirectory : getAbsoluteDir(grunt.option("assetsDirectory")),
+		assetsDirectory : getAbsoluteDir2(grunt.option("assetsDirectory")),
 		assetsDirectoryRelative : path.basename(grunt.option("assetsDirectory")),
 
-		lessDirectory : getAbsoluteDir(grunt.option("lessDirectory")),
+		lessDirectory : getAbsoluteDir2(grunt.option("lessDirectory")),
 	};
-
+	
 	grunt.initConfig({
 		globalConfig : buildDirConfig,
 		pkg : grunt.file.readJSON("package.json"),
