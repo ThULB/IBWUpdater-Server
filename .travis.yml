@@ -12,6 +12,7 @@ install:
     - sudo apt-get update -qq
     # Install the browsers
     - sudo apt-get install -y google-chrome-stable
+    - sudo apt-get install -y --no-install-recommends firefox language-pack-de-base 
 
 before_script:
     # start xvfb
@@ -19,7 +20,8 @@ before_script:
     - "sh -e /etc/init.d/xvfb start"
     - sleep 3 # give xvfb some time to start
 script:
-    - mvn -B clean install -DseleniumDriver=chrome
+    #- mvn -B clean install -DseleniumDriver=chrome
+    - mvn -B clean install -DseleniumDriver=marionette
 after_script:
     - mvn com.gavinmogan:codacy-maven-plugin:coverage -DcoverageReportFile=target/site/jacoco/jacoco.xml -DprojectToken=${CODACY_PROJECT_TOKEN} -DapiToken=${CODACY_API_TOKEN}
     - mvn com.versioneye:versioneye-maven-plugin:update -DprojectId=583339f8eaa74b004633a88f -DapiKey=${VERSIONEYE_API_TOKEN}
