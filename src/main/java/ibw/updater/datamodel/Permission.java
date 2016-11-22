@@ -291,10 +291,8 @@ public class Permission {
 			return false;
 		if (sourceId != other.sourceId)
 			return false;
-		if (type != other.type)
-			return false;
 
-		return true;
+		return type != other.type;
 	}
 
 	/*
