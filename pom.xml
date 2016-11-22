@@ -35,16 +35,16 @@
   </licenses>
 
   <organization>
-    <name>Universitätsbibliothek Ilmenau</name>
+    <name>Friedrich-Schiller-Universität Jena, Thüringer Universitäts- und Landesbibliothek</name>
   </organization>
 
   <developers>
     <developer>
       <id>mcradler</id>
       <name>René Adler</name>
-      <organization>TU Ilmenau, Universitätsbibliothek</organization>
-      <email>Rene.Adler (at) tu-ilmenau.de</email>
-      <organizationUrl>http://www.tu-ilmenau.de/ub/</organizationUrl>
+       <organization>Friedrich-Schiller-Universität Jena, Thüringer Universitäts- und Landesbibliothek</organization>
+      <organizationUrl>http://www.thulb.uni-jena.de/</organizationUrl>
+      <email>rene.adler (at) uni-jena.de</email>
       <timezone>+1</timezone>
       <roles>
         <role>architect</role>
