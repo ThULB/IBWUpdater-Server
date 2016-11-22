@@ -32,7 +32,6 @@ import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.status.StatusLogger;
 
-import ibw.updater.common.events.AutoExecutableHandler;
 import ibw.updater.common.events.annotation.AutoExecutable;
 import ibw.updater.common.events.annotation.Startup;
 

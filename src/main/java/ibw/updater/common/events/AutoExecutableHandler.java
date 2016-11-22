@@ -18,7 +18,6 @@ package ibw.updater.common.events;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Set;
