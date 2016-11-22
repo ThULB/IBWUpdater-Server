@@ -4,6 +4,7 @@ dist: trusty
 install:
     # Add repos
     - sudo apt-add-repository "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
+    - sudo add-apt-repository ppa:ubuntu-mozilla-daily/firefox-aurora 
     # Remove "deb-src" repos added from apt-add-repository, because it doesn't exist online
     - sudo sed -i s/deb-src.*google.*//g /etc/apt/sources.list
     # Add apt-keys for checking the packages
@@ -15,6 +16,8 @@ install:
     - sudo apt-get install -y --no-install-recommends firefox language-pack-de-base 
 
 before_script:
+    - mkdir ${HOME}/tmp
+    - export TMPDIR="${HOME}/tmp"
     # start xvfb
     - "export DISPLAY=:99.0"
     - "sh -e /etc/init.d/xvfb start"
