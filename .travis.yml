@@ -4,7 +4,7 @@ dist: trusty
 install:
     # Add repos
     - sudo apt-add-repository "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
-    - sudo add-apt-repository ppa:ubuntu-mozilla-daily/firefox-aurora 
+    - sudo add-apt-repository ppa:ubuntu-mozilla-daily/firefox-aurora -y
     # Remove "deb-src" repos added from apt-add-repository, because it doesn't exist online
     - sudo sed -i s/deb-src.*google.*//g /etc/apt/sources.list
     # Add apt-keys for checking the packages
