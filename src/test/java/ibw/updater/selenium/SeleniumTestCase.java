@@ -17,6 +17,8 @@
 package ibw.updater.selenium;
 
 import java.io.File;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -59,7 +61,7 @@ public class SeleniumTestCase extends JPATestCase {
 	public void setupUp() throws Exception {
 		super.setUp();
 		driver = new ChromeDriver();
-		driver.get("http://localhost:8085");
+		driver.get("http://" + getHostName() + ":8085");
 	}
 
 	@After
@@ -82,5 +84,16 @@ public class SeleniumTestCase extends JPATestCase {
 		WebDriverWait wait = new WebDriverWait(driver, MAX_WAIT_TIME);
 		WebElement elm = wait.until(ExpectedConditions.visibilityOfElementLocated(by));
 		return elm;
+	}
+
+	private String getHostName() {
+		String hostName = "localhost";
+		try {
+			hostName = InetAddress.getLocalHost().getHostName();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+
+		return hostName;
 	}
 }
