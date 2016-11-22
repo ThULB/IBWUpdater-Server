@@ -26,13 +26,11 @@ import org.junit.BeforeClass;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import ibw.updater.Application;
 import ibw.updater.backend.jpa.JPATestCase;
-import io.github.bonigarcia.wdm.ChromeDriverManager;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -53,14 +51,12 @@ public class SeleniumTestCase extends JPATestCase {
 		}
 
 		Application.main(new String[] { "--configDir", configDir.getAbsolutePath() });
-
-		ChromeDriverManager.getInstance().setup();
 	}
 
 	@Before
 	public void setupUp() throws Exception {
 		super.setUp();
-		driver = new ChromeDriver();
+		driver = new SeleniumDriverFactory().driver();
 		driver.get("http://" + getHostName() + ":8085");
 	}
 
