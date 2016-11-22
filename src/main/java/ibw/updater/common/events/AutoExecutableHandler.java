@@ -136,8 +136,8 @@ public class AutoExecutableHandler {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info(msg);
 		} else {
-			System.out.println(MessageFormat.format("{0} INFO\t{1}: {2}", Instant.now().toString(),
-					AutoExecutableHandler.class.getSimpleName(), msg));
+			System.out.println(
+					Instant.now().toString() + " INFO\t" + AutoExecutableHandler.class.getSimpleName() + ": " + msg);
 		}
 	}
 }

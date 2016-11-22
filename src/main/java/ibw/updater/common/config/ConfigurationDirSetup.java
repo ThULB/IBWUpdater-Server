@@ -22,7 +22,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Locale;
 import java.util.Objects;
@@ -104,8 +103,8 @@ public class ConfigurationDirSetup {
 		if (LOGGER.isErrorEnabled()) {
 			LOGGER.error(msg);
 		} else {
-			System.err.println(MessageFormat.format("{0} ERROR\t{1}: {2}", Instant.now().toString(),
-					AutoExecutableHandler.class.getSimpleName(), msg));
+			System.err.println(
+					Instant.now().toString() + " ERROR\t" + ConfigurationDirSetup.class.getSimpleName() + ": " + msg);
 		}
 	}
 
@@ -113,8 +112,8 @@ public class ConfigurationDirSetup {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info(msg);
 		} else {
-			System.out.println(MessageFormat.format("{0} INFO\t{1}: {2}", Instant.now().toString(),
-					AutoExecutableHandler.class.getSimpleName(), msg));
+			System.out.println(
+					Instant.now().toString() + " INFO\t" + ConfigurationDirSetup.class.getSimpleName() + ": " + msg);
 		}
 	}
 }

@@ -26,7 +26,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
@@ -127,7 +126,7 @@ public class PackageManager {
 	 */
 	public static Packages getExtended(User user) {
 		Packages packages = getExtended();
-		LOGGER.debug(MessageFormat.format("Filter packages by user: {0}", user));
+		LOGGER.debug("Filter packages by user: " + user);
 		return new Packages(packages.getPackages().stream().filter(p -> {
 			Permissions permissions = PermissionManager.get(p.getId());
 			return permissions.getPermissions().isEmpty()
@@ -149,7 +148,7 @@ public class PackageManager {
 	public static Package get(String id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.debug(MessageFormat.format("Get package by id: {0}", id));
+			LOGGER.debug("Get package by id: " + id);
 			return em.find(Package.class, id);
 		} finally {
 			em.close();
@@ -206,7 +205,7 @@ public class PackageManager {
 	public static Package save(Package p) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info(MessageFormat.format("Save package: {0}", p));
+			LOGGER.info("Save package: " + p);
 			em.getTransaction().begin();
 			em.persist(p);
 			em.getTransaction().commit();
@@ -291,7 +290,7 @@ public class PackageManager {
 				p.setVersion(p.getVersion() + 1);
 			}
 
-			LOGGER.info(MessageFormat.format("Update package: {0}", p));
+			LOGGER.info("Update package: " + p);
 
 			em.merge(p);
 			em.getTransaction().commit();
@@ -364,7 +363,7 @@ public class PackageManager {
 				}
 			}
 
-			LOGGER.info(MessageFormat.format("Update package: {0}", p));
+			LOGGER.info("Update package: " + p);
 
 			em.merge(p);
 			em.getTransaction().commit();
@@ -386,7 +385,7 @@ public class PackageManager {
 	public static void delete(String id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info(MessageFormat.format("Delete package with id: {0}", id));
+			LOGGER.info("Delete package with id: " + id);
 			em.getTransaction().begin();
 			em.remove(em.find(Package.class, id));
 			em.getTransaction().commit();

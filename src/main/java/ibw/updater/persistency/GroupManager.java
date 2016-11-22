@@ -16,7 +16,6 @@
  */
 package ibw.updater.persistency;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
@@ -65,7 +64,7 @@ public class GroupManager {
 	public static Group get(int id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.debug(MessageFormat.format("Get group by id: {0}", id));
+			LOGGER.debug("Get group by id: " + id);
 			return em.find(Group.class, id);
 		} finally {
 			em.close();
@@ -83,7 +82,7 @@ public class GroupManager {
 	public static Group get(String name) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.debug(MessageFormat.format("Get group by name: {0}", name));
+			LOGGER.debug("Get group by name: " + name);
 			TypedQuery<Group> query = em.createNamedQuery("Group.findByName", Group.class);
 			query.setParameter("name", name);
 
@@ -133,7 +132,7 @@ public class GroupManager {
 
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info(MessageFormat.format("Save group: {0}", group));
+			LOGGER.info("Save group: " + group);
 			em.getTransaction().begin();
 			em.persist(group);
 			em.getTransaction().commit();
@@ -163,7 +162,7 @@ public class GroupManager {
 				group.setId(inDB.getId());
 				em.detach(inDB);
 			}
-			LOGGER.info(MessageFormat.format("Update group: {0}", group));
+			LOGGER.info("Update group: " + group);
 			em.getTransaction().begin();
 			em.merge(group);
 			em.getTransaction().commit();
@@ -183,7 +182,7 @@ public class GroupManager {
 	public static void delete(int gid) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info(MessageFormat.format("Delete group with id: {0}", gid));
+			LOGGER.info("Delete group with id: " + gid);
 			em.getTransaction().begin();
 			em.remove(em.find(Group.class, gid));
 			em.getTransaction().commit();

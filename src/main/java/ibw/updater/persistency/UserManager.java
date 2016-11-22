@@ -16,7 +16,6 @@
  */
 package ibw.updater.persistency;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
@@ -65,7 +64,7 @@ public class UserManager {
 	public static User get(int id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.debug(MessageFormat.format("Get user by id: {0}", id));
+			LOGGER.debug("Get user by id: " + id);
 			return em.find(User.class, id);
 		} finally {
 			em.close();
@@ -83,7 +82,7 @@ public class UserManager {
 	public static User get(String name) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.debug(MessageFormat.format("Get user by name: {0}", name));
+			LOGGER.debug("Get user by name: " + name);
 			TypedQuery<User> query = em.createNamedQuery("User.findByName", User.class);
 			query.setParameter("name", name);
 
@@ -133,7 +132,7 @@ public class UserManager {
 
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info(MessageFormat.format("Save user: {0}", user));
+			LOGGER.info("Save user: " + user);
 			em.getTransaction().begin();
 			em.persist(user);
 			em.getTransaction().commit();
@@ -164,7 +163,7 @@ public class UserManager {
 				em.detach(inDB);
 			}
 
-			LOGGER.info(MessageFormat.format("Update user: {0}", user));
+			LOGGER.info("Update user: " + user);
 			em.getTransaction().begin();
 			em.merge(user);
 			em.getTransaction().commit();
@@ -184,7 +183,7 @@ public class UserManager {
 	public static void delete(int uid) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		try {
-			LOGGER.info(MessageFormat.format("Delete user with id: {0}", uid));
+			LOGGER.info("Delete user with id: " + uid);
 			em.getTransaction().begin();
 			em.remove(em.find(User.class, uid));
 			em.getTransaction().commit();
