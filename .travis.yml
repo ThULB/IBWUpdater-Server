@@ -2,8 +2,8 @@ language: java
 sudo: true
 dist: trusty
 
-addons:
-    firefox: "50.0"
+#addons:
+#    firefox: "50.0"
 cache:
     directories:
         - $HOME/.m2
@@ -33,8 +33,8 @@ before_script:
 script:
     - mkdir ${HOME}/tmp
     - export TMPDIR="${HOME}/tmp"
-    #- mvn -B clean install -DseleniumDriver=chrome
-    - sudo mvn -B clean install -DseleniumDriver=firefox
+    - mvn -B clean install -DseleniumDriver=chrome
+    #- mvn -B clean install -DseleniumDriver=firefox
 after_script:
     - mvn com.gavinmogan:codacy-maven-plugin:coverage -DcoverageReportFile=target/site/jacoco/jacoco.xml -DprojectToken=${CODACY_PROJECT_TOKEN} -DapiToken=${CODACY_API_TOKEN}
     - mvn com.versioneye:versioneye-maven-plugin:update -DprojectId=583339f8eaa74b004633a88f -DapiKey=${VERSIONEYE_API_TOKEN}
