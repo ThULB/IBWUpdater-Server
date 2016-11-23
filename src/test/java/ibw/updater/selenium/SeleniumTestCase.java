@@ -39,7 +39,7 @@ import ibw.updater.backend.jpa.JPATestCase;
  */
 public class SeleniumTestCase extends JPATestCase {
 
-	protected static final long MAX_WAIT_TIME = 5;
+	protected static final long MAX_WAIT_TIME = 10;
 
 	protected static SeleniumDriverFactory factory;
 
