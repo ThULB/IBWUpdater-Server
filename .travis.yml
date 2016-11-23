@@ -1,10 +1,7 @@
 language: java
 dist: trusty
-sudo: false
-group: beta
+sudo: true
 
-addons:
-    firefox: "latest-esr"
 cache:
     directories:
         - $HOME/.m2
@@ -12,22 +9,21 @@ env:
     global:
         - MAVEN_OPTS="-Xmx1024M -Xss128M -XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC"
         - XVFBARGS=":99 -ac -screen 0 1280x1024x24 -ac +extension GLX +extension RANDR +render -noreset"
-        - FIREFOX_BIN=$(which firefox)
         
 before_install:
     # start xvfb
     - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- $XVFBARGS"
-#install:
+install:
     # Add repos
-    #- sudo apt-add-repository "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
+    - sudo apt-add-repository "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
     # Remove "deb-src" repos added from apt-add-repository, because it doesn't exist online
-    #- sudo sed -i s/deb-src.*google.*//g /etc/apt/sources.list
+    - sudo sed -i s/deb-src.*google.*//g /etc/apt/sources.list
     # Add apt-keys for checking the packages
-    #- wget -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+    - wget -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
     # Mke sure
-    #- sudo apt-get update -qq
+    - sudo apt-get update -qq
     # Install the browsers
-    #- sudo apt-get install -y google-chrome-stable
+    - sudo apt-get install -y google-chrome-stable
 
 before_script:
     - "export DISPLAY=:99.0"
@@ -37,8 +33,7 @@ before_script:
 script:
     - mkdir ${HOME}/tmp
     - export TMPDIR="${HOME}/tmp"
-    #- mvn -B clean install -DseleniumDriver=chrome
-    - mvn -B clean install -Dwebdriver.firefox.bin=${FIREFOX_BIN} -DseleniumDriver=firefox
+    - mvn -B clean install -DseleniumDriver=chrome
 after_script:
     - mvn com.gavinmogan:codacy-maven-plugin:coverage -DcoverageReportFile=target/site/jacoco/jacoco.xml -DprojectToken=${CODACY_PROJECT_TOKEN} -DapiToken=${CODACY_API_TOKEN}
     - mvn com.versioneye:versioneye-maven-plugin:update -DprojectId=583339f8eaa74b004633a88f -DapiKey=${VERSIONEYE_API_TOKEN}
