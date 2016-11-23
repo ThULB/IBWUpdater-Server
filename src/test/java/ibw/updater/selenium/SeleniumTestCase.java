@@ -40,6 +40,8 @@ public class SeleniumTestCase extends JPATestCase {
 
 	protected static final long MAX_WAIT_TIME = 5;
 
+	protected static SeleniumDriverFactory factory;
+
 	protected WebDriver driver;
 
 	@BeforeClass
@@ -51,12 +53,14 @@ public class SeleniumTestCase extends JPATestCase {
 		}
 
 		Application.main(new String[] { "--configDir", configDir.getAbsolutePath() });
+
+		factory = new SeleniumDriverFactory();
 	}
 
 	@Before
 	public void setupUp() throws Exception {
 		super.setUp();
-		driver = new SeleniumDriverFactory().driver();
+		driver = factory.driver();
 		driver.get("http://" + getHostName() + ":8085");
 	}
 

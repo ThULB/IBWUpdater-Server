@@ -21,13 +21,13 @@ import java.util.Optional;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.firefox.MarionetteDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.opera.OperaDriver;
 
 import io.github.bonigarcia.wdm.ChromeDriverManager;
 import io.github.bonigarcia.wdm.EdgeDriverManager;
+import io.github.bonigarcia.wdm.FirefoxDriverManager;
 import io.github.bonigarcia.wdm.InternetExplorerDriverManager;
-import io.github.bonigarcia.wdm.MarionetteDriverManager;
 import io.github.bonigarcia.wdm.OperaDriverManager;
 
 /**
@@ -40,42 +40,48 @@ public class SeleniumDriverFactory {
 
 	public final static String EDGE_DRIVER = "edge";
 
-	public final static String IE_DRIVER = "ie";
+	public final static String FIREFOX_DRIVER = "firefox";
 
-	public final static String MARIONETTE_DRIVER = "marionette";
+	public final static String IE_DRIVER = "ie";
 
 	public final static String OPERA_DRIVER = "opera";
 
 	private final static String SELENIUM_DRIVER_ENV = "SELENIUM_DRIVER";
-	
+
 	private final static String SELENIUM_DRIVER_PROP = "seleniumDriver";
 
-	private final WebDriver driver;
+	private final String driverName;
 
 	public SeleniumDriverFactory() {
 		this(Optional.ofNullable(System.getenv(SELENIUM_DRIVER_ENV)).orElse(System.getProperty(SELENIUM_DRIVER_PROP)));
 	}
 
-	public SeleniumDriverFactory(String name) {
-		if (CHROME_DRIVER.equalsIgnoreCase(name)) {
+	public SeleniumDriverFactory(String driverName) {
+		this.driverName = driverName;
+		if (CHROME_DRIVER.equalsIgnoreCase(driverName)) {
 			ChromeDriverManager.getInstance().setup();
-			driver = new ChromeDriver();
-		} else if (EDGE_DRIVER.equalsIgnoreCase(name)) {
+		} else if (EDGE_DRIVER.equalsIgnoreCase(driverName)) {
 			EdgeDriverManager.getInstance().setup();
-			driver = new EdgeDriver();
-		} else if (IE_DRIVER.equalsIgnoreCase(name)) {
+		} else if (IE_DRIVER.equalsIgnoreCase(driverName)) {
 			InternetExplorerDriverManager.getInstance().setup();
-			driver = new EdgeDriver();
-		} else if (OPERA_DRIVER.equalsIgnoreCase(name)) {
+		} else if (OPERA_DRIVER.equalsIgnoreCase(driverName)) {
 			OperaDriverManager.getInstance().setup();
-			driver = new OperaDriver();
 		} else {
-			MarionetteDriverManager.getInstance().setup();
-			driver = new MarionetteDriver();
+			FirefoxDriverManager.getInstance().setup();
 		}
 	}
 
 	public WebDriver driver() {
-		return driver;
+		if (CHROME_DRIVER.equalsIgnoreCase(driverName)) {
+			return new ChromeDriver();
+		} else if (EDGE_DRIVER.equalsIgnoreCase(driverName)) {
+			return new EdgeDriver();
+		} else if (IE_DRIVER.equalsIgnoreCase(driverName)) {
+			return new EdgeDriver();
+		} else if (OPERA_DRIVER.equalsIgnoreCase(driverName)) {
+			return new OperaDriver();
+		}
+
+		return new FirefoxDriver();
 	}
 }
