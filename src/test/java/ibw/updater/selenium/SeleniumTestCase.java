@@ -24,6 +24,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -74,16 +75,29 @@ public class SeleniumTestCase extends JPATestCase {
 
 	public WebElement waitAndClick(By by) {
 		WebDriverWait wait = new WebDriverWait(driver, MAX_WAIT_TIME);
-		WebElement elm = wait.until(ExpectedConditions.elementToBeClickable(by));
-		elm.click();
+		if (wait.until(ExpectedConditions.and(ExpectedConditions.visibilityOfElementLocated(by),
+				ExpectedConditions.elementToBeClickable(by), webDriver -> isReady(webDriver)))) {
+			WebElement elm = driver.findElement(by);
+			elm.click();
+			return elm;
+		}
 
-		return elm;
+		return null;
 	}
 
 	public WebElement waitForElement(By by) {
 		WebDriverWait wait = new WebDriverWait(driver, MAX_WAIT_TIME);
-		WebElement elm = wait.until(ExpectedConditions.visibilityOfElementLocated(by));
-		return elm;
+		if (wait.until(ExpectedConditions.and(ExpectedConditions.visibilityOfElementLocated(by),
+				webDriver -> isReady(webDriver)))) {
+			WebElement elm = driver.findElement(by);
+			return elm;
+		}
+
+		return null;
+	}
+
+	private boolean isReady(WebDriver webDriver) {
+		return ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete");
 	}
 
 	private String getHostName() {
