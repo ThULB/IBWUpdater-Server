@@ -19,6 +19,7 @@ package ibw.updater.backend.jpa;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.FlushModeType;
 import javax.persistence.Persistence;
 import javax.persistence.RollbackException;
 
@@ -47,6 +48,7 @@ public class EntityManagerProvider {
 		EntityManager em = threadLocal.get();
 		if (em == null || !em.isOpen()) {
 			em = factory.createEntityManager();
+			em.setFlushMode(FlushModeType.COMMIT);
 			threadLocal.set(em);
 		}
 		return em;

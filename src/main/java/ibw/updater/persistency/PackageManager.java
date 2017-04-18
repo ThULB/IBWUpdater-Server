@@ -77,12 +77,8 @@ public class PackageManager {
 	 */
 	public static Packages get() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.debug("List all packages");
-			return new Packages(em.createNamedQuery("Package.findAll", Package.class).getResultList());
-		} finally {
-			em.close();
-		}
+		LOGGER.debug("List all packages");
+		return new Packages(em.createNamedQuery("Package.findAll", Package.class).getResultList());
 	}
 
 	/**
@@ -92,18 +88,14 @@ public class PackageManager {
 	 */
 	public static Packages getExtended() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.debug("List all packages with extended informations");
-			List<Package> packages = em.createNamedQuery("Package.findAll", Package.class).getResultList();
-			return new Packages(packages.stream().map(p -> {
-				if (p.getType() == Package.Type.COMMON) {
-					p.setUrl("packages/" + p.getId() + ".zip");
-				}
-				return p;
-			}).collect(Collectors.toList()));
-		} finally {
-			em.close();
-		}
+		LOGGER.debug("List all packages with extended informations");
+		List<Package> packages = em.createNamedQuery("Package.findAll", Package.class).getResultList();
+		return new Packages(packages.stream().map(p -> {
+			if (p.getType() == Package.Type.COMMON) {
+				p.setUrl("packages/" + p.getId() + ".zip");
+			}
+			return p;
+		}).collect(Collectors.toList()));
 	}
 
 	/**
@@ -147,12 +139,8 @@ public class PackageManager {
 	 */
 	public static Package get(String id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.debug("Get package by id: " + id);
-			return em.find(Package.class, id);
-		} finally {
-			em.close();
-		}
+		LOGGER.debug("Get package by id: " + id);
+		return em.find(Package.class, id);
 	}
 
 	/**
@@ -204,16 +192,13 @@ public class PackageManager {
 	 */
 	public static Package save(Package p) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.info("Save package: " + p);
-			em.getTransaction().begin();
-			em.persist(p);
-			em.getTransaction().commit();
 
-			return p;
-		} finally {
-			em.close();
-		}
+		LOGGER.info("Save package: " + p);
+		EntityManagerProvider.beginTransaction();
+		em.persist(p);
+		EntityManagerProvider.commit();
+
+		return p;
 	}
 
 	/**
@@ -269,36 +254,31 @@ public class PackageManager {
 		}
 
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			Package inDB = get(p.getId());
-			if (inDB != null) {
-				p.setId(inDB.getId());
-				em.detach(inDB);
-			}
-			em.getTransaction().begin();
-
-			if (p.getType() == Package.Type.USER && inDB.getFunction() != null && p.getFunction() != null
-					&& !inDB.getFunction().equals(p.getFunction())) {
-				p.setVersion(p.getVersion() + 1);
-			} else if (p.getType() == Package.Type.COMMON
-					&& (inDB.getStartupScript() == null && p.getStartupScript() != null
-							|| inDB.getStartupScript() != null && p.getStartupScript() != null
-									&& !inDB.getStartupScript().equals(p.getStartupScript()))) {
-				if (!isValidStartupScript(PACKAGE_DIR.resolve(p.getId() + ".zip"), p.getStartupScript())) {
-					throw new UnsupportedOperationException("Startup-Script wasn't found in ZIP file.");
-				}
-				p.setVersion(p.getVersion() + 1);
-			}
-
-			LOGGER.info("Update package: " + p);
-
-			em.merge(p);
-			em.getTransaction().commit();
-
-			return p;
-		} finally {
-			em.close();
+		Package inDB = get(p.getId());
+		if (inDB != null) {
+			p.setId(inDB.getId());
+			em.detach(inDB);
 		}
+		EntityManagerProvider.beginTransaction();
+
+		if (Package.Type.USER.equals(p.getType()) && inDB.getFunction() != null && p.getFunction() != null
+				&& !inDB.getFunction().equals(p.getFunction())) {
+			p.setVersion(p.getVersion() + 1);
+		} else if (p.getType() == Package.Type.COMMON
+				&& (inDB.getStartupScript() == null && p.getStartupScript() != null || inDB.getStartupScript() != null
+						&& p.getStartupScript() != null && !inDB.getStartupScript().equals(p.getStartupScript()))) {
+			if (!isValidStartupScript(PACKAGE_DIR.resolve(p.getId() + ".zip"), p.getStartupScript())) {
+				throw new UnsupportedOperationException("Startup-Script wasn't found in ZIP file.");
+			}
+			p.setVersion(p.getVersion() + 1);
+		}
+
+		LOGGER.info("Update package: " + p);
+
+		p = em.merge(p);
+		EntityManagerProvider.commit();
+
+		return p;
 	}
 
 	/**
@@ -315,65 +295,57 @@ public class PackageManager {
 		}
 
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			Package inDB = get(p.getId());
-			if (inDB != null) {
-				p.setId(inDB.getId());
-				em.detach(inDB);
-			}
-			em.getTransaction().begin();
-
-			if (p.getType() == Package.Type.USER) {
-				if (inDB.getFunction() != null && p.getFunction() != null
-						&& !inDB.getFunction().equals(p.getFunction())) {
-					p.setVersion(p.getVersion() + 1);
-				}
-			} else if (p.getType() == Package.Type.COMMON) {
-				boolean incVer = false;
-
-				if (inDB.getStartupScript() == null && p.getStartupScript() != null || inDB.getStartupScript() != null
-						&& p.getStartupScript() != null && !inDB.getStartupScript().equals(p.getStartupScript())) {
-					incVer = true;
-				}
-
-				if (is != null) {
-					Path tmpFile = createTempFile(p.getId(), is);
-					Path pFile = PACKAGE_DIR.resolve(p.getId() + ".zip");
-
-					try {
-						if (isValidPackage(tmpFile)) {
-							if (!isEqualPackage(pFile, tmpFile)) {
-								if (p.getStartupScript() != null
-										&& !isValidStartupScript(tmpFile, p.getStartupScript())) {
-									throw new UnsupportedOperationException("Startup-Script wasn't found in ZIP file.");
-								}
-								Files.copy(tmpFile, pFile, StandardCopyOption.REPLACE_EXISTING);
-								incVer = true;
-							}
-						} else {
-							throw new UnsupportedOperationException("Uploaded file isn't a ZIP file.");
-						}
-					} finally {
-						Files.delete(tmpFile);
-					}
-				}
-
-				if (incVer) {
-					p.setVersion(p.getVersion() + 1);
-				}
-			}
-
-			LOGGER.info("Update package: " + p);
-
-			em.merge(p);
-			em.getTransaction().commit();
-
-			return p;
-		} finally
-
-		{
-			em.close();
+		Package inDB = get(p.getId());
+		if (inDB != null) {
+			p.setId(inDB.getId());
+			em.detach(inDB);
 		}
+		EntityManagerProvider.beginTransaction();
+
+		if (p.getType() == Package.Type.USER) {
+			if (inDB.getFunction() != null && p.getFunction() != null && !inDB.getFunction().equals(p.getFunction())) {
+				p.setVersion(p.getVersion() + 1);
+			}
+		} else if (p.getType() == Package.Type.COMMON) {
+			boolean incVer = false;
+
+			if (inDB.getStartupScript() == null && p.getStartupScript() != null || inDB.getStartupScript() != null
+					&& p.getStartupScript() != null && !inDB.getStartupScript().equals(p.getStartupScript())) {
+				incVer = true;
+			}
+
+			if (is != null) {
+				Path tmpFile = createTempFile(p.getId(), is);
+				Path pFile = PACKAGE_DIR.resolve(p.getId() + ".zip");
+
+				try {
+					if (isValidPackage(tmpFile)) {
+						if (!isEqualPackage(pFile, tmpFile)) {
+							if (p.getStartupScript() != null && !isValidStartupScript(tmpFile, p.getStartupScript())) {
+								throw new UnsupportedOperationException("Startup-Script wasn't found in ZIP file.");
+							}
+							Files.copy(tmpFile, pFile, StandardCopyOption.REPLACE_EXISTING);
+							incVer = true;
+						}
+					} else {
+						throw new UnsupportedOperationException("Uploaded file isn't a ZIP file.");
+					}
+				} finally {
+					Files.delete(tmpFile);
+				}
+			}
+
+			if (incVer) {
+				p.setVersion(p.getVersion() + 1);
+			}
+		}
+
+		LOGGER.info("Update package: " + p);
+
+		p = em.merge(p);
+		EntityManagerProvider.commit();
+
+		return p;
 	}
 
 	/**
@@ -384,14 +356,10 @@ public class PackageManager {
 	 */
 	public static void delete(String id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.info("Delete package with id: " + id);
-			em.getTransaction().begin();
-			em.remove(em.find(Package.class, id));
-			em.getTransaction().commit();
-		} finally {
-			em.close();
-		}
+		LOGGER.info("Delete package with id: " + id);
+		EntityManagerProvider.beginTransaction();
+		em.remove(em.find(Package.class, id));
+		EntityManagerProvider.commit();
 	}
 
 	private static Path createTempFile(String id, InputStream is) throws IOException {

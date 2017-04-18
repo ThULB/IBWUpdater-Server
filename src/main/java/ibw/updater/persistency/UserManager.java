@@ -45,12 +45,8 @@ public class UserManager {
 	 */
 	public static Users get() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.debug("List all users");
-			return new Users(em.createNamedQuery("User.findAll", User.class).getResultList());
-		} finally {
-			em.close();
-		}
+		LOGGER.debug("List all users");
+		return new Users(em.createNamedQuery("User.findAll", User.class).getResultList());
 	}
 
 	/**
@@ -63,12 +59,8 @@ public class UserManager {
 	 */
 	public static User get(int id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.debug("Get user by id: " + id);
-			return em.find(User.class, id);
-		} finally {
-			em.close();
-		}
+		LOGGER.debug("Get user by id: " + id);
+		return em.find(User.class, id);
 	}
 
 	/**
@@ -89,8 +81,6 @@ public class UserManager {
 			return query.getSingleResult();
 		} catch (NoResultException nre) {
 			return null;
-		} finally {
-			em.close();
 		}
 	}
 
@@ -131,16 +121,12 @@ public class UserManager {
 		}
 
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.info("Save user: " + user);
-			em.getTransaction().begin();
-			em.persist(user);
-			em.getTransaction().commit();
+		LOGGER.info("Save user: " + user);
+		EntityManagerProvider.beginTransaction();
+		em.persist(user);
+		EntityManagerProvider.commit();
 
-			return user;
-		} finally {
-			em.close();
-		}
+		return user;
 	}
 
 	/**
@@ -156,22 +142,18 @@ public class UserManager {
 		}
 
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			User inDB = get(user.getName());
-			if (inDB != null) {
-				user.setId(inDB.getId());
-				em.detach(inDB);
-			}
-
-			LOGGER.info("Update user: " + user);
-			em.getTransaction().begin();
-			em.merge(user);
-			em.getTransaction().commit();
-
-			return user;
-		} finally {
-			em.close();
+		User inDB = get(user.getName());
+		if (inDB != null) {
+			user.setId(inDB.getId());
+			em.detach(inDB);
 		}
+
+		LOGGER.info("Update user: " + user);
+		EntityManagerProvider.beginTransaction();
+		user = em.merge(user);
+		EntityManagerProvider.commit();
+
+		return user;
 	}
 
 	/**
@@ -182,14 +164,10 @@ public class UserManager {
 	 */
 	public static void delete(int uid) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.info("Delete user with id: " + uid);
-			em.getTransaction().begin();
-			em.remove(em.find(User.class, uid));
-			em.getTransaction().commit();
-		} finally {
-			em.close();
-		}
+		LOGGER.info("Delete user with id: " + uid);
+		EntityManagerProvider.beginTransaction();
+		em.remove(em.find(User.class, uid));
+		EntityManagerProvider.commit();
 	}
 
 	/**

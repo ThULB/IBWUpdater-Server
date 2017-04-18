@@ -49,12 +49,8 @@ public class PermissionManager {
 	 */
 	public static Permissions get() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.debug("List all permissions");
-			return new Permissions(em.createNamedQuery("Permission.findAll", Permission.class).getResultList());
-		} finally {
-			em.close();
-		}
+		LOGGER.debug("List all permissions");
+		return new Permissions(em.createNamedQuery("Permission.findAll", Permission.class).getResultList());
 	}
 
 	/**
@@ -64,14 +60,10 @@ public class PermissionManager {
 	 */
 	public static Permissions get(String packageId) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.debug("List permissions for packageId: " + packageId);
-			Package p = PackageManager.get(packageId);
-			return new Permissions(em.createNamedQuery("Permission.findAllByPackage", Permission.class)
-					.setParameter("package", p).getResultList());
-		} finally {
-			em.close();
-		}
+		LOGGER.debug("List permissions for packageId: " + packageId);
+		Package p = PackageManager.get(packageId);
+		return new Permissions(em.createNamedQuery("Permission.findAllByPackage", Permission.class)
+				.setParameter("package", p).getResultList());
 	}
 
 	/**
@@ -83,12 +75,8 @@ public class PermissionManager {
 	 */
 	public static Permission get(PermissionId id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.debug("Get permission for permissionId: " + id);
-			return em.find(Permission.class, id);
-		} finally {
-			em.close();
-		}
+		LOGGER.debug("Get permission for permissionId: " + id);
+		return em.find(Permission.class, id);
 	}
 
 	/**
@@ -127,16 +115,12 @@ public class PermissionManager {
 		}
 
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.info("Save permission: " + permission);
-			em.getTransaction().begin();
-			em.persist(permission);
-			em.getTransaction().commit();
+		LOGGER.info("Save permission: " + permission);
+		EntityManagerProvider.beginTransaction();
+		em.persist(permission);
+		EntityManagerProvider.commit();
 
-			return permission;
-		} finally {
-			em.close();
-		}
+		return permission;
 	}
 
 	/**
@@ -164,16 +148,12 @@ public class PermissionManager {
 		}
 
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.info("Update permission: " + permission);
-			em.getTransaction().begin();
-			em.merge(permission);
-			em.getTransaction().commit();
+		LOGGER.info("Update permission: " + permission);
+		EntityManagerProvider.beginTransaction();
+		permission = em.merge(permission);
+		EntityManagerProvider.commit();
 
-			return permission;
-		} finally {
-			em.close();
-		}
+		return permission;
 	}
 
 	/**
@@ -196,14 +176,10 @@ public class PermissionManager {
 	 */
 	public static void delete(PermissionId permissionId) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.info("Delete permission: " + permissionId);
-			em.getTransaction().begin();
-			em.remove(em.find(Permission.class, permissionId));
-			em.getTransaction().commit();
-		} finally {
-			em.close();
-		}
+		LOGGER.info("Delete permission: " + permissionId);
+		EntityManagerProvider.beginTransaction();
+		em.remove(em.find(Permission.class, permissionId));
+		EntityManagerProvider.commit();
 	}
 
 	/**

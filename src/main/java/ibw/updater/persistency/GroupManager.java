@@ -45,12 +45,8 @@ public class GroupManager {
 	 */
 	public static Groups get() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.debug("List all groups");
-			return new Groups(em.createNamedQuery("Group.findAll", Group.class).getResultList());
-		} finally {
-			em.close();
-		}
+		LOGGER.debug("List all groups");
+		return new Groups(em.createNamedQuery("Group.findAll", Group.class).getResultList());
 	}
 
 	/**
@@ -63,12 +59,8 @@ public class GroupManager {
 	 */
 	public static Group get(int id) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.debug("Get group by id: " + id);
-			return em.find(Group.class, id);
-		} finally {
-			em.close();
-		}
+		LOGGER.debug("Get group by id: " + id);
+		return em.find(Group.class, id);
 	}
 
 	/**
@@ -89,8 +81,6 @@ public class GroupManager {
 			return query.getSingleResult();
 		} catch (NoResultException nre) {
 			return null;
-		} finally {
-			em.close();
 		}
 	}
 
@@ -131,16 +121,13 @@ public class GroupManager {
 		}
 
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.info("Save group: " + group);
-			em.getTransaction().begin();
-			em.persist(group);
-			em.getTransaction().commit();
+		LOGGER.info("Save group: " + group);
 
-			return group;
-		} finally {
-			em.close();
-		}
+		EntityManagerProvider.beginTransaction();
+		em.persist(group);
+		EntityManagerProvider.commit();
+
+		return group;
 	}
 
 	/**
@@ -156,21 +143,18 @@ public class GroupManager {
 		}
 
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			Group inDB = get(group.getName());
-			if (inDB != null) {
-				group.setId(inDB.getId());
-				em.detach(inDB);
-			}
-			LOGGER.info("Update group: " + group);
-			em.getTransaction().begin();
-			em.merge(group);
-			em.getTransaction().commit();
-
-			return group;
-		} finally {
-			em.close();
+		Group inDB = get(group.getName());
+		if (inDB != null) {
+			group.setId(inDB.getId());
+			em.detach(inDB);
 		}
+
+		LOGGER.info("Update group: " + group);
+		EntityManagerProvider.beginTransaction();
+		group = em.merge(group);
+		EntityManagerProvider.commit();
+
+		return group;
 	}
 
 	/**
@@ -181,14 +165,11 @@ public class GroupManager {
 	 */
 	public static void delete(int gid) {
 		EntityManager em = EntityManagerProvider.getEntityManager();
-		try {
-			LOGGER.info("Delete group with id: " + gid);
-			em.getTransaction().begin();
-			em.remove(em.find(Group.class, gid));
-			em.getTransaction().commit();
-		} finally {
-			em.close();
-		}
+
+		LOGGER.info("Delete group with id: " + gid);
+		EntityManagerProvider.beginTransaction();
+		em.remove(em.find(Group.class, gid));
+		EntityManagerProvider.commit();
 	}
 
 	/**

@@ -240,12 +240,14 @@ public class TestPersistency extends JPATestCase {
 		p.setFunction(f);
 
 		p = PackageManager.save(p);
+		
+		this.entitymanager.close();
 
 		assertNotNull("package id should not null", p.getId());
 		assertEquals("function id should package id", p.getId(), f.getPackage().getId());
 		assertEquals("version id should be 1", new Integer(1), p.getVersion());
 
-		f.setCode("alert(\"Hello World!\");");
+		p.getFunction().setCode("alert(\"Hello World!\");");
 
 		p = PackageManager.update(p);
 
