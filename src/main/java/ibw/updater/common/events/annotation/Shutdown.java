@@ -22,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks an {@link Method} as shutdown method for an previous marked
+ * Marks an method as shutdown method for an previous marked
  * {@link AutoExecutable}.
  * 
  * @author Ren\u00E9 Adler (eagle)
