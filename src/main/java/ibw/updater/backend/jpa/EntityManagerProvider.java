@@ -18,7 +18,9 @@ package ibw.updater.backend.jpa;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.RollbackException;
 
 import ibw.updater.common.events.annotation.AutoExecutable;
 import ibw.updater.common.events.annotation.Shutdown;
@@ -35,27 +37,72 @@ public class EntityManagerProvider {
 
 	private static EntityManagerFactory factory;
 
+	private static ThreadLocal<EntityManager> threadLocal;
+
 	public static EntityManagerFactory getEntityManagerFactory() {
 		return factory;
 	}
 
 	public static EntityManager getEntityManager() {
-		return factory.createEntityManager();
+		EntityManager em = threadLocal.get();
+		if (em == null || !em.isOpen()) {
+			em = factory.createEntityManager();
+			threadLocal.set(em);
+		}
+		return em;
+	}
+
+	public static void closeEntityManager() {
+		EntityManager em = threadLocal.get();
+		if (em != null && em.isOpen()) {
+			if (em.getTransaction().isActive()) {
+				try {
+					commit();
+				} catch (RollbackException e) {
+					rollback();
+				}
+			}
+			em.close();
+			threadLocal.set(null);
+		}
+	}
+
+	public static void beginTransaction() {
+		EntityTransaction tx = getEntityManager().getTransaction();
+		if (!tx.isActive()) {
+			tx.begin();
+		}
+	}
+
+	public static void rollback() {
+		EntityTransaction tx = getEntityManager().getTransaction();
+		if (tx.isActive()) {
+			tx.rollback();
+		}
+	}
+
+	public static void commit() {
+		EntityTransaction tx = getEntityManager().getTransaction();
+		if (tx.isActive()) {
+			tx.commit();
+		}
 	}
 
 	protected static void init(EntityManagerFactory factory) {
 		EntityManagerProvider.factory = factory;
+		threadLocal = new ThreadLocal<EntityManager>();
 	}
 
 	@Startup
-	public void startup() {
-		EntityManagerProvider.init(Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME));
+	public static void startup() {
+		init(Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME));
 	}
 
 	@Shutdown
-	public void shutdown() {
-		if (EntityManagerProvider.getEntityManagerFactory().isOpen()) {
-			EntityManagerProvider.getEntityManagerFactory().close();
+	public static void shutdown() {
+		if (factory != null && factory.isOpen()) {
+			closeEntityManager();
+			factory.close();
 		}
 	}
 }

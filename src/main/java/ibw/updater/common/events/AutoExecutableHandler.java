@@ -18,6 +18,7 @@ package ibw.updater.common.events;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Set;
@@ -27,6 +28,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.reflections.Reflections;
 
+import ibw.updater.Application;
 import ibw.updater.common.events.annotation.AutoExecutable;
 import ibw.updater.common.events.annotation.Shutdown;
 import ibw.updater.common.events.annotation.Startup;
@@ -37,20 +39,23 @@ import ibw.updater.common.events.annotation.Startup;
  */
 public class AutoExecutableHandler {
 
+	/** The Constant LOGGER. */
 	private static final Logger LOGGER = LogManager.getLogger();
 
+	/** The halt on error. */
 	private static boolean haltOnError = true;
 
+	/** The executables. */
 	private static Set<Class<?>> executables;
 
 	static {
-		final Reflections reflections = new Reflections("ibw.updater");
+		final Reflections reflections = new Reflections(Application.class.getPackage().getName());
 		executables = reflections.getTypesAnnotatedWith(AutoExecutable.class);
 	}
 
 	/**
-	 * Register class as {@link AutoExecutable}
-	 * 
+	 * Register class as {@link AutoExecutable}.
+	 *
 	 * @param executable
 	 *            the class to execute
 	 */
@@ -63,6 +68,8 @@ public class AutoExecutableHandler {
 	}
 
 	/**
+	 * Checks if is halt on error.
+	 *
 	 * @return the haltOnError
 	 */
 	public static boolean isHaltOnError() {
@@ -70,6 +77,8 @@ public class AutoExecutableHandler {
 	}
 
 	/**
+	 * Sets the halt on error.
+	 *
 	 * @param haltOnError
 	 *            the haltOnError to set
 	 */
@@ -97,6 +106,14 @@ public class AutoExecutableHandler {
 				.forEachOrdered(autoExecutable -> runExecutables(autoExecutable, Shutdown.class));
 	}
 
+	/**
+	 * Run executables.
+	 *
+	 * @param autoExecutable
+	 *            the auto executable
+	 * @param type
+	 *            the type
+	 */
 	private static void runExecutables(Class<?> autoExecutable, Class<? extends Annotation> type) {
 		log("Run " + autoExecutable.getAnnotation(AutoExecutable.class).name() + " with priority of "
 				+ autoExecutable.getAnnotation(AutoExecutable.class).priority());
@@ -105,7 +122,14 @@ public class AutoExecutableHandler {
 					.forEachOrdered(m -> {
 						try {
 							log("...invoke " + m.getName() + "() for " + type.getSimpleName());
-							m.invoke(autoExecutable.newInstance());
+							if (!m.isAccessible()) {
+								m.setAccessible(true);
+							}
+							if (Modifier.isStatic(m.getModifiers())) {
+								m.invoke(null);
+							} else {
+								m.invoke(autoExecutable.newInstance());
+							}
 						} catch (Exception e) {
 							throw new RuntimeException(e.getCause());
 						}
@@ -118,6 +142,15 @@ public class AutoExecutableHandler {
 		}
 	}
 
+	/**
+	 * Sort.
+	 *
+	 * @param type
+	 *            the type
+	 * @param methods
+	 *            the methods
+	 * @return the stream
+	 */
 	private static Stream<Method> sort(Class<? extends Annotation> type, Stream<Method> methods) {
 		if (type.equals(Startup.class)) {
 			// reverse ordering: highest priority first
@@ -131,6 +164,12 @@ public class AutoExecutableHandler {
 		return methods;
 	}
 
+	/**
+	 * Log.
+	 *
+	 * @param msg
+	 *            the msg
+	 */
 	private static void log(String msg) {
 		if (LOGGER.isInfoEnabled()) {
 			LOGGER.info(msg);
