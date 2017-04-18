@@ -14,11 +14,12 @@
  * If not, write to the Free Software Foundation Inc.,
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  */
-package ibw.updater.persistency;
+package ibw.updater.datamodel.adapter;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import ibw.updater.datamodel.Package;
+import ibw.updater.persistency.PackageManager;
 
 /**
  * @author Ren\u00E9 Adler (eagle)

@@ -14,14 +14,15 @@
  * If not, write to the Free Software Foundation Inc.,
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  */
-package ibw.updater.persistency;
+package ibw.updater.datamodel.adapter;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import ibw.updater.datamodel.Group;
-import ibw.updater.persistency.GroupAdapter.BasicGroup;
+import ibw.updater.datamodel.adapter.GroupAdapter.BasicGroup;
+import ibw.updater.persistency.GroupManager;
 
 public class GroupAdapter extends XmlAdapter<BasicGroup, Group> {
 

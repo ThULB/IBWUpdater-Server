@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import ibw.updater.datamodel.Permission.PermissionId;
-import ibw.updater.persistency.PackageAdapter;
+import ibw.updater.datamodel.adapter.PackageAdapter;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
