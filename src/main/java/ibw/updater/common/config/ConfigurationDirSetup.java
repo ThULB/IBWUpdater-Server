@@ -24,6 +24,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.time.Instant;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -45,8 +46,9 @@ public class ConfigurationDirSetup {
 	private static final StatusLogger LOGGER = StatusLogger.getLogger();
 
 	@Startup
-	public void startup() {
+	public static void startup() {
 		loadExternalLibs();
+		loadProperties();
 	}
 
 	public static void loadExternalLibs() {
@@ -84,6 +86,12 @@ public class ConfigurationDirSetup {
 		} catch (NoSuchMethodException | SecurityException e) {
 			LogManager.getLogger().warn(classLoaderClass + " does not support adding additional JARs at runtime", e);
 		}
+	}
+
+	public static void loadProperties() {
+		ConfigurationLoader configurationLoader = new ConfigurationLoader();
+		Map<String, String> properties = configurationLoader.load();
+		Configuration.instance().initialize(properties, true);
 	}
 
 	private static Stream<File> getFileStream(File resourceDir, File libDir) {
