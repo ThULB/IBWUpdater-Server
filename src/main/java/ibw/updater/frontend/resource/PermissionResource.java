@@ -16,6 +16,7 @@
  */
 package ibw.updater.frontend.resource;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -29,6 +30,7 @@ import javax.ws.rs.core.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ibw.updater.access.UserPermission;
 import ibw.updater.datamodel.Permission;
 import ibw.updater.datamodel.Permissions;
 import ibw.updater.frontend.entity.ExceptionWrapper;
@@ -46,6 +48,7 @@ public class PermissionResource {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response list() {
 		try {
 			return Response.ok().entity(PermissionManager.get()).build();
@@ -58,6 +61,7 @@ public class PermissionResource {
 	@GET
 	@Path("{packageId}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response list(@PathParam("packageId") final String packageId) {
 		try {
 			return Response.ok().entity(PermissionManager.get(packageId)).build();
@@ -70,6 +74,7 @@ public class PermissionResource {
 	@POST
 	@Path("update")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response update(final Permissions permissions) {
 		try {
 			return Response.ok().entity(PermissionManager.update(permissions)).build();
@@ -82,6 +87,7 @@ public class PermissionResource {
 	@POST
 	@Path("delete")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response delete(final Permission permission) {
 		try {
 			PermissionManager.delete(permission);

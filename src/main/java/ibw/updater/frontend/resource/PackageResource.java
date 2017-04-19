@@ -18,6 +18,8 @@ package ibw.updater.frontend.resource;
 
 import java.io.InputStream;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -36,6 +38,7 @@ import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import ibw.updater.access.UserPermission;
 import ibw.updater.datamodel.Package;
 import ibw.updater.frontend.entity.ExceptionWrapper;
 import ibw.updater.frontend.entity.ResourceWrapper;
@@ -54,6 +57,7 @@ public class PackageResource {
 	@GET
 	@Path("packages")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@PermitAll
 	public Response listExtended(@QueryParam("uid") String uid) {
 		return Response.ok().entity(PackageManager.getExtended(uid)).build();
 	}
@@ -61,6 +65,7 @@ public class PackageResource {
 	@GET
 	@Path("packages/{fileName:.+}")
 	@Produces("*/*")
+	@PermitAll
 	public Response getPackageFile(@PathParam("fileName") String fileName) {
 		try {
 			ResourceWrapper r = new ResourceWrapper(fileName, PackageManager.getContentByFileName(fileName));
@@ -79,6 +84,7 @@ public class PackageResource {
 	@GET
 	@Path("manage/packages")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response list() {
 		return Response.ok().entity(PackageManager.get()).build();
 	}
@@ -87,6 +93,7 @@ public class PackageResource {
 	@Path("manage/packages/add")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response add(final Package p) {
 		try {
 			return Response.ok().entity(PackageManager.save(p)).build();
@@ -100,6 +107,7 @@ public class PackageResource {
 	@Path("manage/packages/add")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response add(@FormDataParam("package") FormDataBodyPart obj, @FormDataParam("file") InputStream is) {
 		try {
 			Package p = obj.getValueAs(Package.class);
@@ -114,6 +122,7 @@ public class PackageResource {
 	@Path("manage/packages/update")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response update(final Package p) {
 		try {
 			return Response.ok().entity(PackageManager.update(p)).build();
@@ -127,6 +136,7 @@ public class PackageResource {
 	@Path("manage/packages/update")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response update(@FormDataParam("package") FormDataBodyPart obj, @FormDataParam("file") InputStream is) {
 		try {
 			Package p = obj.getValueAs(Package.class);
@@ -140,6 +150,7 @@ public class PackageResource {
 	@POST
 	@Path("manage/packages/delete")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response delete(final Package p) {
 		try {
 			PackageManager.delete(p.getId());
@@ -152,6 +163,7 @@ public class PackageResource {
 
 	@DELETE
 	@Path("manage/packages/delete/{pid}")
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response delete(@PathParam("pid") final String pid) {
 		try {
 			PackageManager.delete(pid);

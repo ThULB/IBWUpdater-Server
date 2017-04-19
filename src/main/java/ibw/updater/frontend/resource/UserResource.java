@@ -16,6 +16,7 @@
  */
 package ibw.updater.frontend.resource;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -30,6 +31,7 @@ import javax.ws.rs.core.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ibw.updater.access.UserPermission;
 import ibw.updater.datamodel.User;
 import ibw.updater.frontend.entity.ExceptionWrapper;
 import ibw.updater.persistency.UserManager;
@@ -46,6 +48,7 @@ public class UserResource {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response list() {
 		return Response.ok().entity(UserManager.get()).build();
 	}
@@ -53,6 +56,7 @@ public class UserResource {
 	@POST
 	@Path("add")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response add(final User user) {
 		try {
 			return Response.ok().entity(UserManager.save(user)).build();
@@ -65,6 +69,7 @@ public class UserResource {
 	@POST
 	@Path("update")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response update(final User user) {
 		try {
 			return Response.ok().entity(UserManager.update(user)).build();
@@ -77,6 +82,7 @@ public class UserResource {
 	@POST
 	@Path("delete")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response delete(final User user) {
 		try {
 			UserManager.delete(user);
@@ -89,6 +95,7 @@ public class UserResource {
 
 	@DELETE
 	@Path("delete/{uid}")
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response delete(@PathParam("uid") final int uid) {
 		try {
 			UserManager.delete(uid);

@@ -22,6 +22,10 @@ import javax.ws.rs.core.FeatureContext;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.moxy.json.MoxyJsonFeature;
 
+import ibw.updater.frontend.filter.AuthenticationFilter;
+import ibw.updater.frontend.provider.GenericExceptionMapper;
+import ibw.updater.frontend.provider.XmlMessageBodyWriter;
+
 /**
  * @author Ren\u00E9 Adler (eagle)
  *
@@ -39,6 +43,8 @@ public class FrontendFeature implements Feature {
 		context.register(MultiPartFeature.class);
 
 		// internal features
+		context.register(AuthenticationFilter.class);
+		context.register(GenericExceptionMapper.class);
 		context.register(XmlMessageBodyWriter.class);
 
 		return true;

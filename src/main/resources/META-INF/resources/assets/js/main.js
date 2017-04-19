@@ -487,6 +487,7 @@ app.controller("usersCtrl", function($rootScope, $scope, $log, $http, $translate
 
 app.controller("userDialogCtrl", function($scope, user, groups, close) {
 	$scope.user = user;
+	$scope.passwordRepeat = user.password;
 	$scope.groups = groups;
 	$scope.headline = "user.headline." + (user === undefined ? "create" : "edit");
 

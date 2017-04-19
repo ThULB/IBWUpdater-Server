@@ -65,5 +65,7 @@
 	"user.message.delete" : "Wollen Sie wirklich den Benutzer mit dem Name \"{0}\" löschen?",
 	"user.name" : "Name",
 	"user.description" : "Vollständiger Name",
-	"user.groups" : "Gruppen-Mitgliedschaft"
+	"user.groups" : "Gruppen-Mitgliedschaft",
+	"user.password" : "Passwort",
+	"user.passwordRepeat" : "Passwort Wiederholung"
 }

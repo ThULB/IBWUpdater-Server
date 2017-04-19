@@ -16,6 +16,7 @@
  */
 package ibw.updater.frontend.resource;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -30,6 +31,7 @@ import javax.ws.rs.core.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ibw.updater.access.UserPermission;
 import ibw.updater.datamodel.Group;
 import ibw.updater.frontend.entity.ExceptionWrapper;
 import ibw.updater.persistency.GroupManager;
@@ -46,6 +48,7 @@ public class GroupResource {
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response list() {
 		return Response.ok().entity(GroupManager.get()).build();
 	}
@@ -53,6 +56,7 @@ public class GroupResource {
 	@POST
 	@Path("add")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response add(final Group group) {
 		try {
 			return Response.ok().entity(GroupManager.save(group)).build();
@@ -65,6 +69,7 @@ public class GroupResource {
 	@POST
 	@Path("update")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response update(final Group group) {
 		try {
 			return Response.ok().entity(GroupManager.update(group)).build();
@@ -77,6 +82,7 @@ public class GroupResource {
 	@POST
 	@Path("delete")
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response delete(final Group group) {
 		try {
 			GroupManager.delete(group);
@@ -89,6 +95,7 @@ public class GroupResource {
 
 	@DELETE
 	@Path("delete/{gid}")
+	@RolesAllowed(UserPermission.ADMINISTRATOR)
 	public Response delete(@PathParam("gid") final int gid) {
 		try {
 			GroupManager.delete(gid);

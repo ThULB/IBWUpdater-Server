@@ -1,34 +1,42 @@
 <div class="modal fade" id="user-dialog" tabindex="-1" role="dialog" aria-labelledby="user-label">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-label="{{'btn.close' | translate}}">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="user-label">{{headline | translate}}</h4>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="name">{{'user.name' | translate}}</label> <input type="text" class="form-control" id="name" placeholder="{{'user.name' | translate}}"
-                            ng-model="user.name">
-                    </div>
-                    <div class="form-group">
-                        <label for="description">{{'user.description' | translate}}</label>
-                        <textarea class="form-control" id="description" rows="3" placeholder="{{'user.description' | translate}}" ng-model="user.description">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-ng-click="close()" data-dismiss="modal" aria-label="{{'btn.close' | translate}}">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="user-label">{{headline | translate}}</h4>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="form-group">
+						<label for="name">{{'user.name' | translate}}</label> <input type="text" class="form-control" id="name" placeholder="{{'user.name' | translate}}"
+							data-ng-model="user.name">
+					</div>
+					<div class="form-group" data-ng-class="{'has-error':user.password !== passwordRepeat}">
+						<label for="password">{{'user.password' | translate}}</label> <input type="password" class="form-control" id="password"
+							placeholder="{{'user.password' | translate}}" data-ng-model="user.password">
+					</div>
+					<div class="form-group" data-ng-class="{'has-error':user.password !== passwordRepeat}">
+						<label for="passwordRepeat">{{'user.passwordRepeat' | translate}}</label> <input type="password" class="form-control" id="passwordRepeat"
+							placeholder="{{'user.passwordRepeat' | translate}}" data-ng-model="passwordRepeat">
+					</div>
+					<div class="form-group">
+						<label for="description">{{'user.description' | translate}}</label>
+						<textarea class="form-control" id="description" rows="3" placeholder="{{'user.description' | translate}}" data-ng-model="user.description">
                         </textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="description">{{'user.groups' | translate}}</label> <select multiple class="form-control" id="groups" ng-model="user.group"
-                            ng-options="group as (group.description + ' (' + group.name + ')') for group in groups.group track by group.id">
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" ng-click="save()" class="btn btn-primary" data-dismiss="modal">{{'btn.save' | translate}}</button>
-                <button type="button" ng-click="close()" class="btn btn-default" data-dismiss="modal">{{'btn.close' | translate}}</button>
-            </div>
-        </div>
-    </div>
+					</div>
+					<div class="form-group">
+						<label for="description">{{'user.groups' | translate}}</label> <select multiple class="form-control" id="groups" data-ng-model="user.group"
+							data-ng-options="group as (group.description + ' (' + group.name + ')') for group in groups.group track by group.id">
+						</select>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" data-ng-click="save()" class="btn btn-primary" data-dismiss="modal">{{'btn.save' | translate}}</button>
+				<button type="button" data-ng-click="close()" class="btn btn-default" data-dismiss="modal">{{'btn.close' | translate}}</button>
+			</div>
+		</div>
+	</div>
 </div>

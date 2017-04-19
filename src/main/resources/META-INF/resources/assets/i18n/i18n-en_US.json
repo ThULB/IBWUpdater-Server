@@ -65,5 +65,7 @@
 	"user.message.delete" : "Do you want really delete the user with name \"{0}\"?",
 	"user.name" : "Name",
 	"user.description" : "Real-Name",
-	"user.groups" : "Group-Membership"
+	"user.groups" : "Group-Membership",
+	"user.password" : "Password",
+	"user.passwordRepeat" : "Repeat password"
 }
