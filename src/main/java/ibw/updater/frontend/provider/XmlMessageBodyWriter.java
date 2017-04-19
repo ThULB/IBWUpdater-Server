@@ -14,12 +14,16 @@
  * If not, write to the Free Software Foundation Inc.,
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  */
-package ibw.updater.frontend;
+package ibw.updater.frontend.provider;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
@@ -32,6 +36,11 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.google.common.reflect.ClassPath;
+import com.google.common.reflect.ClassPath.ClassInfo;
+
+import ibw.updater.common.config.Configuration;
+
 /**
  * @author Ren\u00E9 Adler (eagle)
  *
@@ -39,6 +48,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Provider
 @Produces(MediaType.APPLICATION_XML)
 public class XmlMessageBodyWriter<T> implements MessageBodyWriter<T> {
+
+	private static final List<Class<?>> CACHED_ENTITIES = Collections.synchronizedList(new ArrayList<>());
+
+	private static final Configuration CONFIG = Configuration.instance();
 
 	/*
 	 * (non-Javadoc)
@@ -49,7 +62,8 @@ public class XmlMessageBodyWriter<T> implements MessageBodyWriter<T> {
 	 */
 	@Override
 	public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-		return mediaType.equals(MediaType.APPLICATION_XML_TYPE) && type.getAnnotation(XmlRootElement.class) != null;
+		return (mediaType.equals(MediaType.APPLICATION_XML_TYPE) || mediaType.equals(MediaType.TEXT_XML_TYPE))
+				&& type.isAnnotationPresent(XmlRootElement.class);
 	}
 
 	/*
@@ -77,7 +91,8 @@ public class XmlMessageBodyWriter<T> implements MessageBodyWriter<T> {
 			MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
 			throws IOException, WebApplicationException {
 		try {
-			JAXBContext jc = JAXBContext.newInstance(type);
+			JAXBContext jc = JAXBContext.newInstance(populateEntities(CONFIG.getStrings("APP.Jersey.DynamicEntities"))
+					.stream().toArray(Class<?>[]::new));
 			final Marshaller marshaller = jc.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.marshal(t, entityStream);
@@ -86,4 +101,14 @@ public class XmlMessageBodyWriter<T> implements MessageBodyWriter<T> {
 		}
 	}
 
+	private List<Class<?>> populateEntities(List<String> pkgs) throws IOException {
+		if (CACHED_ENTITIES.isEmpty()) {
+			Class<?>[] classes;
+			classes = ClassPath.from(this.getClass().getClassLoader()).getTopLevelClasses().stream().filter(
+					ci -> pkgs.contains(ci.getPackageName()) && ci.load().isAnnotationPresent(XmlRootElement.class))
+					.map(ClassInfo::load).toArray(Class<?>[]::new);
+			CACHED_ENTITIES.addAll(Arrays.asList(classes));
+		}
+		return CACHED_ENTITIES;
+	}
 }

@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,6 +40,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.lambdaworks.crypto.SCryptUtil;
 
 import ibw.updater.datamodel.adapter.GroupAdapter;
 
@@ -59,6 +62,8 @@ public class User {
 	private int id;
 
 	private String name;
+
+	private String password;
 
 	private String description;
 
@@ -116,6 +121,35 @@ public class User {
 	}
 
 	/**
+	 * @return the password
+	 */
+	@Column(name = "password", length = 255, nullable = true)
+	@XmlElement(name = "password")
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param password
+	 *            the password to set
+	 */
+	public void setPassword(String password) {
+		if (password != null && !password.startsWith("$s0$")) {
+			this.password = SCryptUtil.scrypt(password, 16, 16, 16);
+		} else {
+			this.password = password;
+		}
+	}
+
+	public boolean isValidPassword(String password) {
+		try {
+			return SCryptUtil.check(password, this.password);
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
+	}
+
+	/**
 	 * @return the description
 	 */
 	@Column(name = "description", length = 4096)
@@ -135,7 +169,7 @@ public class User {
 	/**
 	 * @return the groups
 	 */
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinTable(name = "IBWGroupMember", joinColumns = {
 			@JoinColumn(name = "uid", referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(name = "gid", referencedColumnName = "id") })
