@@ -69,7 +69,7 @@ public class TestWebIF extends SeleniumTestCase {
 		createUser();
 		driver.navigate().refresh();
 
-		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showUserDialog')]"));
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showUserDialog')]"));
 
 		waitForElement(By.id("user-dialog"));
 
@@ -111,7 +111,7 @@ public class TestWebIF extends SeleniumTestCase {
 		createGroup();
 		driver.navigate().refresh();
 
-		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showGroupDialog')]"));
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showGroupDialog')]"));
 
 		waitForElement(By.id("group-dialog"));
 
@@ -151,7 +151,7 @@ public class TestWebIF extends SeleniumTestCase {
 		createCommonPackage();
 		driver.navigate().refresh();
 
-		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showPackageDialog')]"));
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showPackageDialog')]"));
 
 		waitForElement(By.id("package-dialog"));
 
@@ -171,7 +171,7 @@ public class TestWebIF extends SeleniumTestCase {
 
 		driver.navigate().refresh();
 
-		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showPackageDialog')]"));
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showPackageDialog')]"));
 
 		waitForElement(By.id("package-dialog"));
 
@@ -194,7 +194,7 @@ public class TestWebIF extends SeleniumTestCase {
 		createCommonPackage();
 		driver.navigate().refresh();
 
-		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showPackageDialog')]"));
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showPackageDialog')]"));
 
 		waitForElement(By.id("package-dialog"));
 
@@ -224,7 +224,7 @@ public class TestWebIF extends SeleniumTestCase {
 		createUserPackage();
 		driver.navigate().refresh();
 
-		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showPackageDialog')]"));
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showPackageDialog')]"));
 
 		waitForElement(By.id("package-dialog"));
 
@@ -257,7 +257,7 @@ public class TestWebIF extends SeleniumTestCase {
 		createUserPackage();
 		driver.navigate().refresh();
 
-		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showPermissionDialog')]"));
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showPermissionDialog')]"));
 
 		waitForElement(By.id("permission-dialog"));
 
@@ -270,11 +270,11 @@ public class TestWebIF extends SeleniumTestCase {
 		Thread.sleep(MAX_WAIT_TIME * 1000);
 		driver.navigate().refresh();
 
-		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showPermissionDialog')]"));
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showPermissionDialog')]"));
 
 		waitForElement(By.id("permission-dialog"));
 
-		waitAndClick(By.xpath("//form//button[starts-with(@ng-click, 'deletePermission')][1]"));
+		waitAndClick(By.xpath("//form//button[starts-with(@data-ng-click, 'deletePermission')][1]"));
 
 		waitAndClick(By.cssSelector(".modal-footer button.btn-default"));
 
@@ -289,7 +289,7 @@ public class TestWebIF extends SeleniumTestCase {
 	private void createUser() {
 		switchNavLink("/users");
 
-		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@ng-if, '!users.user')]")) != null);
+		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@data-ng-if, '!users.user')]")) != null);
 
 		waitAndClick(By.id("btnCreateUser"));
 
@@ -309,18 +309,18 @@ public class TestWebIF extends SeleniumTestCase {
 	private void deleteUser() {
 		switchNavLink("/users");
 
-		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showUserDeleteDialog')]"));
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showUserDeleteDialog')]"));
 
 		waitForElement(By.id("delete-confirm-dialog"));
 		waitAndClick(By.cssSelector(".modal-footer button.btn-danger"));
 
-		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@ng-if, '!users.user')]")) != null);
+		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@data-ng-if, '!users.user')]")) != null);
 	}
 
 	private void createGroup() {
 		switchNavLink("/groups");
 
-		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@ng-if, '!groups.group')]")) != null);
+		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@data-ng-if, '!groups.group')]")) != null);
 
 		waitAndClick(By.id("btnCreateGroup"));
 
@@ -340,18 +340,18 @@ public class TestWebIF extends SeleniumTestCase {
 	private void deleteGroup() {
 		switchNavLink("/groups");
 
-		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showGroupDeleteDialog')]"));
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showGroupDeleteDialog')]"));
 
 		waitForElement(By.id("delete-confirm-dialog"));
 		waitAndClick(By.cssSelector(".modal-footer button.btn-danger"));
 
-		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@ng-if, '!groups.group')]")) != null);
+		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@data-ng-if, '!groups.group')]")) != null);
 	}
 
 	private void createCommonPackage() {
 		switchNavLink("/packages");
 
-		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@ng-if, '!packages.package')]")) != null);
+		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@data-ng-if, '!packages.package')]")) != null);
 
 		waitAndClick(By.id("btnCreatePackage"));
 
@@ -386,7 +386,7 @@ public class TestWebIF extends SeleniumTestCase {
 	private void createUserPackage() {
 		switchNavLink("/packages");
 
-		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@ng-if, '!packages.package')]")) != null);
+		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@data-ng-if, '!packages.package')]")) != null);
 
 		waitAndClick(By.id("btnCreatePackage"));
 
@@ -411,12 +411,12 @@ public class TestWebIF extends SeleniumTestCase {
 	private void deletePackage() {
 		switchNavLink("/packages");
 
-		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@ng-click, 'showPackageDeleteDialog')]"));
+		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showPackageDeleteDialog')]"));
 
 		waitForElement(By.id("delete-confirm-dialog"));
 		waitAndClick(By.cssSelector(".modal-footer button.btn-danger"));
 
-		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@ng-if, '!packages.package')]")) != null);
+		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@data-ng-if, '!packages.package')]")) != null);
 	}
 
 	private void switchNavLink(String link) {
