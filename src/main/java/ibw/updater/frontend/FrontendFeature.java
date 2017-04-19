@@ -19,10 +19,12 @@ package ibw.updater.frontend;
 import javax.ws.rs.core.Feature;
 import javax.ws.rs.core.FeatureContext;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.moxy.json.MoxyJsonFeature;
 
-import ibw.updater.frontend.filter.AuthenticationFilter;
+import ibw.updater.common.config.Configuration;
 import ibw.updater.frontend.provider.GenericExceptionMapper;
 import ibw.updater.frontend.provider.XmlMessageBodyWriter;
 
@@ -31,6 +33,8 @@ import ibw.updater.frontend.provider.XmlMessageBodyWriter;
  *
  */
 public class FrontendFeature implements Feature {
+
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	/*
 	 * (non-Javadoc)
@@ -42,10 +46,18 @@ public class FrontendFeature implements Feature {
 		context.register(MoxyJsonFeature.class);
 		context.register(MultiPartFeature.class);
 
-		// internal features
-		context.register(AuthenticationFilter.class);
+		// internal default features
 		context.register(GenericExceptionMapper.class);
 		context.register(XmlMessageBodyWriter.class);
+
+		Configuration.instance().getStrings("APP.Jersey.Features").forEach(cn -> {
+			try {
+				LOGGER.info("Register Jersey Feature: {}", cn);
+				context.register(this.getClass().getClassLoader().loadClass(cn));
+			} catch (ClassNotFoundException e) {
+				LOGGER.error(e.getMessage(), e);
+			}
+		});
 
 		return true;
 	}
