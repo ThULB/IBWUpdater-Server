@@ -55,18 +55,18 @@ public class TestWebIF extends SeleniumTestCase {
 
 	@Test
 	public void testCreateUser() throws InterruptedException {
-		createUser();
+		assertTrue(createUser());
 		driver.navigate().refresh();
 
-		deleteUser();
+		assertTrue(deleteUser());
 	}
 
 	@Test
 	public void testEditUser() throws InterruptedException {
-		createGroup();
+		assertTrue(createGroup());
 		driver.navigate().refresh();
 
-		createUser();
+		assertTrue(createUser());
 		driver.navigate().refresh();
 
 		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showUserDialog')]"));
@@ -89,26 +89,26 @@ public class TestWebIF extends SeleniumTestCase {
 		assertEquals(TU_DESCRIPTION_UPDATE, description.getText());
 		assertEquals(TG_NAME, group.getText());
 
-		deleteUser();
+		assertTrue(deleteUser());
 		driver.navigate().refresh();
 
-		deleteGroup();
+		assertTrue(deleteGroup());
 	}
 
 	@Test
 	public void testCreateGroup() throws InterruptedException {
-		createGroup();
+		assertTrue(createGroup());
 		driver.navigate().refresh();
 
-		deleteGroup();
+		assertTrue(deleteGroup());
 	}
 
 	@Test
 	public void testEditGroup() throws InterruptedException {
-		createUser();
+		assertTrue(createUser());
 		driver.navigate().refresh();
 
-		createGroup();
+		assertTrue(createGroup());
 		driver.navigate().refresh();
 
 		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showGroupDialog')]"));
@@ -132,10 +132,10 @@ public class TestWebIF extends SeleniumTestCase {
 		assertEquals(TG_DESCRIPTION_UPDATE, description.getText());
 		assertEquals(TU_NAME, user.getText());
 
-		deleteGroup();
+		assertTrue(deleteGroup());
 		driver.navigate().refresh();
 
-		deleteUser();
+		assertTrue(deleteUser());
 	}
 
 	@Test
@@ -143,7 +143,7 @@ public class TestWebIF extends SeleniumTestCase {
 		createCommonPackage();
 		driver.navigate().refresh();
 
-		deletePackage();
+		assertTrue(deletePackage());
 	}
 
 	@Test
@@ -186,7 +186,7 @@ public class TestWebIF extends SeleniumTestCase {
 		version = waitForElement(By.xpath("//tbody/tr[1]/td[3]"));
 		assertEquals(new Integer(2), new Integer(version.getText()));
 
-		deletePackage();
+		assertTrue(deletePackage());
 	}
 
 	@Test
@@ -208,20 +208,20 @@ public class TestWebIF extends SeleniumTestCase {
 
 		assertNotNull(waitForElement(By.cssSelector("div.alert.alert-danger")));
 
-		deletePackage();
+		assertTrue(deletePackage());
 	}
 
 	@Test
 	public void testCreateUserPackage() {
-		createUserPackage();
+		assertTrue(createUserPackage());
 		driver.navigate().refresh();
 
-		deletePackage();
+		assertTrue(deletePackage());
 	}
 
 	@Test
 	public void testEditUserPackage() throws InterruptedException {
-		createUserPackage();
+		assertTrue(createUserPackage());
 		driver.navigate().refresh();
 
 		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showPackageDialog')]"));
@@ -246,15 +246,15 @@ public class TestWebIF extends SeleniumTestCase {
 		assertEquals(new Integer(2), new Integer(version.getText()));
 		assertEquals(TP_DESCRIPTION_UPDATE, description.getText());
 
-		deletePackage();
+		assertTrue(deletePackage());
 	}
 
 	@Test
 	public void testPackagePermission() throws InterruptedException {
-		createGroup();
+		assertTrue(createGroup());
 		driver.navigate().refresh();
 
-		createUserPackage();
+		assertTrue(createUserPackage());
 		driver.navigate().refresh();
 
 		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showPermissionDialog')]"));
@@ -280,13 +280,13 @@ public class TestWebIF extends SeleniumTestCase {
 
 		Thread.sleep(MAX_WAIT_TIME * 1000);
 
-		deletePackage();
+		assertTrue(deletePackage());
 		driver.navigate().refresh();
 
-		deleteGroup();
+		assertTrue(deleteGroup());
 	}
 
-	private void createUser() {
+	private boolean createUser() {
 		switchNavLink("/users");
 
 		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@data-ng-if, '!users.user')]")) != null);
@@ -304,9 +304,11 @@ public class TestWebIF extends SeleniumTestCase {
 
 		assertEquals(TU_NAME, name.getText());
 		assertEquals(TU_DESCRIPTION, description.getText());
+
+		return true;
 	}
 
-	private void deleteUser() {
+	private boolean deleteUser() {
 		switchNavLink("/users");
 
 		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showUserDeleteDialog')]"));
@@ -315,9 +317,11 @@ public class TestWebIF extends SeleniumTestCase {
 		waitAndClick(By.cssSelector(".modal-footer button.btn-danger"));
 
 		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@data-ng-if, '!users.user')]")) != null);
+		
+		return true;
 	}
 
-	private void createGroup() {
+	private boolean createGroup() {
 		switchNavLink("/groups");
 
 		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@data-ng-if, '!groups.group')]")) != null);
@@ -335,9 +339,11 @@ public class TestWebIF extends SeleniumTestCase {
 
 		assertEquals(TG_NAME, name.getText());
 		assertEquals(TG_DESCRIPTION, description.getText());
+		
+		return true;
 	}
 
-	private void deleteGroup() {
+	private boolean deleteGroup() {
 		switchNavLink("/groups");
 
 		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showGroupDeleteDialog')]"));
@@ -346,9 +352,11 @@ public class TestWebIF extends SeleniumTestCase {
 		waitAndClick(By.cssSelector(".modal-footer button.btn-danger"));
 
 		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@data-ng-if, '!groups.group')]")) != null);
+		
+		return true;
 	}
 
-	private void createCommonPackage() {
+	private boolean createCommonPackage() {
 		switchNavLink("/packages");
 
 		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@data-ng-if, '!packages.package')]")) != null);
@@ -381,9 +389,11 @@ public class TestWebIF extends SeleniumTestCase {
 		} catch (IOException e) {
 			assertTrue("couldn't download package src: " + TP_PACKAGE_SRC, e == null);
 		}
+		
+		return true;
 	}
 
-	private void createUserPackage() {
+	private boolean createUserPackage() {
 		switchNavLink("/packages");
 
 		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@data-ng-if, '!packages.package')]")) != null);
@@ -406,9 +416,11 @@ public class TestWebIF extends SeleniumTestCase {
 		assertEquals(new Integer(1), new Integer(version.getText()));
 		assertEquals(TP_NAME, name.getText());
 		assertEquals(TP_DESCRIPTION, description.getText());
+		
+		return true;
 	}
 
-	private void deletePackage() {
+	private boolean deletePackage() {
 		switchNavLink("/packages");
 
 		waitAndClick(By.xpath("//tbody/tr[1]/td[1]//button[starts-with(@data-ng-click, 'showPackageDeleteDialog')]"));
@@ -417,6 +429,8 @@ public class TestWebIF extends SeleniumTestCase {
 		waitAndClick(By.cssSelector(".modal-footer button.btn-danger"));
 
 		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@data-ng-if, '!packages.package')]")) != null);
+		
+		return true;
 	}
 
 	private void switchNavLink(String link) {
