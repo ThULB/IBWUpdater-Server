@@ -169,7 +169,7 @@ public class User {
 	/**
 	 * @return the groups
 	 */
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany
 	@JoinTable(name = "IBWGroupMember", joinColumns = {
 			@JoinColumn(name = "uid", referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(name = "gid", referencedColumnName = "id") })

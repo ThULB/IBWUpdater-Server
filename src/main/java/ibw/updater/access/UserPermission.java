@@ -29,6 +29,7 @@ import ibw.updater.common.events.annotation.AutoExecutable;
 import ibw.updater.common.events.annotation.Startup;
 import ibw.updater.datamodel.Group;
 import ibw.updater.datamodel.User;
+import ibw.updater.persistency.GroupManager;
 import ibw.updater.persistency.UserManager;
 
 /**
@@ -50,10 +51,12 @@ public class UserPermission {
 	public static void initSuperuser() {
 		String suname = CONFIG.getString("APP.SuperUser");
 		if (!UserManager.exists(suname)) {
+			Group sugrp = new Group(CONFIG.getString("APP.SuperGroup"), "Superuser Group");
+			GroupManager.save(sugrp);
+
 			User su = new User(suname, "Superuser");
 			String password = new BigInteger(130, new SecureRandom()).toString(32);
 			su.setPassword(password);
-			Group sugrp = new Group(CONFIG.getString("APP.SuperGroup"), "Superuser Group");
 			su.addGroup(sugrp);
 			UserManager.save(su);
 
