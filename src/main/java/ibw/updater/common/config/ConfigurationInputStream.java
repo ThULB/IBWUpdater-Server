@@ -50,7 +50,7 @@ public class ConfigurationInputStream extends InputStream {
 	private static final byte[] lbr = System.getProperty("line.separator").getBytes(StandardCharsets.ISO_8859_1);
 
 	/** The in. */
-	InputStream in;
+	protected InputStream in;
 
 	/** The e. */
 	private Enumeration<? extends InputStream> e;
@@ -201,7 +201,7 @@ public class ConfigurationInputStream extends InputStream {
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	final void nextStream() throws IOException {
+	protected final void nextStream() throws IOException {
 		if (in != null) {
 			in.close();
 		}

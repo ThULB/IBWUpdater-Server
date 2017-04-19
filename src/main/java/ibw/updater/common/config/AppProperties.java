@@ -46,7 +46,9 @@ public class AppProperties extends Properties {
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -6572230923593865161L;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Hashtable#put(java.lang.Object, java.lang.Object)
 	 */
 	@Override
@@ -78,7 +80,9 @@ public class AppProperties extends Properties {
 		return super.put(key, newValue);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Hashtable#get(java.lang.Object)
 	 */
 	@Override
@@ -92,7 +96,7 @@ public class AppProperties extends Properties {
 	 *
 	 * @return the as map
 	 */
-	Map<String, String> getAsMap() {
+	protected Map<String, String> getAsMap() {
 		@SuppressWarnings("rawtypes")
 		Map compileFix = this;
 		@SuppressWarnings("unchecked")

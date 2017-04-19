@@ -58,7 +58,7 @@ public class Configuration {
 	private Hashtable<SingletonKey, Object> instanceHolder = new Hashtable<SingletonKey, Object>();
 
 	/** The Constant PROPERTY_SPLITTER. */
-	static final Pattern PROPERTY_SPLITTER = Pattern.compile(",");
+	protected static final Pattern PROPERTY_SPLITTER = Pattern.compile(",");
 
 	/**
 	 * The properties instance that stores the values that have been read from
@@ -255,7 +255,7 @@ public class Configuration {
 	 * @throws ConfigurationException
 	 *             the configuration exception
 	 */
-	<T> T loadClass(String classname) throws ConfigurationException {
+	protected <T> T loadClass(String classname) throws ConfigurationException {
 		LogManager.getLogger().debug("Loading Class: " + classname);
 
 		T o = null;
