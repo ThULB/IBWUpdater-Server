@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ibw</groupId>
   <artifactId>updater</artifactId>
-  <version>1.9.2-SNAPSHOT</version>
+  <version>1.9.3-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>WinIBW Updater</name>
 
@@ -318,7 +318,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore />
                   </action>
                 </pluginExecution>
               </pluginExecutions>
