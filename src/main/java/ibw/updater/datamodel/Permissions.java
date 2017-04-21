@@ -22,8 +22,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * The Class Permissions.
  *
+ * @author Ren\u00E9 Adler (eagle)
  */
 @XmlRootElement(name = "permissions")
 public class Permissions {
@@ -31,19 +32,24 @@ public class Permissions {
 	private List<Permission> permissions;
 
 	/**
-	 * 
+	 * Instantiates a new permissions.
 	 */
 	public Permissions() {
 	}
 
 	/**
+	 * Instantiates a new permissions.
+	 *
 	 * @param permissions
+	 *            the permissions
 	 */
 	public Permissions(List<Permission> permissions) {
 		this.permissions = permissions;
 	}
 
 	/**
+	 * Gets the permissions.
+	 *
 	 * @return the permissions
 	 */
 	@XmlElement(name = "permission")
@@ -52,6 +58,8 @@ public class Permissions {
 	}
 
 	/**
+	 * Sets the permissions.
+	 *
 	 * @param permissions
 	 *            the permissions to set
 	 */

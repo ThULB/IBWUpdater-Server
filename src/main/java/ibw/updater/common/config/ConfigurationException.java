@@ -17,8 +17,9 @@
 package ibw.updater.common.config;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * The Class ConfigurationException.
  *
+ * @author Ren\u00E9 Adler (eagle)
  */
 public class ConfigurationException extends RuntimeException {
 
@@ -28,8 +29,8 @@ public class ConfigurationException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Creates a new ConfigurationException with an error message
-	 * 
+	 * Creates a new ConfigurationException with an error message.
+	 *
 	 * @param message
 	 *            the error message for this exception
 	 */

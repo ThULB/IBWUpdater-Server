@@ -24,8 +24,9 @@ import java.util.Locale;
 import org.apache.logging.log4j.LogManager;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * The Class ConfigurationDir.
  *
+ * @author Ren\u00E9 Adler (eagle)
  */
 public class ConfigurationDir {
 
@@ -33,12 +34,23 @@ public class ConfigurationDir {
 
 	private static String configDir;
 
+	/**
+	 * Sets the configuration directory.
+	 *
+	 * @param configDir
+	 *            the new configuration directory
+	 */
 	public static void setConfigurationDirectory(String configDir) {
 		if (configDir != null) {
 			ConfigurationDir.configDir = configDir;
 		}
 	}
 
+	/**
+	 * Gets the configuration directory.
+	 *
+	 * @return the configuration directory
+	 */
 	public static File getConfigurationDirectory() {
 		if (configDir != null) {
 			return new File(configDir);
@@ -83,6 +95,7 @@ public class ConfigurationDir {
 	 * 
 	 * @param relativePath
 	 *            as defined in {@link #getConfigFile(String)}
+	 * @return the resource
 	 */
 	public static URL getConfigResource(String relativePath) {
 		return getConfigResource(relativePath, null);
@@ -93,12 +106,13 @@ public class ConfigurationDir {
 	 * returns an existing file for "resources"+{relativePath}, its URL is
 	 * returned. In any other case this method returns the same as
 	 * {@link ClassLoader#getResource(String)}
-	 * 
+	 *
 	 * @param relativePath
 	 *            as defined in {@link #getConfigFile(String)}
 	 * @param classLoader
 	 *            a classLoader to resolve the resource (see above), null
 	 *            defaults to this class' class loader
+	 * @return the config resource
 	 */
 	public static URL getConfigResource(String relativePath, ClassLoader classLoader) {
 		File resolvedFile = getConfigFile("resources/" + relativePath);

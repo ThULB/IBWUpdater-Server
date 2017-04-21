@@ -40,8 +40,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * The Class Package.
  *
+ * @author Ren\u00E9 Adler (eagle)
  */
 @Entity
 @Cacheable
@@ -51,17 +52,20 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "package")
 public class Package {
+	
 	/**
-	 * The Package Type
-	 * 
-	 * @author Ren\u00E9 Adler (eagle)
+	 * The Package Type.
 	 *
+	 * @author Ren\u00E9 Adler (eagle)
 	 */
 	@XmlType(name = "package.type")
 	@XmlEnum
 	public enum Type {
+		
+		/** The common. */
 		@XmlEnumValue("common") COMMON("common"),
 
+		/** The user. */
 		@XmlEnumValue("user") USER("user");
 
 		private String value;
@@ -82,6 +86,12 @@ public class Package {
 			throw new IllegalArgumentException(value);
 		}
 
+		/**
+		 * Instantiates a new type.
+		 *
+		 * @param value
+		 *            the value
+		 */
 		Type(final String value) {
 			this.value = value;
 		}
@@ -113,15 +123,20 @@ public class Package {
 	private Function function;
 
 	/**
-	 * 
+	 * Instantiates a new package.
 	 */
 	public Package() {
 	}
 
 	/**
+	 * Instantiates a new package.
+	 *
 	 * @param type
+	 *            the type
 	 * @param name
+	 *            the name
 	 * @param description
+	 *            the description
 	 */
 	public Package(Type type, String name, String description) {
 		this.type = type;
@@ -130,6 +145,8 @@ public class Package {
 	}
 
 	/**
+	 * Gets the id.
+	 *
 	 * @return the id
 	 */
 	@Id
@@ -143,6 +160,8 @@ public class Package {
 	}
 
 	/**
+	 * Sets the id.
+	 *
 	 * @param id
 	 *            the id to set
 	 */
@@ -151,6 +170,8 @@ public class Package {
 	}
 
 	/**
+	 * Gets the type.
+	 *
 	 * @return the type
 	 */
 	@Column(name = "type", nullable = false)
@@ -161,6 +182,8 @@ public class Package {
 	}
 
 	/**
+	 * Sets the type.
+	 *
 	 * @param type
 	 *            the type to set
 	 */
@@ -169,6 +192,8 @@ public class Package {
 	}
 
 	/**
+	 * Gets the version.
+	 *
 	 * @return the version
 	 */
 	@Column(name = "version", nullable = false)
@@ -181,6 +206,8 @@ public class Package {
 	}
 
 	/**
+	 * Sets the version.
+	 *
 	 * @param version
 	 *            the version to set
 	 */
@@ -189,6 +216,8 @@ public class Package {
 	}
 
 	/**
+	 * Gets the name.
+	 *
 	 * @return the name
 	 */
 	@Column(name = "name", length = 64, nullable = false)
@@ -198,6 +227,8 @@ public class Package {
 	}
 
 	/**
+	 * Sets the name.
+	 *
 	 * @param name
 	 *            the name to set
 	 */
@@ -206,6 +237,8 @@ public class Package {
 	}
 
 	/**
+	 * Gets the description.
+	 *
 	 * @return the description
 	 */
 	@Column(name = "description", length = 4096)
@@ -215,6 +248,8 @@ public class Package {
 	}
 
 	/**
+	 * Sets the description.
+	 *
 	 * @param description
 	 *            the description to set
 	 */
@@ -223,6 +258,8 @@ public class Package {
 	}
 
 	/**
+	 * Gets the url.
+	 *
 	 * @return the url
 	 */
 	@Transient
@@ -232,6 +269,8 @@ public class Package {
 	}
 
 	/**
+	 * Sets the url.
+	 *
 	 * @param url
 	 *            the url to set
 	 */
@@ -240,6 +279,8 @@ public class Package {
 	}
 
 	/**
+	 * Gets the startup script.
+	 *
 	 * @return the startupScript
 	 */
 	@Column(name = "startupScript", length = 2048)
@@ -249,6 +290,8 @@ public class Package {
 	}
 
 	/**
+	 * Sets the startup script.
+	 *
 	 * @param startupScript
 	 *            the startupScript to set
 	 */
@@ -257,6 +300,8 @@ public class Package {
 	}
 
 	/**
+	 * Gets the function.
+	 *
 	 * @return the function
 	 */
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "package")
@@ -266,6 +311,8 @@ public class Package {
 	}
 
 	/**
+	 * Sets the function.
+	 *
 	 * @param function
 	 *            the function to set
 	 */

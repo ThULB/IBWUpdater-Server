@@ -22,8 +22,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * The Class Packages.
  *
+ * @author Ren\u00E9 Adler (eagle)
  */
 @XmlRootElement(name = "packages")
 public class Packages {
@@ -31,19 +32,24 @@ public class Packages {
 	private List<Package> packages;
 
 	/**
-	 * 
+	 * Instantiates a new packages.
 	 */
 	public Packages() {
 	}
 
 	/**
+	 * Instantiates a new packages.
+	 *
 	 * @param packages
+	 *            the packages
 	 */
 	public Packages(List<Package> packages) {
 		this.packages = packages;
 	}
 
 	/**
+	 * Gets the packages.
+	 *
 	 * @return the packages
 	 */
 	@XmlElement(name = "package")
@@ -52,6 +58,8 @@ public class Packages {
 	}
 
 	/**
+	 * Sets the packages.
+	 *
 	 * @param packages
 	 *            the packages to set
 	 */

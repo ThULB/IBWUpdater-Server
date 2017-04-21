@@ -35,6 +35,8 @@ public @interface Startup {
 	/**
 	 * (Optional) The <code>priority</code>, higher values starts earlier than
 	 * lower. Default is <code>0</code>.
+	 *
+	 * @return the int
 	 */
 	int priority() default 0;
 }

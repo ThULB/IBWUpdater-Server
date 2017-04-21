@@ -31,15 +31,13 @@ import ibw.updater.datamodel.Permission.PermissionId;
 import ibw.updater.datamodel.Permissions;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * The Class PermissionManager.
  *
- */
-/**
  * @author Ren\u00E9 Adler (eagle)
- *
  */
 public class PermissionManager {
 
+	/** The Constant LOGGER. */
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	/**
@@ -55,7 +53,9 @@ public class PermissionManager {
 
 	/**
 	 * Returns all {@link Permission}s for given packageId.
-	 * 
+	 *
+	 * @param packageId
+	 *            the package id
 	 * @return a {@link List} of {@link Permissions}
 	 */
 	public static Permissions get(String packageId) {

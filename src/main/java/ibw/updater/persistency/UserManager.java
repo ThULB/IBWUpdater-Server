@@ -31,11 +31,13 @@ import ibw.updater.datamodel.User;
 import ibw.updater.datamodel.Users;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * The Class UserManager.
  *
+ * @author Ren\u00E9 Adler (eagle)
  */
 public class UserManager {
 
+	/** The Constant LOGGER. */
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	/**

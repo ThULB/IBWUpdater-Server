@@ -31,9 +31,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Shutdown {
+	
 	/**
 	 * (Optional) The <code>priority</code>, lower values stops earlier than
 	 * higher. Default is <code>0</code>.
+	 *
+	 * @return the int
 	 */
 	int priority() default 0;
 }

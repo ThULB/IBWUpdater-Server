@@ -29,8 +29,9 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlValue;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * The Class Function.
  *
+ * @author Ren\u00E9 Adler (eagle)
  */
 @Entity
 @Cacheable
@@ -47,15 +48,20 @@ public class Function {
 	private String code;
 
 	/**
-	 * 
+	 * Instantiates a new function.
 	 */
 	public Function() {
 	}
 
 	/**
+	 * Instantiates a new function.
+	 *
 	 * @param name
+	 *            the name
 	 * @param params
+	 *            the params
 	 * @param code
+	 *            the code
 	 */
 	public Function(String name, String params, String code) {
 		this.name = name;
@@ -64,11 +70,16 @@ public class Function {
 	}
 
 	/**
-	 * @param packageId
+	 * Instantiates a new function.
+	 *
+	 * @param packAge
+	 *            the pack age
 	 * @param name
-	 * @param description
+	 *            the name
 	 * @param params
+	 *            the params
 	 * @param code
+	 *            the code
 	 */
 	public Function(Package packAge, String name, String params, String code) {
 		this.packAge = packAge;
@@ -78,6 +89,8 @@ public class Function {
 	}
 
 	/**
+	 * Gets the package.
+	 *
 	 * @return the package
 	 */
 	@Id
@@ -89,6 +102,8 @@ public class Function {
 	}
 
 	/**
+	 * Sets the package.
+	 *
 	 * @param packAge
 	 *            the package to set
 	 */
@@ -97,6 +112,8 @@ public class Function {
 	}
 
 	/**
+	 * Gets the name.
+	 *
 	 * @return the name
 	 */
 	@Column(name = "name", length = 64, nullable = false)
@@ -106,6 +123,8 @@ public class Function {
 	}
 
 	/**
+	 * Sets the name.
+	 *
 	 * @param name
 	 *            the name to set
 	 */
@@ -114,6 +133,8 @@ public class Function {
 	}
 
 	/**
+	 * Gets the params.
+	 *
 	 * @return the params
 	 */
 	@Column(name = "params", length = 4096)
@@ -123,6 +144,8 @@ public class Function {
 	}
 
 	/**
+	 * Sets the params.
+	 *
 	 * @param params
 	 *            the params to set
 	 */
@@ -131,6 +154,8 @@ public class Function {
 	}
 
 	/**
+	 * Gets the code.
+	 *
 	 * @return the code
 	 */
 	@Column(name = "code", length = Integer.MAX_VALUE, nullable = false, columnDefinition = "LONGTEXT")
@@ -140,6 +165,8 @@ public class Function {
 	}
 
 	/**
+	 * Sets the code.
+	 *
 	 * @param code
 	 *            the code to set
 	 */

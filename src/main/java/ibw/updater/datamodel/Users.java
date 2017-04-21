@@ -22,26 +22,35 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * The Class Users.
  *
+ * @author Ren\u00E9 Adler (eagle)
  */
 @XmlRootElement(name = "users")
 public class Users {
 	
 	private List<User> users;
 
+	/**
+	 * Instantiates a new users.
+	 */
 	public Users() {
 
 	}
 
 	/**
+	 * Instantiates a new users.
+	 *
 	 * @param users
+	 *            the users
 	 */
 	public Users(List<User> users) {
 		this.users = users;
 	}
 
 	/**
+	 * Gets the users.
+	 *
 	 * @return the users
 	 */
 	@XmlElement(name = "user")
@@ -50,6 +59,8 @@ public class Users {
 	}
 
 	/**
+	 * Sets the users.
+	 *
 	 * @param users
 	 *            the users to set
 	 */

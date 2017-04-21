@@ -37,20 +37,27 @@ import ibw.updater.common.events.annotation.AutoExecutable;
 import ibw.updater.common.events.annotation.Startup;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * The Class ConfigurationDirSetup.
  *
+ * @author Ren\u00E9 Adler (eagle)
  */
 @AutoExecutable(name = "Configuration Dir Setup", priority = Integer.MAX_VALUE - 100)
 public class ConfigurationDirSetup {
 
 	private static final StatusLogger LOGGER = StatusLogger.getLogger();
 
+	/**
+	 * Startup.
+	 */
 	@Startup
 	public static void startup() {
 		loadExternalLibs();
 		loadProperties();
 	}
 
+	/**
+	 * Load external libs.
+	 */
 	public static void loadExternalLibs() {
 		File resourceDir = ConfigurationDir.getConfigFile("resources");
 		if (resourceDir == null) {
@@ -88,6 +95,9 @@ public class ConfigurationDirSetup {
 		}
 	}
 
+	/**
+	 * Load properties.
+	 */
 	public static void loadProperties() {
 		ConfigurationLoader configurationLoader = new ConfigurationLoader();
 		Map<String, String> properties = configurationLoader.load();

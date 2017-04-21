@@ -45,8 +45,9 @@ import com.lambdaworks.crypto.SCryptUtil;
 import ibw.updater.datamodel.adapter.GroupAdapter;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * The Class User.
  *
+ * @author Ren\u00E9 Adler (eagle)
  */
 
 @Entity
@@ -69,14 +70,18 @@ public class User {
 	private List<Group> groups;
 
 	/**
-	 * 
+	 * Instantiates a new user.
 	 */
 	public User() {
 	}
 
 	/**
+	 * Instantiates a new user.
+	 *
 	 * @param name
+	 *            the name
 	 * @param description
+	 *            the description
 	 */
 	public User(String name, String description) {
 		this.name = name;
@@ -84,6 +89,8 @@ public class User {
 	}
 
 	/**
+	 * Gets the id.
+	 *
 	 * @return the id
 	 */
 	@Id
@@ -95,6 +102,8 @@ public class User {
 	}
 
 	/**
+	 * Sets the id.
+	 *
 	 * @param id
 	 *            the id to set
 	 */
@@ -103,6 +112,8 @@ public class User {
 	}
 
 	/**
+	 * Gets the name.
+	 *
 	 * @return the name
 	 */
 	@Column(name = "name", length = 64, nullable = false)
@@ -112,6 +123,8 @@ public class User {
 	}
 
 	/**
+	 * Sets the name.
+	 *
 	 * @param name
 	 *            the name to set
 	 */
@@ -120,6 +133,8 @@ public class User {
 	}
 
 	/**
+	 * Gets the password.
+	 *
 	 * @return the password
 	 */
 	@Column(name = "password", length = 255, nullable = true)
@@ -129,6 +144,8 @@ public class User {
 	}
 
 	/**
+	 * Sets the password.
+	 *
 	 * @param password
 	 *            the password to set
 	 */
@@ -140,6 +157,13 @@ public class User {
 		}
 	}
 
+	/**
+	 * Checks if is valid password.
+	 *
+	 * @param password
+	 *            the password
+	 * @return true, if is valid password
+	 */
 	public boolean isValidPassword(String password) {
 		try {
 			return SCryptUtil.check(password, this.password);
@@ -149,6 +173,8 @@ public class User {
 	}
 
 	/**
+	 * Gets the description.
+	 *
 	 * @return the description
 	 */
 	@Column(name = "description", length = 4096)
@@ -158,6 +184,8 @@ public class User {
 	}
 
 	/**
+	 * Sets the description.
+	 *
 	 * @param description
 	 *            the description to set
 	 */
@@ -166,6 +194,8 @@ public class User {
 	}
 
 	/**
+	 * Gets the groups.
+	 *
 	 * @return the groups
 	 */
 	@OneToMany
@@ -179,6 +209,8 @@ public class User {
 	}
 
 	/**
+	 * Sets the groups.
+	 *
 	 * @param groups
 	 *            the groups to set
 	 */
@@ -187,6 +219,8 @@ public class User {
 	}
 
 	/**
+	 * Adds the group.
+	 *
 	 * @param group
 	 *            the group to add
 	 */

@@ -43,8 +43,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import ibw.updater.datamodel.adapter.UserAdapter;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * The Class Group.
  *
+ * @author Ren\u00E9 Adler (eagle)
  */
 @Entity
 @Cacheable
@@ -64,14 +65,18 @@ public class Group {
 	private List<User> users;
 
 	/**
-	 * 
+	 * Instantiates a new group.
 	 */
 	public Group() {
 	}
 
 	/**
+	 * Instantiates a new group.
+	 *
 	 * @param name
+	 *            the name
 	 * @param description
+	 *            the description
 	 */
 	public Group(String name, String description) {
 		this.name = name;
@@ -79,6 +84,8 @@ public class Group {
 	}
 
 	/**
+	 * Gets the id.
+	 *
 	 * @return the id
 	 */
 	@Id
@@ -90,6 +97,8 @@ public class Group {
 	}
 
 	/**
+	 * Sets the id.
+	 *
 	 * @param id
 	 *            the id to set
 	 */
@@ -98,6 +107,8 @@ public class Group {
 	}
 
 	/**
+	 * Gets the name.
+	 *
 	 * @return the name
 	 */
 	@Column(name = "name", length = 64, nullable = false)
@@ -107,6 +118,8 @@ public class Group {
 	}
 
 	/**
+	 * Sets the name.
+	 *
 	 * @param name
 	 *            the name to set
 	 */
@@ -115,6 +128,8 @@ public class Group {
 	}
 
 	/**
+	 * Gets the description.
+	 *
 	 * @return the description
 	 */
 	@Column(name = "description", length = 4096, nullable = false)
@@ -124,6 +139,8 @@ public class Group {
 	}
 
 	/**
+	 * Sets the description.
+	 *
 	 * @param description
 	 *            the description to set
 	 */
@@ -132,6 +149,8 @@ public class Group {
 	}
 
 	/**
+	 * Gets the users.
+	 *
 	 * @return the users
 	 */
 	@OneToMany
@@ -145,6 +164,8 @@ public class Group {
 	}
 
 	/**
+	 * Sets the users.
+	 *
 	 * @param users
 	 *            the users to set
 	 */
@@ -153,6 +174,8 @@ public class Group {
 	}
 
 	/**
+	 * Adds the user.
+	 *
 	 * @param user
 	 *            the user to add
 	 */
@@ -165,8 +188,8 @@ public class Group {
 	}
 
 	/**
-	 * Removes user membership from group
-	 * 
+	 * Removes user membership from group.
+	 *
 	 * @param user
 	 *            the user to remove
 	 */

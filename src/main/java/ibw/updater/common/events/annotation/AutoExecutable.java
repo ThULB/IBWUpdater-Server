@@ -30,14 +30,19 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface AutoExecutable {
+	
 	/**
 	 * The <code>name</code> of the AutoExecutable.
+	 *
+	 * @return the string
 	 */
 	String name();
 
 	/**
 	 * (Optional) The <code>priority</code>, higher values starts earlier than
 	 * lower. Default is <code>0</code>.
+	 *
+	 * @return the int
 	 */
 	int priority() default 0;
 }

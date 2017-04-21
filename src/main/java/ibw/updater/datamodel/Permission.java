@@ -41,8 +41,9 @@ import ibw.updater.datamodel.Permission.PermissionId;
 import ibw.updater.datamodel.adapter.PackageAdapter;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * The Class Permission.
  *
+ * @author Ren\u00E9 Adler (eagle)
  */
 @Entity
 @Cacheable
@@ -52,19 +53,21 @@ import ibw.updater.datamodel.adapter.PackageAdapter;
 		@NamedQuery(name = "Permission.findAllByPackage", query = "SELECT p FROM Permission p WHERE p.package = :package") })
 @XmlRootElement(name = "permission")
 public class Permission {
+
 	/**
-	 * The Source Type
-	 * 
-	 * @author Ren\u00E9 Adler (eagle)
+	 * The Source Type.
 	 *
+	 * @author Ren\u00E9 Adler (eagle)
 	 */
 	@XmlType(name = "permission.type")
 	@XmlEnum
 	public enum Type {
 
+		/** The group. */
 		@XmlEnumValue("g")
 		GROUP("group"),
 
+		/** The user. */
 		@XmlEnumValue("u")
 		USER("user");
 
@@ -86,6 +89,12 @@ public class Permission {
 			throw new IllegalArgumentException(value);
 		}
 
+		/**
+		 * Instantiates a new type.
+		 *
+		 * @param value
+		 *            the value
+		 */
 		Type(final String value) {
 			this.value = value;
 		}
@@ -101,17 +110,19 @@ public class Permission {
 	}
 
 	/**
-	 * The Action Type
-	 * 
-	 * @author Ren\u00E9 Adler (eagle)
+	 * The Action Type.
 	 *
+	 * @author Ren\u00E9 Adler (eagle)
 	 */
 	@XmlType(name = "permission.action")
 	@XmlEnum
 	public enum Action {
+
+		/** The read. */
 		@XmlEnumValue("r")
 		READ("read"),
 
+		/** The write. */
 		@XmlEnumValue("w")
 		WRITE("write");
 
@@ -133,6 +144,12 @@ public class Permission {
 			throw new IllegalArgumentException(value);
 		}
 
+		/**
+		 * Instantiates a new action.
+		 *
+		 * @param value
+		 *            the value
+		 */
 		Action(final String value) {
 			this.value = value;
 		}
@@ -156,16 +173,22 @@ public class Permission {
 	private Package _package;
 
 	/**
-	 * 
+	 * Instantiates a new permission.
 	 */
 	public Permission() {
 	}
 
 	/**
+	 * Instantiates a new permission.
+	 *
 	 * @param type
+	 *            the type
 	 * @param sourceId
+	 *            the source id
 	 * @param action
-	 * @param packageId
+	 *            the action
+	 * @param p
+	 *            the p
 	 */
 	public Permission(Type type, int sourceId, Action action, Package p) {
 		this.type = type;
@@ -175,6 +198,8 @@ public class Permission {
 	}
 
 	/**
+	 * Gets the type.
+	 *
 	 * @return the type
 	 */
 	@Id
@@ -186,6 +211,8 @@ public class Permission {
 	}
 
 	/**
+	 * Sets the type.
+	 *
 	 * @param type
 	 *            the type to set
 	 */
@@ -194,6 +221,8 @@ public class Permission {
 	}
 
 	/**
+	 * Gets the source id.
+	 *
 	 * @return the sourceId
 	 */
 	@Id
@@ -204,6 +233,8 @@ public class Permission {
 	}
 
 	/**
+	 * Sets the source id.
+	 *
 	 * @param sourceId
 	 *            the sourceId to set
 	 */
@@ -212,6 +243,8 @@ public class Permission {
 	}
 
 	/**
+	 * Gets the action.
+	 *
 	 * @return the action
 	 */
 	@Id
@@ -223,6 +256,8 @@ public class Permission {
 	}
 
 	/**
+	 * Sets the action.
+	 *
 	 * @param action
 	 *            the action to set
 	 */
@@ -231,6 +266,8 @@ public class Permission {
 	}
 
 	/**
+	 * Gets the package.
+	 *
 	 * @return the package
 	 */
 	@Id
@@ -243,8 +280,10 @@ public class Permission {
 	}
 
 	/**
-	 * @param package
-	 *            the package to set
+	 * Sets the package.
+	 *
+	 * @param p
+	 *            the new package
 	 */
 	public void setPackage(Package p) {
 		this._package = p;
@@ -306,6 +345,9 @@ public class Permission {
 				+ "]";
 	}
 
+	/**
+	 * The Class PermissionId.
+	 */
 	public static class PermissionId implements Serializable {
 
 		private static final long serialVersionUID = -3030317167265840962L;
@@ -319,11 +361,17 @@ public class Permission {
 		private String packageId;
 
 		/**
-		 * 
+		 * Instantiates a new permission id.
 		 */
 		public PermissionId() {
 		}
 
+		/**
+		 * Instantiates a new permission id.
+		 *
+		 * @param permission
+		 *            the permission
+		 */
 		public PermissionId(Permission permission) {
 			this.type = permission.getType();
 			this.sourceId = permission.getSourceId();
@@ -332,6 +380,8 @@ public class Permission {
 		}
 
 		/**
+		 * Gets the type.
+		 *
 		 * @return the type
 		 */
 		public Type getType() {
@@ -339,6 +389,8 @@ public class Permission {
 		}
 
 		/**
+		 * Sets the type.
+		 *
 		 * @param type
 		 *            the type to set
 		 */
@@ -347,6 +399,8 @@ public class Permission {
 		}
 
 		/**
+		 * Gets the source id.
+		 *
 		 * @return the sourceId
 		 */
 		public int getSourceId() {
@@ -354,6 +408,8 @@ public class Permission {
 		}
 
 		/**
+		 * Sets the source id.
+		 *
 		 * @param sourceId
 		 *            the sourceId to set
 		 */
@@ -362,6 +418,8 @@ public class Permission {
 		}
 
 		/**
+		 * Gets the action.
+		 *
 		 * @return the action
 		 */
 		public Action getAction() {
@@ -369,6 +427,8 @@ public class Permission {
 		}
 
 		/**
+		 * Sets the action.
+		 *
 		 * @param action
 		 *            the action to set
 		 */
@@ -377,6 +437,8 @@ public class Permission {
 		}
 
 		/**
+		 * Gets the package.
+		 *
 		 * @return the packageId
 		 */
 		public String getPackage() {
@@ -384,6 +446,8 @@ public class Permission {
 		}
 
 		/**
+		 * Sets the package.
+		 *
 		 * @param packageId
 		 *            the packageId to set
 		 */

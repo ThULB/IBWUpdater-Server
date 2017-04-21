@@ -28,13 +28,17 @@ import java.util.StringTokenizer;
 import org.apache.commons.io.input.TeeInputStream;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * The Class ConfigurationLoader.
  *
+ * @author Ren\u00E9 Adler (eagle)
  */
 public class ConfigurationLoader {
 
 	protected AppProperties properties;
 
+	/**
+	 * Instantiates a new configuration loader.
+	 */
 	public ConfigurationLoader() {
 		this.properties = new AppProperties();
 		try (InputStream in = getConfigInputStream()) {
@@ -55,6 +59,11 @@ public class ConfigurationLoader {
 		return configurationInputStream;
 	}
 
+	/**
+	 * Load.
+	 *
+	 * @return the map
+	 */
 	public Map<String, String> load() {
 		return properties.getAsMap();
 	}

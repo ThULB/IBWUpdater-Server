@@ -31,11 +31,13 @@ import ibw.updater.datamodel.Group;
 import ibw.updater.datamodel.Groups;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * The Class GroupManager.
  *
+ * @author Ren\u00E9 Adler (eagle)
  */
 public class GroupManager {
 
+	/** The Constant LOGGER. */
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	/**

@@ -22,8 +22,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * The Class Groups.
  *
+ * @author Ren\u00E9 Adler (eagle)
  */
 @XmlRootElement(name = "groups")
 public class Groups {
@@ -31,19 +32,24 @@ public class Groups {
 	private List<Group> groups;
 
 	/**
-	 * 
+	 * Instantiates a new groups.
 	 */
 	public Groups() {
 	}
 
 	/**
+	 * Instantiates a new groups.
+	 *
 	 * @param groups
+	 *            the groups
 	 */
 	public Groups(List<Group> groups) {
 		this.groups = groups;
 	}
 
 	/**
+	 * Gets the groups.
+	 *
 	 * @return the groups
 	 */
 	@XmlElement(name = "group")
@@ -52,6 +58,8 @@ public class Groups {
 	}
 
 	/**
+	 * Sets the groups.
+	 *
 	 * @param groups
 	 *            the groups to set
 	 */
