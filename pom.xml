@@ -10,20 +10,20 @@
   <inceptionYear>2012</inceptionYear>
 
   <scm>
-    <url>https://github.com/adlerre/IBWUpdater-Server</url>
-    <connection>scm:git:https://github.com/adlerre/IBWUpdater-Server.git</connection>
-    <developerConnection>scm:git:https://github.com/adlerre/IBWUpdater-Server.git</developerConnection>
+    <url>https://github.com/ThULB/IBWUpdater-Server</url>
+    <connection>scm:git:https://github.com/ThULB/IBWUpdater-Server.git</connection>
+    <developerConnection>scm:git:https://github.com/ThULB/IBWUpdater-Server.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
   <issueManagement>
-    <url>https://github.com/adlerre/IBWUpdater-Server/issues</url>
+    <url>https://github.com/ThULB/IBWUpdater-Server/issues</url>
     <system>GitHub Issues</system>
   </issueManagement>
 
   <ciManagement>
     <system>Travis-CI</system>
-    <url>https://travis-ci.org/adlerre/IBWUpdater-Server</url>
+    <url>https://travis-ci.org/ThULB/IBWUpdater-Server</url>
   </ciManagement>
 
   <licenses>
