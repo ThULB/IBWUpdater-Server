@@ -11,6 +11,7 @@
 				<form>
 					<div class="form-group">
 						<label for="type">{{'package.type' | translate}}</label> <select class="form-control" id="type" data-ng-model="package.type">
+							<option value="">{{'general.pleaseSelect' | translate}}</option>
 							<option value="common">{{'package.type.common' | translate}}</option>
 							<option value="user">{{'package.type.user' | translate}}</option>
 						</select>
