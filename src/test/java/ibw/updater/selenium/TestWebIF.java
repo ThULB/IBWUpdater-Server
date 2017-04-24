@@ -76,7 +76,7 @@ public class TestWebIF extends SeleniumTestCase {
 		WebElement description = waitForElement(By.id("description"));
 		description.clear();
 		description.sendKeys(TU_DESCRIPTION_UPDATE);
-		waitAndClick(By.cssSelector("#groups option"));
+		waitAndSelectByIndex(By.id("groups"), 0);
 
 		waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));
 
@@ -120,7 +120,7 @@ public class TestWebIF extends SeleniumTestCase {
 		description.clear();
 		description.sendKeys(TG_DESCRIPTION_UPDATE);
 
-		waitAndClick(By.cssSelector("#users option"));
+		waitAndSelectByIndex(By.id("users"), 0);
 
 		waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));
 
@@ -263,7 +263,7 @@ public class TestWebIF extends SeleniumTestCase {
 
 		waitAndClick(By.xpath("//form//button[contains(@class, 'dropdown-toggle')][1]"));
 		waitAndClick(By.xpath("//form//ul[contains(@class, 'dropdown-menu')][1]//li[1]/a"));
-		waitAndClick(By.xpath("//form//select[@id = 'sourceId'][1]/option[2]"));
+		waitAndSelectByIndex(By.xpath("//form//select[@id = 'sourceId'][1]"), 1);
 
 		waitAndClick(By.cssSelector(".modal-footer button.btn-primary"));
 
@@ -317,7 +317,7 @@ public class TestWebIF extends SeleniumTestCase {
 		waitAndClick(By.cssSelector(".modal-footer button.btn-danger"));
 
 		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@data-ng-if, '!users.user')]")) != null);
-		
+
 		return true;
 	}
 
@@ -339,7 +339,7 @@ public class TestWebIF extends SeleniumTestCase {
 
 		assertEquals(TG_NAME, name.getText());
 		assertEquals(TG_DESCRIPTION, description.getText());
-		
+
 		return true;
 	}
 
@@ -352,7 +352,7 @@ public class TestWebIF extends SeleniumTestCase {
 		waitAndClick(By.cssSelector(".modal-footer button.btn-danger"));
 
 		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@data-ng-if, '!groups.group')]")) != null);
-		
+
 		return true;
 	}
 
@@ -368,7 +368,7 @@ public class TestWebIF extends SeleniumTestCase {
 		try {
 			File pkg = downloadPackageSrc();
 
-			waitAndClick(By.xpath("//select[@id='type']//option[@value='common']"));
+			waitAndSelectByValue(By.id("type"), "common");
 
 			waitForElement(By.id("name")).sendKeys(TP_NAME);
 			waitForElement(By.id("description")).sendKeys(TP_DESCRIPTION);
@@ -389,7 +389,7 @@ public class TestWebIF extends SeleniumTestCase {
 		} catch (IOException e) {
 			assertTrue("couldn't download package src: " + TP_PACKAGE_SRC, e == null);
 		}
-		
+
 		return true;
 	}
 
@@ -401,7 +401,7 @@ public class TestWebIF extends SeleniumTestCase {
 		waitAndClick(By.id("btnCreatePackage"));
 
 		waitForElement(By.id("package-dialog"));
-		waitAndClick(By.xpath("//select[@id='type']//option[@value='user']"));
+		waitAndSelectByValue(By.id("type"), "user");
 
 		waitForElement(By.id("name")).sendKeys(TP_NAME);
 		waitForElement(By.id("description")).sendKeys(TP_DESCRIPTION);
@@ -416,7 +416,7 @@ public class TestWebIF extends SeleniumTestCase {
 		assertEquals(new Integer(1), new Integer(version.getText()));
 		assertEquals(TP_NAME, name.getText());
 		assertEquals(TP_DESCRIPTION, description.getText());
-		
+
 		return true;
 	}
 
@@ -429,7 +429,7 @@ public class TestWebIF extends SeleniumTestCase {
 		waitAndClick(By.cssSelector(".modal-footer button.btn-danger"));
 
 		assertTrue(waitForElement(By.xpath("//tbody/tr[contains(@data-ng-if, '!packages.package')]")) != null);
-		
+
 		return true;
 	}
 

@@ -28,6 +28,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import ibw.updater.Application;
@@ -79,6 +80,30 @@ public class SeleniumTestCase extends JPATestCase {
 				ExpectedConditions.elementToBeClickable(by), webDriver -> isReady(webDriver)))) {
 			WebElement elm = driver.findElement(by);
 			elm.click();
+			return elm;
+		}
+
+		return null;
+	}
+
+	public WebElement waitAndSelectByValue(By by, String value) {
+		WebDriverWait wait = new WebDriverWait(driver, MAX_WAIT_TIME);
+		if (wait.until(ExpectedConditions.and(ExpectedConditions.visibilityOfElementLocated(by),
+				ExpectedConditions.elementToBeClickable(by), webDriver -> isReady(webDriver)))) {
+			WebElement elm = driver.findElement(by);
+			new Select(elm).selectByValue(value);
+			return elm;
+		}
+
+		return null;
+	}
+	
+	public WebElement waitAndSelectByIndex(By by, int index) {
+		WebDriverWait wait = new WebDriverWait(driver, MAX_WAIT_TIME);
+		if (wait.until(ExpectedConditions.and(ExpectedConditions.visibilityOfElementLocated(by),
+				ExpectedConditions.elementToBeClickable(by), webDriver -> isReady(webDriver)))) {
+			WebElement elm = driver.findElement(by);
+			new Select(elm).selectByIndex(index);
 			return elm;
 		}
 
