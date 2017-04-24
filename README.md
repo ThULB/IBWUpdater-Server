@@ -1,9 +1,9 @@
-# IBWUpdater Server [![Build Status](https://travis-ci.org/ThULB/IBWUpdater-Server.svg?branch=master)](https://travis-ci.org/ThULB/IBWUpdater-Server) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e276ce11390e4000bb9711c9e44864ba)](https://www.codacy.com/app/rene-adler/IBWUpdater-Server?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=adlerre/IBWUpdater-Server&amp;utm_campaign=Badge_Grade) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/e276ce11390e4000bb9711c9e44864ba)](https://www.codacy.com/app/rene-adler/IBWUpdater-Server?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=adlerre/IBWUpdater-Server&amp;utm_campaign=Badge_Coverage) [![Dependency Status](https://www.versioneye.com/user/projects/583339f8eaa74b004633a88f/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/583339f8eaa74b004633a88f)
+# IBWUpdater Server [![Build Status](https://travis-ci.org/ThULB/IBWUpdater-Server.svg?branch=master)](https://travis-ci.org/ThULB/IBWUpdater-Server) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e276ce11390e4000bb9711c9e44864ba)](https://www.codacy.com/app/ThULB/IBWUpdater-Server?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=adlerre/IBWUpdater-Server&amp;utm_campaign=Badge_Grade) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/e276ce11390e4000bb9711c9e44864ba)](https://www.codacy.com/app/ThULB/IBWUpdater-Server?utm_source=github.com&utm_medium=referral&utm_content=adlerre/IBWUpdater-Server&utm_campaign=Badge_Coverage) [![Dependency Status](https://www.versioneye.com/user/projects/583339f8eaa74b004633a88f/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/583339f8eaa74b004633a88f)
 WinIBW Updater Server
 
 ## Getting Started
 
-This Project requires at least Java 8, Maven 3 and Chrome installed to build.
+This Project requires at least Java 8, Maven 3 and Firefox/Chrome installed to build.
 
 Build Project with this command:
 
