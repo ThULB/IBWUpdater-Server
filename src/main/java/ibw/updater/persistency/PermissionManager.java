@@ -150,10 +150,11 @@ public class PermissionManager {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		LOGGER.info("Update permission: " + permission);
 		EntityManagerProvider.beginTransaction();
-		permission = em.merge(permission);
-		EntityManagerProvider.commit();
-
-		return permission;
+		try {
+			return em.merge(permission);
+		} finally {
+			EntityManagerProvider.commit();
+		}
 	}
 
 	/**

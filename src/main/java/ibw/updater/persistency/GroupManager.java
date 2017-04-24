@@ -153,10 +153,11 @@ public class GroupManager {
 
 		LOGGER.info("Update group: " + group);
 		EntityManagerProvider.beginTransaction();
-		group = em.merge(group);
-		EntityManagerProvider.commit();
-
-		return group;
+		try {
+			return em.merge(group);
+		} finally {
+			EntityManagerProvider.commit();
+		}
 	}
 
 	/**

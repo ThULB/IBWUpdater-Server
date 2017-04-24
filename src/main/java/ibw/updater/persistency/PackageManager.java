@@ -115,7 +115,8 @@ public class PackageManager {
 	/**
 	 * Returns all {@link Package}s with extended informations for given uid.
 	 *
-	 * @param user the user
+	 * @param user
+	 *            the user
 	 * @return a {@link List} of {@link Package}s
 	 */
 	public static Packages getExtended(User user) {
@@ -148,9 +149,11 @@ public class PackageManager {
 	/**
 	 * Returns the {@link Package} file/content for given id.
 	 *
-	 * @param id            the {@link Package#id}
+	 * @param id
+	 *            the {@link Package#id}
 	 * @return a {@link InputStream} with content
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static InputStream getContent(String id) throws IOException {
 		Package p = get(id);
@@ -163,9 +166,11 @@ public class PackageManager {
 	/**
 	 * Returns the {@link Package} file/content for given filename.
 	 *
-	 * @param fileName            the fileName
+	 * @param fileName
+	 *            the fileName
 	 * @return a {@link InputStream} with content
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static InputStream getContentByFileName(String fileName) throws IOException {
 		return Channels.newInputStream(FileChannel.open(PACKAGE_DIR.resolve(fileName)));
@@ -243,9 +248,11 @@ public class PackageManager {
 	/**
 	 * Updates given {@link Package}.
 	 *
-	 * @param p            the {@link Package} to update
+	 * @param p
+	 *            the {@link Package} to update
 	 * @return the updated {@link Package} object
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static Package update(Package p) throws IOException {
 		if (!exists(p.getId())) {
@@ -274,19 +281,23 @@ public class PackageManager {
 
 		LOGGER.info("Update package: " + p);
 
-		p = em.merge(p);
-		EntityManagerProvider.commit();
-
-		return p;
+		try {
+			return em.merge(p);
+		} finally {
+			EntityManagerProvider.commit();
+		}
 	}
 
 	/**
 	 * Updates given {@link Package}.
 	 *
-	 * @param p            the {@link Package} to update
-	 * @param is the is
+	 * @param p
+	 *            the {@link Package} to update
+	 * @param is
+	 *            the is
 	 * @return the updated {@link Package} object
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static Package update(Package p, InputStream is) throws IOException {
 		if (!exists(p.getId())) {
@@ -341,10 +352,11 @@ public class PackageManager {
 
 		LOGGER.info("Update package: " + p);
 
-		p = em.merge(p);
-		EntityManagerProvider.commit();
-
-		return p;
+		try {
+			return em.merge(p);
+		} finally {
+			EntityManagerProvider.commit();
+		}
 	}
 
 	/**
@@ -364,10 +376,13 @@ public class PackageManager {
 	/**
 	 * Creates the temp file.
 	 *
-	 * @param id the id
-	 * @param is the is
+	 * @param id
+	 *            the id
+	 * @param is
+	 *            the is
 	 * @return the path
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	private static Path createTempFile(String id, InputStream is) throws IOException {
 		Path tmpFile = Files.createTempFile(id, null);
@@ -378,9 +393,11 @@ public class PackageManager {
 	/**
 	 * Checks if is valid package.
 	 *
-	 * @param pFile the file
+	 * @param pFile
+	 *            the file
 	 * @return true, if is valid package
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	private static boolean isValidPackage(Path pFile) throws IOException {
 		return new ZipInputStream(Channels.newInputStream(FileChannel.open(pFile))).getNextEntry() != null;
@@ -389,10 +406,13 @@ public class PackageManager {
 	/**
 	 * Checks if is valid startup script.
 	 *
-	 * @param pFile the file
-	 * @param startupScript the startup script
+	 * @param pFile
+	 *            the file
+	 * @param startupScript
+	 *            the startup script
 	 * @return true, if is valid startup script
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	private static boolean isValidStartupScript(Path pFile, String startupScript) throws IOException {
 		ZipFile zf = new ZipFile(pFile.toFile());
@@ -406,10 +426,13 @@ public class PackageManager {
 	/**
 	 * Checks if is equal package.
 	 *
-	 * @param p1 the p 1
-	 * @param p2 the p 2
+	 * @param p1
+	 *            the p 1
+	 * @param p2
+	 *            the p 2
 	 * @return true, if is equal package
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	private static boolean isEqualPackage(Path p1, Path p2) throws IOException {
 		ReadableByteChannel ch1 = FileChannel.open(p1);

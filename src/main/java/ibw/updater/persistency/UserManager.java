@@ -152,10 +152,11 @@ public class UserManager {
 
 		LOGGER.info("Update user: " + user);
 		EntityManagerProvider.beginTransaction();
-		user = em.merge(user);
-		EntityManagerProvider.commit();
-
-		return user;
+		try {
+			return em.merge(user);
+		} finally {
+			EntityManagerProvider.commit();
+		}
 	}
 
 	/**
