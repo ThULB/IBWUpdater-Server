@@ -18,6 +18,7 @@ package ibw.updater.selenium;
 
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -70,7 +71,7 @@ public class SeleniumDriverFactory {
 		} else if (OPERA_DRIVER.equalsIgnoreCase(driverName)) {
 			OperaDriverManager.getInstance().setup();
 		} else if (SAFARI_DRIVER.equalsIgnoreCase(driverName)) {
-			// No driver manager
+			LogManager.getLogger().warn("See https://github.com/SeleniumHQ/selenium/wiki/SafariDriver");
 		} else {
 			FirefoxDriverManager.getInstance().setup();
 		}
