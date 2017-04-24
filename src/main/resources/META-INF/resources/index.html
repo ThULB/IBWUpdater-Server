@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de" ng-app="IBWUpdater">
+<html lang="de" data-ng-app="IBWUpdater">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,22 +21,22 @@
 
     <!-- .container -->
     <div class="container">
-        <div class="alert alert-dismissible" role="alert" ng-controller="alertCtrl" ng-show="alertObj.show"
-            ng-class="{'alert-danger': alertObj.type == 'error', 'alert-info': alertObj.type == 'info', 'alert-warning': alertObj.type == 'warning', 'alert-success': alertObj.type == 'success'}">
-            <button type="button" class="close" aria-label="Close" ng-click="clear()">
+        <div class="alert alert-dismissible" role="alert" data-ng-controller="alertCtrl" data-ng-show="alertObj.show"
+            data-ng-class="{'alert-danger': alertObj.type == 'error', 'alert-info': alertObj.type == 'info', 'alert-warning': alertObj.type == 'warning', 'alert-success': alertObj.type == 'success'}">
+            <button type="button" class="close" aria-label="Close" data-ng-click="clear()">
                 <span aria-hidden="true">&times;</span>
             </button>
             <h4>{{alertObj.headline}}</h4>
-            <p ng-if="!alertObj.stackTrace">{{alertObj.message}}</p>
-            <p ng-if="alertObj.stackTrace" data-toggle="collapse" data-target="#collapseStackTrace" aria-expanded="false" aria-controls="collapseStackTrace">
+            <p data-ng-if="!alertObj.stackTrace">{{alertObj.message}}</p>
+            <p data-ng-if="alertObj.stackTrace" data-toggle="collapse" data-target="#collapseStackTrace" aria-expanded="false" aria-controls="collapseStackTrace">
                 <span class="caret" aria-hidden="true"></span> {{alertObj.message}}
             </p>
-            <div class="collapse" id="collapseStackTrace" ng-if="alertObj.stackTrace">
+            <div class="collapse" id="collapseStackTrace" data-ng-if="alertObj.stackTrace">
                 <pre class="pre-scrollable">{{alertObj.stackTrace}}</pre>
             </div>
         </div>
-        <div class="content-container" ng-view></div>
-    </div>
+		<div class="content-container" data-ng-view></div>
+	</div>
     <!-- /.container -->
 
 
