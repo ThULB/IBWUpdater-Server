@@ -16,16 +16,25 @@
  */
 package ibw.updater.frontend;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.ws.rs.core.Feature;
 import javax.ws.rs.core.FeatureContext;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.moxy.json.MoxyJsonFeature;
+import org.reflections.Reflections;
 
 import ibw.updater.common.config.Configuration;
 import ibw.updater.frontend.provider.GenericExceptionMapper;
+import ibw.updater.frontend.provider.XmlMessageBodyReader;
 import ibw.updater.frontend.provider.XmlMessageBodyWriter;
 
 /**
@@ -34,7 +43,18 @@ import ibw.updater.frontend.provider.XmlMessageBodyWriter;
  */
 public class FrontendFeature implements Feature {
 
+	private static final List<Class<?>> CACHED_ENTITIES = Collections.synchronizedList(new ArrayList<>());
+
 	private static final Logger LOGGER = LogManager.getLogger();
+
+	public static List<Class<?>> populateEntities(List<String> pkgs) throws IOException {
+		if (CACHED_ENTITIES.isEmpty()) {
+			CACHED_ENTITIES
+					.addAll(pkgs.stream().map(pkg -> new Reflections(pkg).getTypesAnnotatedWith(XmlRootElement.class))
+							.flatMap(ts -> ts.stream()).collect(Collectors.toList()));
+		}
+		return CACHED_ENTITIES;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -48,6 +68,7 @@ public class FrontendFeature implements Feature {
 
 		// internal default features
 		context.register(GenericExceptionMapper.class);
+		context.register(XmlMessageBodyReader.class);
 		context.register(XmlMessageBodyWriter.class);
 
 		Configuration.instance().getStrings("APP.Jersey.Features").forEach(cn -> {
