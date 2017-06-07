@@ -266,7 +266,7 @@
       <plugins>
         <plugin>
           <artifactId>maven-dependency-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.0.1</version>
           <executions>
             <execution>
               <inherited>true</inherited>
@@ -483,7 +483,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>21.0</version>
+      <version>22.0</version>
     </dependency>
 
     <dependency>
