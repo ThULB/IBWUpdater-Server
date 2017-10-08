@@ -4,31 +4,39 @@ module.exports = function(grunt) {
 	var getAbsoluteDir2 = function(dir) {
 		return path.isAbsolute(dir) ? dir : path.resolve(process.cwd(), dir);
 	};
-	
+
 	var buildDirConfig = {
 		assetsDirectory : getAbsoluteDir2(grunt.option("assetsDirectory")),
 		assetsDirectoryRelative : path.basename(grunt.option("assetsDirectory")),
 
 		lessDirectory : getAbsoluteDir2(grunt.option("lessDirectory")),
 	};
-	
+
 	grunt.initConfig({
 		globalConfig : buildDirConfig,
 		pkg : grunt.file.readJSON("package.json"),
-		bootstrap : grunt.file.readJSON("bower_components/bootstrap/package.json"),
+		bootstrap : grunt.file.readJSON("node_modules/bootstrap/package.json"),
 		banner : "/*!\n" + " * <%= pkg.name %> v${project.version}\n" + " * Homepage: <%= pkg.homepage %>\n"
 				+ " * Copyright 2016-<%= grunt.template.today(\"yyyy\") %> <%= pkg.author %> and others\n" + " * Licensed under <%= pkg.license %>\n" + "*/\n",
-		bowercopy : {
+		copy : {
 			build : {
-				options : {
-					destPrefix : "<%=globalConfig.assetsDirectory%>/"
-				},
-				files : {
-					"fonts" : [ "bootstrap/dist/fonts", "font-awesome/fonts" ],
-					"js" : [ "angular/*.min.*", "angular-animate/*.min.*", "angular-modal-service/dst/*.min.*", "angular-route/*.min.*",
-							"angular-sanitize/*.min.*", "angular-translate/*.min.*", "angular-translate-loader-static-files/*.min.*",
-							"bootstrap/dist/js/*min.js", "html5shiv/dist/*min.js", "jquery/dist/*min.js", "respond/dest/*min.js" ],
-				},
+				files : [
+						{
+							cwd : "node_modules/",
+							dest : "<%=globalConfig.assetsDirectory%>/fonts/",
+							expand : true,
+							flatten : true,
+							src : [ "bootstrap/dist/fonts/*", "font-awesome/fonts/*" ],
+						},
+						{
+							cwd : "node_modules/",
+							dest : "<%=globalConfig.assetsDirectory%>/js/",
+							expand : true,
+							flatten : true,
+							src : [ "angular/*.min.*", "angular-animate/*.min.*", "angular-modal-service/dst/*.min.*", "angular-route/*.min.*",
+									"angular-sanitize/*.min.*", "angular-translate/dist/*.min.*", "angular-translate-loader-static-files/*.min.*",
+									"bootstrap/dist/js/*min.js", "html5shiv/dist/*min.js", "jquery/dist/*min.js", "respond.js/dest/*min.js" ],
+						} ]
 			}
 		},
 		googlefonts : {
@@ -87,12 +95,12 @@ module.exports = function(grunt) {
 	});
 
 	grunt.loadNpmTasks("grunt-contrib-concat");
+	grunt.loadNpmTasks("grunt-contrib-copy");
 	grunt.loadNpmTasks("grunt-contrib-jshint");
 	grunt.loadNpmTasks("grunt-contrib-less");
-	grunt.loadNpmTasks("grunt-bowercopy");
 	grunt.loadNpmTasks("grunt-eslint");
 	grunt.loadNpmTasks("grunt-google-fonts");
 
 	grunt.registerTask("test", [ "jshint" ]);
-	grunt.registerTask("default", "build static webapp resources", [ "test", "bowercopy", "googlefonts", "less" ]);
+	grunt.registerTask("default", "build static webapp resources", [ "test", "copy", "googlefonts", "less" ]);
 };
